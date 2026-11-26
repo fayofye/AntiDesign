@@ -1,0 +1,924 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AntiDesign library: buttons</title>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Bowlby+One+SC&family=Courier+Prime:wght@400;700&family=Fascinate+Inline&family=Gochi+Hand&family=Krona+One&family=Londrina+Solid:wght@400;900&family=Martian+Mono:wdth,wght@75..112.5,100..800&family=Mochiy+Pop+One&family=Potta+One&family=Reenie+Beanie&family=Rye&family=Saira+Stencil+One&family=Sedgwick+Ave+Display&family=Shrikhand&family=Train+One&family=Zen+Dots&display=swap" rel="stylesheet">
+<style>
+/* Shell: the gallery around the specimens. Not part of any specimen; never copy it. */
+body{margin:0;background:#E8E8E3;color:#141414;font:16px/1.5 ui-sans-serif,system-ui,sans-serif}
+.shell{max-width:1240px;margin:0 auto;padding:32px 16px 96px}
+.shell>h1{margin:0;font-size:24px}
+.shell>p{margin:4px 0 0;max-width:70ch}
+.index{display:flex;flex-wrap:wrap;gap:6px 16px;margin:20px 0 36px;padding:0;list-style:none;font-size:14px}
+.index a{color:#141414}
+.spec{margin:0 0 40px;border:2px solid #141414;background:#FFFFFF;scroll-margin-top:16px}
+.spec>header{display:flex;flex-wrap:wrap;gap:4px 20px;align-items:baseline;padding:10px 14px;border-bottom:2px solid #141414;font-size:14px}
+.spec>header h2{margin:0;font-size:16px}
+.spec>header code{font:600 13px ui-monospace,monospace;background:#141414;color:#FFFFFF;padding:2px 6px}
+.spec>header p{margin:0;flex:1 1 320px}
+.stage{position:relative;min-height:360px;display:grid;place-items:center;padding:48px 20px;overflow:hidden;box-sizing:border-box}
+.replay{position:absolute;top:10px;right:10px;font:600 13px ui-sans-serif,system-ui,sans-serif;padding:8px 12px;min-height:40px;border:2px solid currentColor;background:transparent;color:inherit;cursor:pointer}
+.replay:focus-visible,.index a:focus-visible{outline:3px solid currentColor;outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* btn-01 Rubber stamp */
+#btn-01 .stage{color:#3A1C77}
+#btn-01 .sheet{display:grid;justify-items:center;gap:12px;width:100%}
+#btn-01 .field{margin:0;font:400 15px/1.2 'Bowlby One SC',Impact,sans-serif;letter-spacing:.14em}
+#btn-01 .stamp{position:relative;display:grid;place-items:center;width:min(100%,280px);aspect-ratio:26/11;padding:0;border:3px dashed currentColor;border-radius:12px;background:transparent;color:inherit;font:400 30px/1 'Bowlby One SC',Impact,sans-serif;letter-spacing:.04em;cursor:pointer;touch-action:manipulation}
+#btn-01 .stamp:focus-visible{outline:3px solid #3A1C77;outline-offset:6px}
+#btn-01 .imp,#btn-01 .block{position:absolute;left:-4%;top:-9%;width:108%;height:118%;opacity:0;transform:rotate(var(--r,0deg));pointer-events:none}
+#btn-01 .imp text{font-family:'Bowlby One SC',Impact,sans-serif}
+#btn-01 .block{box-sizing:border-box;border:3px solid #3E2614;border-radius:14px;background:radial-gradient(circle,#A87444 0 16%,#5E3B1E 17% 20%,transparent 21%),repeating-linear-gradient(91deg,#7A5230 0 5px,#6A4527 5px 8px,#8A6038 8px 15px)}
+#btn-01 .stamp[data-done] .slot{opacity:0}
+#btn-01 .stamp[data-done] .imp{opacity:1}
+#btn-01 .stamp[data-done=hit] .imp{animation:btn01-ink .9s linear both}
+#btn-01 .stamp[data-done=hit] .block{animation:btn01-block .9s cubic-bezier(.45,0,.25,1) both}
+@keyframes btn01-block{0%{opacity:0;transform:rotate(var(--r)) scale(1.6)}30%{opacity:1}48%{transform:rotate(var(--r)) scale(1)}56%{transform:rotate(var(--r)) scale(.97)}74%{opacity:1;transform:rotate(var(--r)) scale(1.14)}100%{opacity:0;transform:rotate(var(--r)) scale(1.6)}}
+@keyframes btn01-ink{0%,51%{opacity:0;transform:rotate(var(--r)) scale(.97)}52%{opacity:1;transform:rotate(var(--r)) scale(.97)}100%{opacity:1;transform:rotate(var(--r)) scale(1)}}
+
+/* btn-02 Ticket stub */
+#btn-02 .stage{color:#FFFFFF}
+#btn-02 .tk{display:flex;width:min(100%,440px);height:172px;padding:0;border:0;background:none;color:#0B2B3F;font-family:Rye,'Rockwell Extra Bold',Georgia,serif;text-align:center;cursor:pointer;touch-action:manipulation}
+#btn-02 .tk:focus-visible{outline:3px solid #9AD9B9;outline-offset:5px}
+#btn-02 .main,#btn-02 .stub{position:relative;display:grid;place-content:center;gap:6px;background:#9AD9B9;box-shadow:inset 0 0 0 7px #9AD9B9,inset 0 0 0 9px #0B2B3F}
+/* Half-holes on both sides of the tear line: the torn edges keep the perforation. */
+#btn-02 .main{flex:1;border-radius:10px 0 0 10px;-webkit-mask:radial-gradient(circle at 100% 7px,#0000 3.2px,#000 3.8px) 0 0/100% 14px;mask:radial-gradient(circle at 100% 7px,#0000 3.2px,#000 3.8px) 0 0/100% 14px}
+#btn-02 .stub{width:104px;border-radius:0 10px 10px 0;transform-origin:0 0;transition:transform .25s cubic-bezier(.3,1.6,.5,1);-webkit-mask:radial-gradient(circle at 0 7px,#0000 3.2px,#000 3.8px) 0 0/100% 14px;mask:radial-gradient(circle at 0 7px,#0000 3.2px,#000 3.8px) 0 0/100% 14px}
+#btn-02 .kick{font-size:15px;letter-spacing:.32em}
+#btn-02 .big{font-size:clamp(38px,9vw,54px);line-height:1}
+#btn-02 .fine{font-size:13px;letter-spacing:.1em}
+#btn-02 .stub span{writing-mode:vertical-rl;font-size:15px;letter-spacing:.14em}
+#btn-02 .tk:active .stub{transform:rotate(3deg)}
+#btn-02 .tk[data-torn=go] .stub{animation:btn02-tear 1.15s both}
+#btn-02 .tk[data-torn=still] .stub{visibility:hidden}
+@media (prefers-reduced-motion:reduce){#btn-02 .stub{transition:none}}
+@keyframes btn02-tear{0%{transform:none;animation-timing-function:cubic-bezier(.2,.7,.4,1)}30%{transform:rotate(8deg)}36%{transform:translate(6px,4px) rotate(11deg);animation-timing-function:cubic-bezier(.55,0,1,.45)}100%{transform:translate(70px,460px) rotate(42deg)}}
+
+/* btn-03 Pull chain */
+#btn-03 .stage{--ink:#F4E6C6;color:var(--ink);transition:background-color .18s ease-out}
+#btn-03 .stage.on{--room:#F4E6C6;--ink:#1B1E24}
+#btn-03 .lamp{position:absolute;top:0;left:calc(50% - 100px);width:120px;margin-left:-60px;display:flex;flex-direction:column;align-items:center}
+#btn-03 .cord{width:2px;height:96px;background:#6A6F75}
+#btn-03 .shade{width:120px;height:58px;background:linear-gradient(90deg,#24302C,#4F625B 45%,#24302C);clip-path:polygon(30% 0,70% 0,100% 100%,0 100%)}
+#btn-03 .bulb{width:34px;height:34px;margin-top:-16px;border-radius:50%;background:#45484D;transition:background-color .18s}
+#btn-03 .on .bulb{background:radial-gradient(circle at 40% 35%,#FFFFFF,#FFF3C9 60%,#F1D589)}
+#btn-03 .pull{position:absolute;top:0;left:calc(50% + 70px);width:64px;margin-left:-32px;height:100%}
+#btn-03 .canopy{position:absolute;top:0;left:12px;z-index:1;width:40px;height:16px;border-radius:0 0 8px 8px;background:linear-gradient(#A2A7AC,#5C6166)}
+#btn-03 .knob{position:absolute;top:-96px;left:0;width:64px;display:flex;flex-direction:column;align-items:center;padding:0;border:0;background:none;color:#1B1E24;cursor:grab;touch-action:none;transition:transform .7s cubic-bezier(.25,2,.45,1)}
+#btn-03 .knob:focus-visible{outline:none}
+#btn-03 .knob:focus-visible .tag{outline:3px solid var(--ink);outline-offset:3px}
+#btn-03 .chain{width:8px;height:246px;background:radial-gradient(circle at 40% 40%,#F2F4F5 0 1px,#A6ACB1 1.6px,#5E646A 3px,transparent 3.4px) 0 0/8px 8px repeat-y}
+#btn-03 .bob{width:26px;height:34px;margin-top:-2px;border-radius:45% 45% 50% 50%/30% 30% 70% 70%;background:radial-gradient(circle at 35% 30%,#FFFFFF,#E3E1DA 45%,#A9A69C)}
+#btn-03 .tag{margin-top:6px;padding:5px 8px 4px;border:2px solid #1B1E24;border-radius:3px;background:#F4E6C6;font:400 16px/1 'Train One',Impact,sans-serif;letter-spacing:.06em}
+#btn-03 .sign{align-self:end;margin:0;font:400 clamp(40px,9vw,64px)/1 'Train One',Impact,sans-serif;letter-spacing:.08em}
+@media (prefers-reduced-motion:reduce){#btn-03 .stage,#btn-03 .knob,#btn-03 .bulb{transition:none}}
+
+/* btn-04 Keycap */
+#btn-04 .stage{color:#E4E6EA;align-content:center;gap:18px}
+#btn-04 .plate{position:relative;width:200px;height:186px;border-radius:14px;background:linear-gradient(#3B3E45,#2E3036)}
+#btn-04 .well{position:absolute;left:22px;top:20px;width:156px;height:140px;border-radius:8px;background:#121316}
+#btn-04 .cap{position:absolute;left:24px;top:14px;width:152px;height:146px;padding:0;border:0;background:none;cursor:pointer;touch-action:manipulation;transition:transform .26s cubic-bezier(.3,1.7,.5,1)}
+#btn-04 .cap.down{transform:translateY(9px);transition:transform .05s cubic-bezier(.7,0,1,.6)}
+#btn-04 .skirt{position:absolute;inset:0;border-radius:16px;background:linear-gradient(#A9CC24,#8EAE18 60%,#6F8A0E);transform:perspective(260px) rotateX(16deg);transform-origin:50% 100%}
+#btn-04 .top{position:absolute;left:16px;right:16px;top:6px;bottom:36px;border-radius:12px;display:grid;place-items:center;background:radial-gradient(ellipse 70% 60% at 50% 42%,#D3F55A,#C6EE3A 55%,#B6DE2C);box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -3px 0 rgba(0,0,0,.08)}
+#btn-04 .cap:focus-visible{outline:none}
+#btn-04 .cap:focus-visible .top{outline:3px solid #1E2600;outline-offset:-7px}
+#btn-04 .lg{font:400 22px/1 'Mochiy Pop One',ui-rounded,sans-serif;color:#1E2600}
+#btn-04 .sub{position:absolute;top:10px;left:12px;font:400 13px/1 'Mochiy Pop One',ui-rounded,sans-serif;color:#2E3A00}
+/* The plate's front lip sits over the cap, so travel hides the skirt instead of faking depth with shadow. */
+#btn-04 .lip{position:absolute;left:0;right:0;bottom:0;z-index:1;height:30px;border-top:2px solid #4A4E57;border-radius:0 0 14px 14px;background:linear-gradient(#34363C,#2B2D32)}
+#btn-04 .hint,#btn-04 .said{margin:0;font:400 14px/1.4 'Mochiy Pop One',ui-rounded,sans-serif;text-align:center}
+#btn-04 kbd{padding:1px 6px;border:2px solid currentColor;border-radius:4px;font:inherit}
+#btn-04 .said{min-height:20px;color:#C6EE3A}
+@media (prefers-reduced-motion:reduce){#btn-04 .cap,#btn-04 .cap.down{transition:none}}
+
+/* btn-05 Wax seal */
+#btn-05 .stage{color:#2A1F38}
+#btn-05 .env{position:relative;width:min(100%,400px);aspect-ratio:8/5;margin-top:120px;perspective:900px}
+#btn-05 .back,#btn-05 .pocket,#btn-05 .flap{position:absolute;inset:0;border-radius:6px}
+#btn-05 .back{z-index:1;background:#D3C3E8}
+#btn-05 .letter{position:absolute;left:8%;right:8%;top:8%;z-index:2;height:80%;display:grid;place-items:center;margin:0;border-radius:3px;background:#FFFFFF;color:#5A0F1D;font:400 clamp(24px,5vw,32px)/1.1 'Fascinate Inline',Georgia,serif;text-align:center}
+#btn-05 .pocket{z-index:3;background:#EDE5F6;clip-path:polygon(0 0,50% 58%,100% 0,100% 100%,0 100%)}
+#btn-05 .flap{z-index:4;background:linear-gradient(#E4D9F2,#D6C7EA);clip-path:polygon(0 0,100% 0,50% 66%);transform-origin:50% 0}
+#btn-05 .seal{position:absolute;left:50%;top:66%;z-index:5;transform:translate(-50%,-52px);display:grid;justify-items:center;gap:6px;padding:0;border:0;background:none;color:inherit;font:400 20px/1 'Fascinate Inline',Georgia,serif;letter-spacing:.04em;white-space:nowrap;cursor:pointer;touch-action:manipulation}
+#btn-05 .seal:focus-visible{outline:3px solid #2A1F38;outline-offset:4px}
+#btn-05 .disk{position:relative;width:84px;height:84px}
+#btn-05 .half{position:absolute;inset:0;display:grid;place-items:center;border-radius:47% 53% 50% 48%/52% 46% 54% 49%;background:radial-gradient(circle,#7A1426 0 30%,#5E0E1C 31% 34%,#8C1B2E 36% 56%,#6A1020 62%,#50091A 72%);filter:url(#btn05-wax);color:#4A0815;font:400 36px/1 'Fascinate Inline',Georgia,serif;text-shadow:0 1px 0 rgba(255,255,255,.28),0 -1px 0 rgba(0,0,0,.4)}
+#btn-05 .half::after{content:"&"}
+#btn-05 .l{clip-path:polygon(0 0,53% 0,47% 17%,56% 34%,45% 51%,54% 67%,46% 83%,51% 100%,0 100%)}
+#btn-05 .r{clip-path:polygon(53% 0,100% 0,100% 100%,51% 100%,46% 83%,54% 67%,45% 51%,56% 34%,47% 17%)}
+#btn-05 .env[data-open] .w{visibility:hidden} /* the unbroken seal hides the seam between the halves */
+#btn-05 .crack{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:#2A0610;stroke-width:2.5;stroke-dasharray:1;stroke-dashoffset:1}
+#btn-05 .env[data-open=go] .crack{animation:btn05-crack .22s ease-in forwards}
+#btn-05 .env[data-open=go] .l{animation:btn05-l .9s .24s cubic-bezier(.5,0,.9,.5) forwards}
+#btn-05 .env[data-open=go] .r{animation:btn05-r .95s .24s cubic-bezier(.5,0,.9,.5) forwards}
+#btn-05 .env[data-open=go] .flap{animation:btn05-flap .6s .5s cubic-bezier(.3,1.25,.5,1) forwards}
+#btn-05 .env[data-open=go] .letter{animation:btn05-letter .6s 1s cubic-bezier(.25,1.3,.5,1) forwards}
+#btn-05 .env[data-open=still] .half,#btn-05 .env[data-open=still] .crack{visibility:hidden}
+#btn-05 .env[data-open=still] .flap{z-index:1;transform:rotateX(180deg)}
+#btn-05 .env[data-open=still] .letter{transform:translateY(-38%)}
+@keyframes btn05-crack{to{stroke-dashoffset:0}}
+@keyframes btn05-l{12%{transform:translate(-3px,0) rotate(-4deg)}100%{transform:translate(-40px,320px) rotate(-70deg)}}
+@keyframes btn05-r{12%{transform:translate(3px,1px) rotate(3deg)}100%{transform:translate(46px,340px) rotate(55deg)}}
+@keyframes btn05-flap{0%{z-index:4}49%{z-index:4}50%{z-index:1}100%{z-index:1;transform:rotateX(180deg)}}
+@keyframes btn05-letter{to{transform:translateY(-38%)}}
+
+/* btn-06 Fuse */
+#btn-06 .stage{color:#F3EEE6;align-content:center;gap:14px}
+#btn-06 .fuse{position:relative;width:min(100%,420px);padding:22px 20px 48px;border:0;border-radius:4px;background:#FF5F1F;color:#160C05;font:900 clamp(28px,7vw,40px)/1 'Londrina Solid',Impact,sans-serif;letter-spacing:.02em;text-transform:uppercase;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+#btn-06 .fuse:focus-visible{outline:3px solid #F3EEE6;outline-offset:5px}
+#btn-06 .fuse[data-state=armed]{background:repeating-linear-gradient(-45deg,#FF5F1F 0 16px,#FF7A42 16px 32px)}
+#btn-06 .fuse[data-state=done]{background:#2B211A;color:#FFC9A8}
+#btn-06 .wick{position:absolute;left:16px;right:16px;bottom:8px}
+#btn-06 .wick svg{display:block;width:100%;height:auto;overflow:visible;fill:none;stroke-width:4}
+#btn-06 .cord{stroke:#3B2414;stroke-linecap:round}
+#btn-06 .twist{stroke:#7A5A3C;stroke-dasharray:2 3}
+#btn-06 .ash{stroke:#EDE6DA;stroke-width:4.5;stroke-dasharray:0 2}
+#btn-06 .spark{position:absolute;left:0;top:50%;width:22px;height:22px;opacity:0;background:radial-gradient(circle,#FFFFFF 0 22%,#FFE27A 38%,#FF9D00 72%);clip-path:polygon(50% 0,58% 38%,100% 50%,58% 62%,50% 100%,42% 62%,0 50%,42% 38%);transform:translate(-50%,-50%)}
+#btn-06 .fuse[data-state=burning] .spark{opacity:1}
+#btn-06 .how{margin:0;font:400 19px/1.3 'Londrina Solid',Impact,sans-serif;letter-spacing:.04em;text-align:center}
+
+/* btn-07 Price tag */
+#btn-07 .stage{min-height:400px}
+#btn-07 .nail{position:absolute;top:22px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#F4F4F4,#9A9A9A 60%,#555555)}
+#btn-07 .pend{position:absolute;top:30px;left:50%;width:180px;margin-left:-90px;display:flex;flex-direction:column;align-items:center;transform-origin:50% 0}
+#btn-07 .twine{position:relative;z-index:1;width:3px;height:100px;margin-bottom:-20px;background:repeating-linear-gradient(170deg,#C8102E 0 3px,#FFFFFF 3px 6px)}
+#btn-07 .tag{position:relative;isolation:isolate;display:grid;justify-items:center;gap:6px;width:168px;padding:40px 12px 24px;border:0;background:none;color:#2A1A05;font-family:'Gochi Hand','Bradley Hand','Segoe Print',cursive;cursor:pointer;transform-origin:50% 12px;touch-action:manipulation}
+#btn-07 .tag::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(170deg,#EDD29A,#E2C080);clip-path:polygon(24% 0,76% 0,100% 18%,100% 100%,0 100%,0 18%)}
+#btn-07 .tag:focus-visible{outline:3px solid #E7C98B;outline-offset:5px}
+#btn-07 .hole{position:absolute;top:12px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:radial-gradient(circle,#34312E 0 4px,#C29A48 4.5px 6px,#7A5A1E 7px)}
+#btn-07 .t1{font-size:30px;line-height:1}
+#btn-07 .t2{font-size:17px;line-height:1.2}
+
+/* btn-08 Split-flap */
+#btn-08 .board{padding:14px 12px;border:0;border-radius:8px;background:linear-gradient(#333333,#262626);color:#F2F0E6;font:700 clamp(22px,6vw,40px)/1 'Martian Mono',ui-monospace,monospace;font-stretch:75%;cursor:pointer;touch-action:manipulation}
+#btn-08 .board:focus-visible{outline:3px solid #161616;outline-offset:5px}
+#btn-08 .row{display:flex;gap:3px}
+#btn-08 .cell{position:relative;width:1.1em;height:1.56em;perspective:4em}
+#btn-08 .hf{position:absolute;left:0;right:0;height:calc(50% - .5px);overflow:hidden;background:#181818}
+#btn-08 .hf b{display:block;height:1.56em;line-height:1.56em;text-align:center}
+#btn-08 .t,#btn-08 .ft{top:0;border-radius:.12em .12em 0 0;background:linear-gradient(#242424,#181818)}
+#btn-08 .b,#btn-08 .fb{bottom:0;border-radius:0 0 .12em .12em}
+#btn-08 .b b,#btn-08 .fb b{margin-top:calc(-.78em - .5px)}
+#btn-08 .ft{z-index:2;transform-origin:50% 100%;backface-visibility:hidden}
+#btn-08 .fb{z-index:2;transform-origin:50% 0;transform:rotateX(90deg);backface-visibility:hidden}
+
+/* btn-09 Elevator call */
+#btn-09 .plate{display:grid;justify-items:center;gap:28px;width:170px;padding:26px 0 34px;border-radius:6px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.22) 0 1px,transparent 1px 3px,rgba(0,0,0,.06) 3px 4px),linear-gradient(100deg,#9DA3A8,#D8DCDF 38%,#AEB4B8 62%,#C9CDD0)}
+#btn-09 .ind{display:flex;align-items:center;gap:10px;padding:8px 14px;border:2px solid #6E7479;border-radius:4px;background:#0B0D0E;color:#7FE0FF}
+/* Dot-matrix: the digit is masked by a grid of round LEDs. */
+#btn-09 .fl{min-width:1.3em;text-align:center;font:400 44px/1 'Zen Dots',ui-rounded,sans-serif;-webkit-mask:radial-gradient(circle,#000 1.3px,transparent 1.7px) 0 0/4px 4px;mask:radial-gradient(circle,#000 1.3px,transparent 1.7px) 0 0/4px 4px}
+#btn-09 .arw{width:0;height:0;margin-top:12px;border:9px solid transparent;border-top:13px solid #7FE0FF;opacity:0}
+#btn-09 .moving .arw{opacity:1;animation:btn09-blink .8s steps(2) infinite}
+@keyframes btn09-blink{50%{opacity:.15}}
+#btn-09 .call{display:grid;place-items:center;width:84px;height:84px;padding:0;border:0;border-radius:50%;background:#4A5057;cursor:pointer;touch-action:manipulation}
+#btn-09 .call.lit{background:#7FE0FF}
+#btn-09 .call:focus-visible{outline:3px solid #10161C;outline-offset:4px}
+/* Turned steel: fine concentric rings from a repeating radial gradient. */
+#btn-09 .face{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:repeating-radial-gradient(circle,#D5D9DC 0 1px,#B9BEC2 1.5px 2.5px);box-shadow:inset 0 0 0 2px #8B9196;color:#2E343A;font:400 13px/1 'Zen Dots',ui-rounded,sans-serif;text-shadow:0 1px 0 rgba(255,255,255,.7)}
+#btn-09 .call:active .face{transform:translateY(1px) scale(.98)}
+@media (prefers-reduced-motion:reduce){#btn-09 .moving .arw{animation:none}}
+
+/* btn-10 Sticker peel */
+#btn-10 .stage{color:#0E2238}
+#btn-10 .spot{position:relative;display:grid;place-items:center;width:min(100%,260px);height:170px}
+#btn-10 .code{margin:0;padding:10px 14px;border-radius:18px;background:repeating-radial-gradient(circle at 30% 40%,rgba(255,255,255,.2) 0 2px,transparent 2px 7px);font:400 22px/1.2 'Bagel Fat One',ui-rounded,sans-serif;text-align:center}
+#btn-10 .code:focus-visible{outline:3px solid #0E2238;outline-offset:3px}
+#btn-10 .stk{--s:1000px;position:absolute;inset:0;padding:0;border:0;background:none;cursor:pointer;touch-action:manipulation;transition:transform .5s cubic-bezier(.5,0,.8,.4),opacity .5s}
+#btn-10 .stk:focus-visible{outline:3px solid #0E2238;outline-offset:5px}
+#btn-10 .face,#btn-10 .back{position:absolute;inset:0;box-sizing:border-box;border-radius:24px}
+/* The fold line is x + y = --s. The face is masked off past it; the back is the same shape mirrored across it. */
+#btn-10 .face{display:grid;place-items:center;border:7px solid #FFFFFF;background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.14) 48%,transparent 56%),#D61F7E;color:#FFFFFF;font:400 30px/1.05 'Bagel Fat One',ui-rounded,sans-serif;-webkit-mask:linear-gradient(135deg,#000 calc(var(--s) * .7071),#0000 0);mask:linear-gradient(135deg,#000 calc(var(--s) * .7071),#0000 0)}
+#btn-10 .back{background:linear-gradient(135deg,#9BA6AF calc(var(--s) * .7071),#E9EDF0 calc(var(--s) * .7071 + 50px));transform-origin:0 0;transform:translate(var(--s),var(--s)) matrix(0,-1,-1,0,0,0);-webkit-mask:linear-gradient(135deg,#0000 calc(var(--s) * .7071),#000 0);mask:linear-gradient(135deg,#0000 calc(var(--s) * .7071),#000 0)}
+#btn-10 .stk.gone{visibility:hidden;opacity:0;transform:translate(-30px,-220px) rotate(-24deg);transition:transform .5s cubic-bezier(.5,0,.8,.4),opacity .5s,visibility 0s .5s}
+@media (prefers-reduced-motion:reduce){#btn-10 .stk,#btn-10 .stk.gone{transition:none}}
+
+/* btn-11 Ballot mark */
+#btn-11 .stage{color:#1E1E1E}
+#btn-11 .ballot{width:min(100%,360px);padding:0 0 18px;border:2px solid #1E1E1E;background:#FAFAF7;font:400 18px/1.3 'Courier Prime','Courier New',monospace}
+#btn-11 .head{margin:0;padding:10px 18px;background:#1E1E1E;color:#FAFAF7;font-weight:700;letter-spacing:.12em}
+#btn-11 fieldset{margin:0;padding:0 18px;border:0}
+#btn-11 legend{padding:14px 0 6px;font-weight:700}
+#btn-11 input{position:absolute;width:1px;height:1px;opacity:0}
+#btn-11 .opt{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px dashed #8C8C88;cursor:pointer}
+#btn-11 .box{position:relative;flex:none;width:36px;height:36px;border:2px solid #1E1E1E;background:#FFFFFF}
+#btn-11 .x{position:absolute;left:-6px;top:-6px;width:48px;height:48px;overflow:visible;fill:none;stroke:#2E2E2E;stroke-width:3.6;stroke-linecap:round}
+#btn-11 .x path{stroke-dasharray:1;stroke-dashoffset:1;filter:url(#btn11-lead)}
+#btn-11 input:checked + .opt .x path{animation:btn11-draw .17s cubic-bezier(.5,0,.6,1) forwards}
+#btn-11 input:checked + .opt .x path + path{animation-delay:.24s}
+#btn-11 input:focus-visible + .opt .box{outline:3px solid #1E1E1E;outline-offset:3px}
+@keyframes btn11-draw{to{stroke-dashoffset:0}}
+#btn-11 .cast{display:block;margin:16px 18px 0 auto;padding:10px 16px;border:2px solid #1E1E1E;background:#1E1E1E;color:#FAFAF7;font:700 17px/1.2 'Courier Prime','Courier New',monospace;cursor:pointer}
+#btn-11 .cast:focus-visible{outline:3px solid #1E1E1E;outline-offset:3px}
+#btn-11 .said{min-height:24px;margin:10px 18px 0;font-size:16px;text-align:right}
+@media (prefers-reduced-motion:reduce){#btn-11 input:checked + .opt .x path{animation:none;stroke-dashoffset:0}}
+
+/* btn-12 Safety cover */
+#btn-12 .stage{padding-top:110px;color:#F0F2EE}
+#btn-12 .panel{display:grid;justify-items:center;gap:14px;width:230px;padding:20px 0;border:2px solid #1D2424;border-radius:8px;background:linear-gradient(#4A5757,#3A4545);font-family:'Saira Stencil One',Impact,sans-serif;perspective:700px}
+#btn-12 .title{margin:0;font-size:17px;letter-spacing:.16em}
+#btn-12 .bay{position:relative;width:140px;height:190px}
+#btn-12 .well{position:absolute;inset:0;display:grid;justify-items:center;align-content:space-between;padding:8px 0;border-radius:6px;background:#1B2121}
+#btn-12 .well p{margin:0;font-size:14px;letter-spacing:.12em}
+#btn-12 .sw{position:relative;width:96px;height:118px;padding:0;border:0;background:none;cursor:pointer;touch-action:manipulation}
+#btn-12 .sw:focus-visible{outline:3px solid #F0F2EE;outline-offset:2px}
+#btn-12 .nut{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:repeating-radial-gradient(circle,#D7DBDC 0 1px,#9DA3A5 1.5px 3px)}
+/* The bat flips through end-on (scaleY 0), and over-centre springs snap it past. */
+#btn-12 .lever{position:absolute;left:50%;top:50%;width:16px;height:54px;margin-left:-8px;border-radius:8px;background:linear-gradient(90deg,#8E9496,#F2F4F4 45%,#A7ADAF);transform-origin:50% 0;transition:transform .16s cubic-bezier(.7,0,.3,1.5)}
+#btn-12 .sw[aria-pressed=true] .lever{transform:scaleY(-1)}
+#btn-12 .cover{position:absolute;inset:-6px;z-index:2;padding:0;border:0;border-radius:8px;background:none;cursor:pointer;transform-origin:50% 0;transform-style:preserve-3d}
+#btn-12 .ready .cover{transition:transform .55s cubic-bezier(.3,1.35,.45,1)}
+#btn-12 .cover[aria-expanded=true]{transform:rotateX(118deg)}
+#btn-12 .cover:focus-visible{outline:3px solid #F0F2EE;outline-offset:4px}
+#btn-12 .front,#btn-12 .under{position:absolute;inset:0;box-sizing:border-box;border-radius:8px;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+#btn-12 .front{display:grid;place-items:center;border:3px solid #141414;background:repeating-linear-gradient(-45deg,#F5C400 0 14px,#141414 14px 28px)}
+#btn-12 .front span{padding:6px 8px;background:#141414;color:#F5C400;font:400 16px/1 'Saira Stencil One',Impact,sans-serif;letter-spacing:.1em;text-transform:uppercase}
+#btn-12 .under{transform:rotateX(180deg);background:repeating-linear-gradient(90deg,#8F7600 0 10px,#7A6400 10px 12px)}
+#btn-12 .hinge{position:absolute;top:-10px;left:8px;right:8px;z-index:3;height:10px;border-radius:5px;background:linear-gradient(#F0F2F2,#8C9294)}
+#btn-12 .lamp{margin:0;padding:4px 12px;border:2px solid #D3DADA;border-radius:3px;color:#D3DADA;font-size:15px;letter-spacing:.14em;text-transform:uppercase}
+#btn-12 .lamp.on{border-color:#F5C400;background:#F5C400;color:#141414}
+@media (prefers-reduced-motion:reduce){#btn-12 .ready .cover,#btn-12 .lever{transition:none}}
+
+/* btn-13 Signature */
+#btn-13 .stage{color:#FAF8F3}
+#btn-13 .card{width:min(100%,380px);box-sizing:border-box;padding:22px 20px 18px;background:#FAF8F3;color:#3B1F0E}
+#btn-13 .terms{margin:0 0 4px;color:#4A4038;font:italic 400 15px/1.4 ui-serif,Georgia,serif}
+#btn-13 .sig{display:block;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;cursor:pointer;touch-action:manipulation}
+#btn-13 .sig:focus-visible{outline:3px solid #1A2238;outline-offset:6px}
+#btn-13 .sig svg{display:block;width:100%;height:auto;overflow:visible}
+#btn-13 .ink{fill:#3B1F0E;font:400 76px/1 'Reenie Beanie','Bradley Hand','Segoe Print',cursive}
+#btn-13 .rule{stroke:#6F7C8A;stroke-width:1.5}
+#btn-13 .pen{fill:none;stroke:#FFFFFF;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+#btn-13 .nib{opacity:0}
+#btn-13 .cap{display:block;margin-top:4px;color:#4A4038;font:600 13px/1.2 ui-serif,Georgia,serif;letter-spacing:.14em;text-transform:uppercase}
+
+/* btn-14 Tally */
+#btn-14 .stage{color:#EFEFE6;align-content:center;gap:18px}
+#btn-14 .marks{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;width:min(100%,420px);min-height:84px}
+#btn-14 .marks svg{width:64px;height:80px;overflow:visible;fill:none;stroke:#EFEFE6;stroke-width:5;stroke-linecap:round}
+#btn-14 .marks path{stroke-dasharray:1;stroke-dashoffset:1;filter:url(#btn14-chalk);transition:stroke-dashoffset .16s cubic-bezier(.5,0,.6,1)}
+#btn-14 .marks path.on{stroke-dashoffset:0}
+#btn-14 .add{padding:10px 22px;border:3px solid #EFEFE6;border-radius:255px 18px 225px 18px/18px 225px 18px 255px;background:none;color:#EFEFE6;font:400 26px/1 'Sedgwick Ave Display','Marker Felt',cursive;cursor:pointer;touch-action:manipulation}
+#btn-14 .add:focus-visible{outline:3px dashed #EFEFE6;outline-offset:5px}
+#btn-14 .count{margin:0;font:400 22px/1 'Sedgwick Ave Display','Marker Felt',cursive}
+@media (prefers-reduced-motion:reduce){#btn-14 .marks path{transition:none}}
+
+/* btn-15 Zipper */
+#btn-15 .stage{color:#1E1E1E;align-content:center;gap:16px}
+#btn-15 .pouch{position:relative;width:min(100%,460px)}
+#btn-15 .pouch svg{display:block;width:100%;height:auto;border-radius:14px}
+#btn-15 .pull{position:absolute;top:36%;left:0;width:44px;height:56%;margin-left:-14px;padding:0;border:0;border-radius:8px;background:none;cursor:grab;touch-action:none}
+#btn-15 .pull:focus-visible{outline:3px solid #FFFFFF;outline-offset:2px}
+#btn-15 .label{position:absolute;right:14px;bottom:8px;margin:0;padding:3px 8px;background:#1E1E1E;color:#FFFFFF;font:400 14px/1.3 'Potta One',ui-rounded,sans-serif}
+#btn-15 .det{width:min(100%,460px);box-sizing:border-box;padding:14px 16px;border:2px dashed #C62B2B;background:#FFFFFF;font:400 16px/1.5 'Potta One',ui-rounded,sans-serif}
+#btn-15 .det p{margin:0}
+
+/* btn-16 Piano keys */
+#btn-16 .stage{color:#FFFFFF}
+#btn-16 .deck{margin:0;padding:0;border:0;font-family:'Krona One',ui-sans-serif,sans-serif}
+#btn-16 legend{padding:0 0 10px;font-size:13px;letter-spacing:.2em;text-transform:uppercase}
+#btn-16 .keys{display:flex;gap:4px;padding:6px;border-radius:6px;background:#141510;perspective:400px;perspective-origin:50% -60%}
+#btn-16 input{position:absolute;width:1px;height:1px;opacity:0}
+/* Keys pivot at the back like a tape deck's; the latch bar lets the old key up a beat after the new one goes down. */
+#btn-16 label{position:relative;display:grid;align-content:end;justify-items:center;width:clamp(76px,22vw,96px);height:118px;box-sizing:border-box;padding-bottom:20px;border-radius:3px 3px 6px 6px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 1px,transparent 1px 3px),linear-gradient(#F4F5F3,#CFD3D2 55%,#A9AEAD);color:#1E2118;font-size:13px;letter-spacing:.06em;cursor:pointer;transform-origin:50% 0;transition:transform .34s cubic-bezier(.25,2.2,.5,1) .07s}
+#btn-16 label::before{content:"";position:absolute;top:12px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#3A3F2A}
+#btn-16 label::after{content:"";position:absolute;left:0;right:0;bottom:0;height:12px;border-radius:0 0 6px 6px;background:linear-gradient(#8B908F,#5F6463)}
+#btn-16 label:active{transform:rotateX(-8deg);transition-duration:.06s;transition-delay:0s}
+#btn-16 input:checked + label{transform:rotateX(-17deg);transition:transform .07s cubic-bezier(.6,0,1,1)}
+#btn-16 input:checked + label::before{background:#FF4A1C}
+#btn-16 input:focus-visible + label{outline:3px solid #FFFFFF;outline-offset:3px}
+@media (prefers-reduced-motion:reduce){#btn-16 label,#btn-16 input:checked + label{transition:none}}
+
+/* btn-17 Embroidered patch */
+#btn-17 .stage{color:#2E2610;align-content:center;gap:14px}
+#btn-17 .patch{position:relative;display:grid;place-items:center;width:210px;height:210px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer;touch-action:manipulation}
+#btn-17 .patch:focus-visible{outline:3px solid #2E2610;outline-offset:8px}
+#btn-17 .patch:active{transform:translateY(1px)}
+#btn-17 .satin{position:absolute;inset:6px;border-radius:50%;background:repeating-linear-gradient(45deg,#F3EEDC 0 2px,#E4DCC2 2px 3px)}
+/* Satin border: hundreds of radial stitches from a repeating conic gradient, masked to a ring. */
+#btn-17 .satin::before{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(#0F7F82 0 .7deg,#0B6466 .7deg 1.4deg);-webkit-mask:radial-gradient(closest-side,#0000 calc(100% - 15px),#000 calc(100% - 14px));mask:radial-gradient(closest-side,#0000 calc(100% - 15px),#000 calc(100% - 14px))}
+#btn-17 .satin::after{content:"";position:absolute;inset:16px;border:2px dashed #0B6466;border-radius:50%}
+#btn-17 .word{position:relative;color:#0B6466;font:400 56px/1 Shrikhand,'Cooper Black',Georgia,serif}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){#btn-17 .word{color:transparent;background:repeating-linear-gradient(100deg,#0B6466 0 1.5px,#138589 1.5px 2.5px);-webkit-background-clip:text;background-clip:text;-webkit-text-stroke:.6px #073F40}}
+#btn-17 .sew{position:absolute;inset:0;width:100%;height:100%;overflow:visible;transform:rotate(-90deg)}
+#btn-17 .run{fill:none;stroke:#2E2610;stroke-width:2.2;stroke-dasharray:1.6 1.2}
+#btn-17 .rev{fill:none;stroke:#FFFFFF;stroke-width:8;stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset 1.4s steps(36)}
+#btn-17 .patch[aria-pressed=true] .rev{stroke-dashoffset:0}
+#btn-17 .state{margin:0;font:400 20px/1.2 Shrikhand,'Cooper Black',Georgia,serif}
+@media (prefers-reduced-motion:reduce){#btn-17 .rev{transition:none}#btn-17 .patch:active{transform:none}}
+</style>
+</head>
+<body>
+<main class="shell">
+<h1>Buttons</h1>
+<p>Specimens to re-cut, never to ship as they are: change the copy, colours and type to the product's own. Roll for one with <code>python3 scripts/roll.py --library buttons</code>.</p>
+<ul class="index"><li><a href="#btn-01">btn-01 Rubber stamp</a></li><li><a href="#btn-02">btn-02 Ticket stub</a></li><li><a href="#btn-03">btn-03 Pull chain</a></li><li><a href="#btn-04">btn-04 Keycap</a></li><li><a href="#btn-05">btn-05 Wax seal</a></li><li><a href="#btn-06">btn-06 Fuse</a></li><li><a href="#btn-07">btn-07 Price tag</a></li><li><a href="#btn-08">btn-08 Split-flap</a></li><li><a href="#btn-09">btn-09 Elevator call</a></li><li><a href="#btn-10">btn-10 Sticker peel</a></li><li><a href="#btn-11">btn-11 Ballot mark</a></li><li><a href="#btn-12">btn-12 Safety cover</a></li><li><a href="#btn-13">btn-13 Signature</a></li><li><a href="#btn-14">btn-14 Tally</a></li><li><a href="#btn-15">btn-15 Zipper</a></li><li><a href="#btn-16">btn-16 Piano keys</a></li><li><a href="#btn-17">btn-17 Embroidered patch</a></li></ul>
+
+<article class="spec" id="btn-01" data-name="Rubber stamp">
+<header><h2><code>btn-01</code> Rubber stamp</h2><p><b>Use it when:</b> an approve, sign-off or mark-as-done action should feel final and leave a mark. <b>Change:</b> the stamp word, ink and paper colours, the face; keep the random seed and tilt so no two stamps match.</p></header>
+<div class="stage" style="background:repeating-linear-gradient(#F2D4D7 0 31px,#E6BDC3 31px 32px)">
+<div class="sheet">
+<p class="field">Sign-off</p>
+<button class="stamp" type="button"><span class="slot">Approve</span><span class="block" aria-hidden="true"></span><svg class="imp" viewBox="0 0 260 110" aria-hidden="true" focusable="false"><filter id="btn01-ink"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="4" result="n"/><feColorMatrix in="n" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -4 2.7" result="gaps"/><feComposite in="SourceGraphic" in2="gaps" operator="in" result="ink"/><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="11" result="w"/><feDisplacementMap in="ink" in2="w" scale="5" xChannelSelector="R" yChannelSelector="G"/></filter><g filter="url(#btn01-ink)" fill="none" stroke="#3A1C77"><rect x="8" y="10" width="244" height="90" rx="12" stroke-width="7"/><rect x="19" y="21" width="222" height="68" rx="5" stroke-width="2.5"/><text x="130" y="69" text-anchor="middle" font-size="40" textLength="190" lengthAdjust="spacingAndGlyphs" fill="#3A1C77" stroke="none">APPROVED</text></g></svg></button>
+<p class="sr" aria-live="polite"></p>
+</div>
+<button class="replay" type="button">Replay</button>
+</div>
+</article>
+
+<article class="spec" id="btn-02" data-name="Ticket stub">
+<header><h2><code>btn-02</code> Ticket stub</h2><p><b>Use it when:</b> claiming a seat, an RSVP or a one-time entry, where the act is irreversible. <b>Change:</b> the ticket words and colours, the stub copy, the fine print; keep the half-holes on both torn edges.</p></header>
+<div class="stage" style="background:repeating-linear-gradient(35deg,rgba(0,0,0,.09) 0 1px,transparent 1px 4px),#1F3FA0">
+<button class="tk" type="button"><span class="main"><span class="kick">Admit</span><span class="big">One</span><span class="fine" aria-hidden="true">Sample ticket · No. 000</span></span><span class="sr">, </span><span class="stub"><span>Tear to claim</span></span></button>
+<p class="sr" aria-live="polite"></p>
+<button class="replay" type="button">Replay</button>
+</div>
+</article>
+
+<article class="spec" id="btn-03" data-name="Pull chain">
+<header><h2><code>btn-03</code> Pull chain</h2><p><b>Use it when:</b> a two-state switch (dark mode, a feature on/off) should be pulled, not ticked. Drag the chain down, or click, or press Enter. <b>Change:</b> the room colours, the tag word, the lamp; keep the switch firing at the bottom of the pull.</p></header>
+<div class="stage" style="background:var(--room,#1B1E24)">
+<div class="lamp" aria-hidden="true"><span class="cord"></span><span class="shade"></span><span class="bulb"></span></div>
+<div class="pull"><span class="canopy" aria-hidden="true"></span><button class="knob" type="button" aria-pressed="false"><span class="chain" aria-hidden="true"></span><span class="bob" aria-hidden="true"></span><span class="tag">Light</span></button></div>
+<p class="sign" aria-hidden="true">Off</p>
+</div>
+</article>
+
+<article class="spec" id="btn-04" data-name="Keycap">
+<header><h2><code>btn-04</code> Keycap</h2><p><b>Use it when:</b> an action has a keyboard shortcut worth teaching (save, next, search). The key travels into the plate and fires from its shortcut too. <b>Change:</b> the legend, the shortcut letter, the cap and plate colours.</p></header>
+<div class="stage" style="background:#26272B">
+<div class="plate"><span class="well" aria-hidden="true"></span><button class="cap" type="button" aria-keyshortcuts="S"><span class="skirt" aria-hidden="true"></span><span class="top"><span class="sub" aria-hidden="true">S</span><span class="lg">Save</span></span></button><span class="lip" aria-hidden="true"></span></div>
+<p class="hint">Click the key or press <kbd>S</kbd></p>
+<p class="said" aria-live="polite"></p>
+</div>
+</article>
+
+<article class="spec" id="btn-05" data-name="Wax seal">
+<header><h2><code>btn-05</code> Wax seal</h2><p><b>Use it when:</b> opening something private or ceremonial: an invitation, a result, a reveal. <b>Change:</b> the wax colour, the monogram, the envelope and letter copy.</p></header>
+<div class="stage" style="background:#B9A6D3">
+<div class="env">
+<div class="back" aria-hidden="true"></div>
+<p class="letter" aria-hidden="true">You're invited</p>
+<div class="pocket" aria-hidden="true"></div>
+<div class="flap" aria-hidden="true"></div>
+<button class="seal" type="button"><span class="disk" aria-hidden="true"><span class="half w"></span><span class="half l"></span><span class="half r"></span><svg class="crack" viewBox="0 0 100 100" focusable="false"><polyline pathLength="1" points="53,0 47,17 56,34 45,51 54,67 46,83 51,100"/></svg></span><span class="lbl">Break the seal</span></button>
+</div>
+<p class="sr" aria-live="polite"></p>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="btn05-wax" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur in="SourceAlpha" stdDeviation="3" result="b"/><feTurbulence type="fractalNoise" baseFrequency=".02" numOctaves="1" seed="7" result="n"/><feComposite in="b" in2="n" operator="arithmetic" k2="1" k3=".25" result="h"/><feSpecularLighting in="h" surfaceScale="4" specularConstant=".55" specularExponent="26" lighting-color="#FFFFFF" result="s"><feDistantLight azimuth="235" elevation="50"/></feSpecularLighting><feComposite in="s" in2="SourceAlpha" operator="in" result="sh"/><feComposite in="SourceGraphic" in2="sh" operator="arithmetic" k2="1" k3=".35"/></filter></svg>
+<button class="replay" type="button">Replay</button>
+</div>
+</article>
+
+<article class="spec" id="btn-06" data-name="Fuse">
+<header><h2><code>btn-06</code> Fuse</h2><p><b>Use it when:</b> a destructive action needs a beat of intent (delete, cancel a plan, wipe data). Hold the pointer, Space or Enter until the fuse burns down; let go early and it goes out. Clicking twice also works. <b>Change:</b> the action word, the hold time (<code>HOLD</code>), the colours.</p></header>
+<div class="stage" style="background:#16130F">
+<button class="fuse" type="button" aria-describedby="btn06-how"><span class="lbl">Delete project</span><span class="wick" aria-hidden="true"><svg viewBox="0 0 300 24" focusable="false"><path class="cord" d="M4 14C40 6 62 20 100 13S160 5 200 13S262 21 296 12"/><path class="twist" d="M4 14C40 6 62 20 100 13S160 5 200 13S262 21 296 12"/><path class="ash" pathLength="1" d="M4 14C40 6 62 20 100 13S160 5 200 13S262 21 296 12"/></svg><span class="spark"></span></span></button>
+<p class="how" id="btn06-how">Hold to delete, or click it twice. Sample: nothing is removed.</p>
+<p class="sr" aria-live="polite"></p>
+<button class="replay" type="button">Reset</button>
+</div>
+</article>
+
+<article class="spec" id="btn-07" data-name="Price tag">
+<header><h2><code>btn-07</code> Price tag</h2><p><b>Use it when:</b> add-to-bag or save-for-later on a shop that sells physical goods. The tag swings on its string like a pendulum when brushed or clicked. <b>Change:</b> the tag copy, the twine colours, the cloth behind; keep the swing short and damped.</p></header>
+<div class="stage" style="background:repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 6px,transparent 6px 12px) 0 0/24px 24px,repeating-linear-gradient(-45deg,rgba(0,0,0,.2) 0 6px,transparent 6px 12px) 12px 0/24px 24px,#34312E">
+<span class="nail" aria-hidden="true"></span>
+<div class="pend"><span class="twine" aria-hidden="true"></span><button class="tag" type="button"><span class="hole" aria-hidden="true"></span><span class="t1">Add to bag</span><span class="t2">Size M · sample</span></button></div>
+<p class="sr" aria-live="polite"></p>
+</div>
+</article>
+
+<article class="spec" id="btn-08" data-name="Split-flap">
+<header><h2><code>btn-08</code> Split-flap</h2><p><b>Use it when:</b> booking, check-in or any status that changes, on a travel, transport or events product. Each letter turns forward through the drum until it lands. <b>Change:</b> the two words (same length), the board colours, the drum order.</p></header>
+<div class="stage" style="background:radial-gradient(circle at 20% 30%,rgba(0,0,0,.07) 0 1px,transparent 1.5px) 0 0/7px 7px,radial-gradient(circle at 60% 70%,rgba(255,255,255,.3) 0 1px,transparent 1.5px) 0 0/11px 11px,#B6B9B2">
+<button class="board" type="button"><span class="txt">Book seat</span></button>
+<p class="sr" aria-live="polite"></p>
+</div>
+</article>
+
+<article class="spec" id="btn-09" data-name="Elevator call">
+<header><h2><code>btn-09</code> Elevator call</h2><p><b>Use it when:</b> joining a queue, a waitlist or requesting a callback, where the wait itself is the feedback. <b>Change:</b> the floors (<code>FLOORS</code>), the LED colour, the panel; label the countdown as sample unless it is real.</p></header>
+<div class="stage" style="background:repeating-linear-gradient(92deg,rgba(0,0,0,.22) 0 2px,transparent 2px 9px,rgba(255,255,255,.05) 9px 11px,transparent 11px 26px),linear-gradient(90deg,#3B2416,#4A2E1C 50%,#3B2416)">
+<div class="plate">
+<div class="ind" aria-hidden="true"><span class="arw"></span><span class="fl">7</span></div>
+<button class="call" type="button"><span class="face">Call</span></button>
+</div>
+<p class="sr" aria-live="polite"></p>
+</div>
+</article>
+
+<article class="spec" id="btn-10" data-name="Sticker peel">
+<header><h2><code>btn-10</code> Sticker peel</h2><p><b>Use it when:</b> revealing a code, a reward or a hidden answer. The corner lifts on hover or focus; a click peels it off. <b>Change:</b> the sticker colour and copy, the hidden code, the surface behind.</p></header>
+<div class="stage" style="background:repeating-linear-gradient(180deg,#8DB9E6 0 12px,#5F8DBE 12px 16px) 50% 24px/180px 64px no-repeat,#8DB9E6">
+<div class="spot">
+<p class="code" tabindex="-1" aria-hidden="true">Code: SAMPLE-CODE</p>
+<button class="stk" type="button"><span class="face">Peel for code</span><span class="back" aria-hidden="true"></span></button>
+</div>
+<p class="sr" aria-live="polite"></p>
+<button class="replay" type="button">Replay</button>
+</div>
+</article>
+
+<article class="spec" id="btn-11" data-name="Ballot mark">
+<header><h2><code>btn-11</code> Ballot mark</h2><p><b>Use it when:</b> a vote, a poll or a one-of-several choice, where picking should feel like marking paper. Works without JavaScript. <b>Change:</b> the options, the paper and pencil colours, the header.</p></header>
+<div class="stage" style="background:#CFD3D6">
+<div class="ballot">
+<p class="head" aria-hidden="true">SAMPLE BALLOT</p>
+<fieldset><legend>Mark one box</legend>
+<input type="radio" name="btn11" id="btn11-a" value="Keep it"><label class="opt" for="btn11-a">Keep it<span class="box"><svg class="x" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path pathLength="1" d="M8 7C15 16 24 26 40 41"/><path pathLength="1" d="M39 8C31 16 20 28 9 40l-2 1"/></svg></span></label>
+<input type="radio" name="btn11" id="btn11-b" value="Change it"><label class="opt" for="btn11-b">Change it<span class="box"><svg class="x" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path pathLength="1" d="M7 9C16 17 25 27 41 39"/><path pathLength="1" d="M40 7C30 17 21 27 8 41l-1 2"/></svg></span></label>
+<input type="radio" name="btn11" id="btn11-c" value="No opinion"><label class="opt" for="btn11-c">No opinion<span class="box"><svg class="x" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path pathLength="1" d="M9 8C17 16 25 27 39 40"/><path pathLength="1" d="M41 9C32 17 20 27 8 39l-2 2"/></svg></span></label>
+</fieldset>
+<button class="cast" type="button">Cast vote</button>
+<p class="said" aria-live="polite"></p>
+</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="btn11-lead" filterUnits="userSpaceOnUse" x="-10" y="-10" width="70" height="70"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="3" result="n"/><feColorMatrix in="n" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.2 1.9" result="g"/><feComposite in="SourceGraphic" in2="g" operator="in"/></filter></svg>
+</div>
+</article>
+
+<article class="spec" id="btn-12" data-name="Safety cover">
+<header><h2><code>btn-12</code> Safety cover</h2><p><b>Use it when:</b> a high-stakes switch (publish, go live, send to everyone) should take two deliberate steps. Lift the cover, then flip the switch; closing the cover pushes the switch back to off. <b>Change:</b> the action word, the stripes, the panel colour.</p></header>
+<div class="stage" style="background:#283131">
+<div class="panel">
+<div class="bay">
+<div class="well"><p aria-hidden="true">ON</p><button class="sw" type="button" aria-pressed="false"><span class="nut" aria-hidden="true"></span><span class="lever" aria-hidden="true"></span><span class="sr">Publish</span></button><p aria-hidden="true">OFF</p></div>
+<span class="hinge" aria-hidden="true"></span>
+<button class="cover" type="button" aria-expanded="true"><span class="front"><span>Lift cover</span></span><span class="under" aria-hidden="true"></span></button>
+</div>
+<p class="title" aria-hidden="true">PUBLISH</p>
+<p class="lamp" aria-hidden="true">Standby</p>
+</div>
+<p class="sr" aria-live="polite"></p>
+</div>
+</article>
+
+<article class="spec" id="btn-13" data-name="Signature">
+<header><h2><code>btn-13</code> Signature</h2><p><b>Use it when:</b> sign up, accept or agree, where a signature is the honest metaphor. The words write themselves with a pen. <b>Change:</b> the signed words, the ink and card colours, the line of terms.</p></header>
+<div class="stage" style="background:#1A2238">
+<div class="card">
+<p class="terms">By signing you agree to the sample terms.</p>
+<button class="sig" type="button"><svg viewBox="0 0 320 110" aria-hidden="true" focusable="false"><defs><mask id="btn13-m" maskUnits="userSpaceOnUse" x="0" y="0" width="320" height="110"><path class="pen" d=""/></mask><filter id="btn13-bleed"><feTurbulence type="fractalNoise" baseFrequency=".06" numOctaves="2" seed="5" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="2" xChannelSelector="R" yChannelSelector="G"/></filter></defs><text class="ink" x="26" y="84" mask="url(#btn13-m)" filter="url(#btn13-bleed)">Sign up</text><path class="rule" d="M4 94H316"/><path d="M6 78l10 10M16 78L6 88" stroke="#6F7C8A" stroke-width="2"/><g class="nib"><path d="M0 0L-6-20Q0-30 6-20Z" fill="#1E1E1E"/><path d="M0-1V-16" stroke="#C9A24A" stroke-width="1.2"/></g></svg><span class="cap">Sign up</span></button>
+<p class="sr" aria-live="polite"></p>
+</div>
+<button class="replay" type="button">Replay</button>
+</div>
+</article>
+
+<article class="spec" id="btn-14" data-name="Tally">
+<header><h2><code>btn-14</code> Tally</h2><p><b>Use it when:</b> an upvote, a like or a counter where the count should look counted by hand. Every fifth stroke crosses the four before it. <b>Change:</b> the board and chalk colours, the label, the cap (<code>MAX</code>).</p></header>
+<div class="stage" style="background:radial-gradient(ellipse at 30% 40%,rgba(255,255,255,.06),transparent 60%),#23312B">
+<div class="marks"></div>
+<button class="add" type="button">+1 Upvote</button>
+<p class="count" aria-live="polite">0 votes</p>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="btn14-chalk" filterUnits="userSpaceOnUse" x="-10" y="-10" width="90" height="100"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="2" result="n"/><feColorMatrix in="n" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -3 2.1" result="g"/><feComposite in="SourceGraphic" in2="g" operator="in"/></filter></svg>
+</div>
+</article>
+
+<article class="spec" id="btn-15" data-name="Zipper">
+<header><h2><code>btn-15</code> Zipper</h2><p><b>Use it when:</b> a disclosure (details, specs, more info) on a fashion, bag or outdoor product. Drag the pull along the teeth, or click it, or press Enter. <b>Change:</b> the fabric and lining colours, the label, the details copy.</p></header>
+<div class="stage" style="background:#DCDCD8">
+<div class="pouch">
+<svg viewBox="0 0 320 120" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="btn15-metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7F8F9"/><stop offset=".55" stop-color="#B7BCC1"/><stop offset="1" stop-color="#787E85"/></linearGradient>
+<pattern id="btn15-tt" width="8" height="13" patternUnits="userSpaceOnUse"><rect x="1.5" width="5" height="13" rx="1.6" fill="url(#btn15-metal)"/></pattern>
+<pattern id="btn15-tb" x="4" width="8" height="13" patternUnits="userSpaceOnUse"><rect x="1.5" width="5" height="13" rx="1.6" fill="url(#btn15-metal)"/></pattern>
+<pattern id="btn15-rip" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#C62B2B"/><path d="M0 .5H10M.5 0V10" stroke="#A82020"/></pattern>
+<pattern id="btn15-quilt" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="16" height="16" fill="#F4F1EA"/><path d="M0 .5H16M.5 0V16" stroke="#D9D2C3" stroke-dasharray="2 2"/></pattern>
+<clipPath id="btn15-open"><rect class="cut" x="-20" y="-60" width="24" height="240"/></clipPath>
+<clipPath id="btn15-shut"><rect class="keep" x="4" y="-60" width="336" height="240"/></clipPath>
+<g id="btn15-top"><rect x="-20" y="30" width="360" height="30" fill="#8E1717"/><rect x="-20" y="49" width="360" height="13" fill="url(#btn15-tt)"/></g>
+<g id="btn15-bot"><rect x="-20" y="60" width="360" height="30" fill="#8E1717"/><rect x="-20" y="58" width="360" height="13" fill="url(#btn15-tb)"/></g>
+</defs>
+<rect y="34" width="320" height="52" fill="url(#btn15-quilt)"/>
+<g clip-path="url(#btn15-shut)"><use href="#btn15-top"/><use href="#btn15-bot"/></g>
+<g class="up"><g clip-path="url(#btn15-open)"><use href="#btn15-top"/></g></g>
+<g class="dn"><g clip-path="url(#btn15-open)"><use href="#btn15-bot"/></g></g>
+<rect width="320" height="38" fill="url(#btn15-rip)"/>
+<rect y="82" width="320" height="38" fill="url(#btn15-rip)"/>
+<path d="M0 36H320M0 84H320" stroke="#7A1010" stroke-dasharray="4 3"/>
+<g class="slider"><path d="M-8 52L18 54Q24 60 18 66L-8 68Z" fill="url(#btn15-metal)" stroke="#5E646A"/><rect x="2" y="62" width="10" height="38" rx="4" fill="url(#btn15-metal)" stroke="#5E646A"/></g>
+</svg>
+<button class="pull" type="button" aria-expanded="false" aria-controls="btn15-det"><span class="sr">Unzip for details</span></button>
+<p class="label" aria-hidden="true">Unzip for details</p>
+</div>
+<div class="det" id="btn15-det" hidden><p>Sample details: size, material, care. Replace with the product's own.</p></div>
+</div>
+</article>
+
+<article class="spec" id="btn-16" data-name="Piano keys">
+<header><h2><code>btn-16</code> Piano keys</h2><p><b>Use it when:</b> a segmented choice (view, mode, speed) on a product with some hardware in its soul. Pressing one key releases the other, like a tape deck's latch bar. Works without JavaScript. <b>Change:</b> the options, the body colour, the key count.</p></header>
+<div class="stage" style="background:radial-gradient(circle,rgba(0,0,0,.14) 1px,transparent 1.5px) 0 0/5px 5px,#5E6B2A">
+<fieldset class="deck"><legend>View</legend>
+<div class="keys">
+<input type="radio" name="btn16" id="btn16-a" checked><label for="btn16-a">List</label>
+<input type="radio" name="btn16" id="btn16-b"><label for="btn16-b">Grid</label>
+<input type="radio" name="btn16" id="btn16-c"><label for="btn16-c">Map</label>
+</div>
+</fieldset>
+</div>
+</article>
+
+<article class="spec" id="btn-17" data-name="Embroidered patch">
+<header><h2><code>btn-17</code> Embroidered patch</h2><p><b>Use it when:</b> join, follow or subscribe on a club, team or community product. Pressing sews the patch on, one stitch at a time; pressing again unpicks it. <b>Change:</b> the word, the thread and canvas colours, the patch shape.</p></header>
+<div class="stage" style="background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0 1px,transparent 1px 3px),#B5A57A">
+<button class="patch" type="button" aria-pressed="false"><span class="satin" aria-hidden="true"></span><svg class="sew" viewBox="0 0 210 210" aria-hidden="true" focusable="false"><mask id="btn17-m"><circle class="rev" cx="105" cy="105" r="103" pathLength="100"/></mask><circle class="run" cx="105" cy="105" r="103" pathLength="100" mask="url(#btn17-m)"/></svg><span class="word">Join</span></button>
+<p class="state">Not joined yet</p>
+</div>
+</article>
+</main>
+<script>
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// btn-01 Rubber stamp
+{
+  const root = document.getElementById('btn-01');
+  const btn = root.querySelector('.stamp'), slot = root.querySelector('.slot'), seed = root.querySelector('feTurbulence'), live = root.querySelector('[aria-live]');
+  btn.addEventListener('click', () => {
+    if (btn.dataset.done) return;
+    seed.setAttribute('seed', 1 + Math.floor(Math.random() * 98)); // new ink gaps every time
+    btn.style.setProperty('--r', (Math.random() * 10 - 5).toFixed(1) + 'deg');
+    btn.dataset.done = reduce ? 'still' : 'hit';
+    btn.setAttribute('aria-disabled', 'true'); slot.textContent = 'Approved'; live.textContent = 'Approved.';
+  });
+  root.querySelector('.replay').addEventListener('click', () => {
+    delete btn.dataset.done; btn.removeAttribute('aria-disabled'); slot.textContent = 'Approve'; live.textContent = '';
+  });
+}
+
+// btn-02 Ticket stub
+{
+  const root = document.getElementById('btn-02');
+  const tk = root.querySelector('.tk'), fine = root.querySelector('.fine'), live = root.querySelector('[aria-live]');
+  tk.addEventListener('click', () => {
+    if (tk.dataset.torn) return;
+    tk.dataset.torn = reduce ? 'still' : 'go';
+    tk.setAttribute('aria-disabled', 'true'); fine.textContent = 'Claimed'; live.textContent = 'Ticket claimed.';
+  });
+  root.querySelector('.replay').addEventListener('click', () => {
+    delete tk.dataset.torn; tk.removeAttribute('aria-disabled'); fine.textContent = 'Sample ticket · No. 000'; live.textContent = '';
+  });
+}
+
+// btn-03 Pull chain
+{
+  const root = document.getElementById('btn-03');
+  const stage = root.querySelector('.stage'), knob = root.querySelector('.knob'), sign = root.querySelector('.sign');
+  const pullBy = d => 64 * (1 - Math.exp(-d / 64)); // the chain resists more the further it goes
+  console.assert(pullBy(0) === 0 && pullBy(1e4) <= 64, 'btn-03 pull limit');
+  let on = false, y0 = null, fired = false, dragged = false;
+  const toggle = () => { on = !on; knob.setAttribute('aria-pressed', on); stage.classList.toggle('on', on); sign.textContent = on ? 'On' : 'Off'; };
+  knob.addEventListener('pointerdown', e => { y0 = e.clientY; fired = dragged = false; knob.setPointerCapture(e.pointerId); knob.style.transition = 'none'; });
+  knob.addEventListener('pointermove', e => {
+    if (y0 === null) return;
+    const d = Math.max(0, e.clientY - y0);
+    if (d > 6) dragged = true;
+    knob.style.transform = `translateY(${pullBy(d)}px)`;
+    if (pullBy(d) > 34 && !fired) { fired = true; toggle(); } // the switch clicks at the bottom of the pull, not on release
+  });
+  const release = () => { if (y0 === null) return; y0 = null; knob.style.transition = ''; knob.style.transform = ''; };
+  knob.addEventListener('pointerup', release);
+  knob.addEventListener('pointercancel', release);
+  knob.addEventListener('click', () => {
+    if (dragged) { dragged = false; return; }
+    toggle();
+    if (!reduce) knob.animate([{ transform: 'none' }, { transform: 'translateY(38px)', offset: .3 }, { transform: 'translateY(-7px)', offset: .62 }, { transform: 'translateY(2px)', offset: .82 }, { transform: 'none' }], { duration: 650, easing: 'ease-out' });
+  });
+}
+
+// btn-04 Keycap
+{
+  const root = document.getElementById('btn-04');
+  const cap = root.querySelector('.cap'), said = root.querySelector('.said');
+  let timer = 0;
+  const save = () => {
+    said.textContent = ''; clearTimeout(timer);
+    setTimeout(() => { said.textContent = 'Saved.'; }, 30); // cleared first so a second save is announced again
+    timer = setTimeout(() => { said.textContent = ''; }, 2000);
+  };
+  const up = () => cap.classList.remove('down');
+  cap.addEventListener('pointerdown', () => cap.classList.add('down'));
+  ['pointerup', 'pointerleave', 'pointercancel', 'keyup', 'blur'].forEach(t => cap.addEventListener(t, up));
+  cap.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') cap.classList.add('down'); });
+  cap.addEventListener('click', save);
+  document.addEventListener('keydown', e => {
+    if ((e.key || '').toLowerCase() !== 's' || e.ctrlKey || e.metaKey || e.altKey || e.repeat || e.target.closest?.('input, textarea, select, [contenteditable]')) return;
+    cap.classList.add('down'); setTimeout(up, 110); save();
+  });
+}
+
+// btn-05 Wax seal
+{
+  const root = document.getElementById('btn-05');
+  const env = root.querySelector('.env'), seal = root.querySelector('.seal'), lbl = root.querySelector('.lbl'), letter = root.querySelector('.letter'), live = root.querySelector('[aria-live]');
+  seal.addEventListener('click', () => {
+    if (env.dataset.open) return;
+    env.dataset.open = reduce ? 'still' : 'go';
+    seal.setAttribute('aria-disabled', 'true'); lbl.textContent = 'Opened'; letter.removeAttribute('aria-hidden');
+    live.textContent = "Seal broken. The letter reads: You're invited.";
+  });
+  root.querySelector('.replay').addEventListener('click', () => {
+    delete env.dataset.open; seal.removeAttribute('aria-disabled'); lbl.textContent = 'Break the seal'; letter.setAttribute('aria-hidden', 'true'); live.textContent = '';
+  });
+}
+
+// btn-06 Fuse
+{
+  const root = document.getElementById('btn-06');
+  const btn = root.querySelector('.fuse'), lbl = root.querySelector('.lbl'), cord = root.querySelector('.cord'), ash = root.querySelector('.ash'), spark = root.querySelector('.spark'), live = root.querySelector('[aria-live]');
+  const HOLD = 1600, len = cord.getTotalLength();
+  console.assert(Math.abs(cord.getPointAtLength(len).x - 296) < 1, 'btn-06 the spark ends at the charge');
+  let p = 0, t0 = 0, raf = 0, holding = false, armed = false, done = false, pressAt = 0, longHold = false, kb = false, disarm = 0;
+  const draw = () => {
+    ash.style.strokeDasharray = `${p} 2`;
+    const pt = cord.getPointAtLength(p * len);
+    spark.style.left = pt.x / 3 + '%'; spark.style.top = pt.y / 24 * 100 + '%';
+    spark.style.transform = `translate(-50%,-50%) rotate(${reduce ? 0 : Math.random() * 90}deg)`;
+  };
+  const say = (text, msg) => { lbl.textContent = text; if (msg) live.textContent = msg; };
+  const finish = () => { holding = false; done = true; armed = false; clearTimeout(disarm); p = 1; draw(); btn.dataset.state = 'done'; say('Deleted', 'Project deleted. Sample only: nothing was removed.'); };
+  const tick = now => { p = Math.min(1, (now - t0) / HOLD); draw(); if (p >= 1) finish(); else raf = requestAnimationFrame(tick); };
+  const begin = () => { if (done || holding) return; holding = true; pressAt = t0 = performance.now(); btn.dataset.state = 'burning'; say('Keep holding'); raf = requestAnimationFrame(tick); };
+  const end = () => {
+    longHold = performance.now() - pressAt > 300;
+    if (!holding) return;
+    holding = false; cancelAnimationFrame(raf); p = 0; draw(); // let go early and the fuse goes out
+    btn.dataset.state = armed ? 'armed' : ''; say(armed ? 'Click again to delete' : 'Delete project');
+  };
+  const quick = () => { // the click equivalent: two clicks within four seconds
+    if (done) return;
+    if (armed) return finish();
+    armed = true; btn.dataset.state = 'armed'; say('Click again to delete', 'Click again to delete, or hold.');
+    clearTimeout(disarm); disarm = setTimeout(() => { if (done) return; armed = false; btn.dataset.state = ''; say('Delete project'); }, 4000);
+  };
+  btn.addEventListener('pointerdown', e => { if (e.button) return; kb = false; btn.setPointerCapture(e.pointerId); begin(); });
+  btn.addEventListener('pointerup', end);
+  btn.addEventListener('pointercancel', end);
+  btn.addEventListener('contextmenu', e => e.preventDefault());
+  btn.addEventListener('keydown', e => { if (e.key !== ' ' && e.key !== 'Enter') return; e.preventDefault(); if (!e.repeat) { kb = true; begin(); } });
+  btn.addEventListener('keyup', e => { if (e.key !== ' ' && e.key !== 'Enter') return; e.preventDefault(); end(); if (!longHold) quick(); });
+  btn.addEventListener('click', () => { if (kb) { kb = false; return; } if (!longHold) quick(); longHold = false; });
+  root.querySelector('.replay').addEventListener('click', () => { done = armed = holding = false; clearTimeout(disarm); cancelAnimationFrame(raf); p = 0; draw(); btn.dataset.state = ''; say('Delete project', 'Reset.'); });
+  draw();
+}
+
+// btn-07 Price tag
+{
+  const root = document.getElementById('btn-07');
+  const pend = root.querySelector('.pend'), tag = root.querySelector('.tag'), t1 = root.querySelector('.t1'), t2 = root.querySelector('.t2'), live = root.querySelector('[aria-live]');
+  const W2 = (2 * Math.PI / 1.5) ** 2, DAMP = .9; // 1.5 s swing period, light air drag
+  const step = (s, dt) => { s.w += (-W2 * Math.sin(s.a) - DAMP * s.w) * dt; s.a += s.w * dt; };
+  const test = { a: .5, w: 0 };
+  for (let i = 0; i < 1200; i++) step(test, 1 / 60);
+  console.assert(Math.abs(test.a) < .01, 'btn-07 the swing dies down');
+  const s = { a: 0, w: 0 };
+  let raf = 0, last = 0, added = false;
+  const frame = now => {
+    step(s, Math.min(.033, (now - last) / 1000)); last = now;
+    pend.style.transform = `rotate(${s.a}rad)`;
+    tag.style.transform = `rotate(${-s.w * .05}rad)`; // the card lags its string
+    raf = Math.abs(s.a) + Math.abs(s.w) > .0005 ? requestAnimationFrame(frame) : 0;
+  };
+  const push = v => {
+    if (reduce) return;
+    s.w = Math.max(-4, Math.min(4, s.w + v));
+    if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); }
+  };
+  tag.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') push(Math.max(-.3, Math.min(.3, e.movementX * .01))); });
+  tag.addEventListener('click', () => {
+    added = !added; push(added ? 2.4 : -1.6);
+    t1.textContent = added ? 'In your bag' : 'Add to bag';
+    t2.textContent = added ? 'Click again to remove' : 'Size M · sample';
+    live.textContent = added ? 'Added to bag.' : 'Removed from bag.';
+  });
+}
+
+// btn-08 Split-flap
+{
+  const root = document.getElementById('btn-08');
+  const board = root.querySelector('.board'), txt = root.querySelector('.txt'), live = root.querySelector('[aria-live]');
+  const DRUM = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ', A = 'BOOK SEAT', B = 'SEAT HELD';
+  const dist = (a, b) => (DRUM.indexOf(b) - DRUM.indexOf(a) + DRUM.length) % DRUM.length; // a drum only turns forward
+  console.assert(dist('O', 'E') === 17 && dist('E', 'E') === 0 && A.length === B.length, 'btn-08 drum maths');
+  const row = document.createElement('span');
+  row.className = 'row'; row.setAttribute('aria-hidden', 'true');
+  const cells = [...A].map(ch => {
+    const c = document.createElement('span');
+    c.className = 'cell'; c.ch = ch;
+    c.innerHTML = '<span class="hf t"><b></b></span><span class="hf b"><b></b></span><span class="hf ft"><b></b></span><span class="hf fb"><b></b></span>';
+    c.querySelectorAll('b').forEach(b => { b.textContent = ch; });
+    row.append(c); return c;
+  });
+  txt.classList.add('sr'); board.append(row);
+  const put = (c, sel, ch) => { c.querySelector(sel + ' b').textContent = ch; };
+  const flip = async (c, to, wait) => {
+    await new Promise(r => setTimeout(r, wait));
+    while (c.ch !== to) {
+      const next = DRUM[(DRUM.indexOf(c.ch) + 1) % DRUM.length];
+      put(c, '.t', next); put(c, '.ft', c.ch); put(c, '.fb', next);
+      await c.querySelector('.ft').animate([{ transform: 'rotateX(0deg)' }, { transform: 'rotateX(-90deg)' }], { duration: 42, easing: 'cubic-bezier(.55,0,1,.6)' }).finished;
+      put(c, '.ft', next);
+      await c.querySelector('.fb').animate([{ transform: 'rotateX(90deg)' }, { transform: 'rotateX(-8deg)', offset: .8 }, { transform: 'rotateX(0deg)' }], { duration: 56, easing: 'ease-out' }).finished;
+      put(c, '.b', next); c.ch = next;
+    }
+  };
+  let busy = false, held = false;
+  board.addEventListener('click', async () => {
+    if (busy) return;
+    busy = true; held = !held;
+    const word = held ? B : A;
+    txt.textContent = held ? 'Seat held' : 'Book seat';
+    live.textContent = held ? 'Seat held.' : 'Seat released.';
+    if (reduce) cells.forEach((c, i) => { c.ch = word[i]; c.querySelectorAll('b').forEach(b => { b.textContent = word[i]; }); });
+    else await Promise.all(cells.map((c, i) => flip(c, word[i], i * 40)));
+    busy = false;
+  });
+}
+
+// btn-09 Elevator call
+{
+  const root = document.getElementById('btn-09');
+  const call = root.querySelector('.call'), ind = root.querySelector('.ind'), fl = root.querySelector('.fl'), live = root.querySelector('[aria-live]');
+  const FLOORS = ['G', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const pause = (i, n) => 260 + 420 * (1 - Math.sin(Math.PI * i / n)); // slow, fast, slow: the car speeds up and brakes
+  console.assert(pause(0, 6) > pause(3, 6) && Math.abs(pause(0, 6) - pause(6, 6)) < 1e-9, 'btn-09 ride timing');
+  let busy = false;
+  call.addEventListener('click', async () => {
+    if (busy) { live.textContent = 'Already called.'; return; }
+    busy = true; call.classList.add('lit');
+    let f = 4 + Math.floor(Math.random() * 6);
+    fl.textContent = FLOORS[f]; live.textContent = `Called. The car is on floor ${FLOORS[f]}.`;
+    if (!reduce) {
+      ind.classList.add('moving');
+      for (let i = 0, n = f; i < n; i++) { await new Promise(r => setTimeout(r, pause(i, n - 1 || 1))); fl.textContent = FLOORS[--f]; }
+    }
+    fl.textContent = 'G'; ind.classList.remove('moving'); call.classList.remove('lit');
+    live.textContent = 'Arrived. Doors opening.'; busy = false;
+  });
+}
+
+// btn-10 Sticker peel
+{
+  const root = document.getElementById('btn-10');
+  const stk = root.querySelector('.stk'), code = root.querySelector('.code'), live = root.querySelector('[aria-live]');
+  const fold = (x, y, s) => [s - y, s - x]; // mirror across the fold line x + y = s, as the .back transform does
+  console.assert(fold(30, 50, 80).join() === '30,50' && fold(100, 100, 80).join() === '-20,-20', 'btn-10 fold maths');
+  let k = 0, goal = 0, raf = 0;
+  const size = () => stk.offsetWidth + stk.offsetHeight;
+  const paint = () => stk.style.setProperty('--s', size() - k + 'px');
+  const settle = () => { k = goal; paint(); raf = 0; if (stk.dataset.peeling) stk.classList.add('gone'); };
+  const run = () => { k += (goal - k) * .16; paint(); if (Math.abs(goal - k) > .5) raf = requestAnimationFrame(run); else settle(); };
+  const to = g => { goal = g; if (reduce) settle(); else if (!raf) raf = requestAnimationFrame(run); };
+  ['pointerenter', 'focus'].forEach(t => stk.addEventListener(t, () => { if (!stk.dataset.peeling) to(28); }));
+  ['pointerleave', 'blur'].forEach(t => stk.addEventListener(t, () => { if (!stk.dataset.peeling) to(0); }));
+  stk.addEventListener('click', () => {
+    if (stk.dataset.peeling) return;
+    stk.dataset.peeling = '1'; to(size() * .8);
+    code.removeAttribute('aria-hidden'); live.textContent = 'Code revealed: SAMPLE-CODE.';
+    setTimeout(() => code.focus(), reduce ? 0 : 1000); // the button is gone, so focus moves to what it revealed
+  });
+  root.querySelector('.replay').addEventListener('click', () => {
+    cancelAnimationFrame(raf); raf = 0; delete stk.dataset.peeling; stk.classList.remove('gone');
+    code.setAttribute('aria-hidden', 'true'); live.textContent = ''; k = goal = 0; paint();
+  });
+  paint();
+}
+
+// btn-11 Ballot mark
+{
+  const root = document.getElementById('btn-11');
+  const said = root.querySelector('.said');
+  root.querySelector('.cast').addEventListener('click', () => {
+    const pick = root.querySelector('input:checked');
+    said.textContent = pick ? `Vote cast: ${pick.value}.` : 'Mark one box first.';
+  });
+}
+
+// btn-12 Safety cover
+{
+  const root = document.getElementById('btn-12');
+  const panel = root.querySelector('.panel'), cover = root.querySelector('.cover'), word = root.querySelector('.front span'), well = root.querySelector('.well'), sw = root.querySelector('.sw'), lamp = root.querySelector('.lamp'), live = root.querySelector('[aria-live]');
+  const setOn = on => { sw.setAttribute('aria-pressed', on); lamp.textContent = on ? 'Live' : 'Standby'; lamp.classList.toggle('on', on); };
+  const setOpen = open => { cover.setAttribute('aria-expanded', open); word.textContent = open ? 'Close cover' : 'Lift cover'; well.inert = !open; };
+  setOpen(false); // without JavaScript the cover stays open, so the switch is still reachable
+  void cover.offsetWidth; panel.classList.add('ready'); // animate only after the first close
+  cover.addEventListener('click', () => {
+    const open = cover.getAttribute('aria-expanded') !== 'true';
+    setOpen(open);
+    if (!open && sw.getAttribute('aria-pressed') === 'true') { setOn(false); live.textContent = 'Cover closed. It pushed the switch back to off.'; }
+    else live.textContent = open ? 'Cover lifted. The switch is free.' : 'Cover closed.';
+  });
+  sw.addEventListener('click', () => { const on = sw.getAttribute('aria-pressed') !== 'true'; setOn(on); live.textContent = on ? 'Published.' : 'Unpublished.'; });
+}
+
+// btn-13 Signature
+{
+  const root = document.getElementById('btn-13');
+  const sig = root.querySelector('.sig'), ink = root.querySelector('.ink'), pen = root.querySelector('.pen'), nib = root.querySelector('.nib'), cap = root.querySelector('.cap'), live = root.querySelector('[aria-live]');
+  let raf = 0;
+  sig.addEventListener('click', () => {
+    if (sig.dataset.done) return;
+    sig.dataset.done = '1'; sig.setAttribute('aria-disabled', 'true'); cap.textContent = 'Signed. Welcome'; live.textContent = 'Signed. Welcome.';
+    // A tight zigzag mask, revealed along its length, uncovers the words in pen order: left to right, up and down.
+    const x0 = 22, x1 = 26 + ink.getComputedTextLength() + 10;
+    let d = `M${x0} 14`;
+    for (let x = x0, low = true; x < x1; x += 5, low = !low) d += ` L${x + 5} ${low ? 104 : 14}`;
+    pen.setAttribute('d', d);
+    const len = pen.getTotalLength();
+    pen.style.strokeDasharray = len;
+    if (reduce) { pen.style.strokeDashoffset = 0; return; }
+    const t0 = performance.now(), ms = 1500;
+    const step = now => {
+      const k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
+      pen.style.strokeDashoffset = len * (1 - e);
+      nib.setAttribute('transform', `translate(${x0 + (x1 - x0) * e} ${70 + 12 * Math.sin(e * 48)}) rotate(28)`);
+      nib.style.opacity = k < 1 ? 1 : 0;
+      if (k < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+  });
+  root.querySelector('.replay').addEventListener('click', () => {
+    cancelAnimationFrame(raf); delete sig.dataset.done; sig.removeAttribute('aria-disabled');
+    pen.setAttribute('d', ''); nib.style.opacity = 0; cap.textContent = 'Sign up'; live.textContent = '';
+  });
+}
+
+// btn-14 Tally
+{
+  const root = document.getElementById('btn-14');
+  const marks = root.querySelector('.marks'), add = root.querySelector('.add'), count = root.querySelector('.count');
+  const groups = n => Array.from({ length: Math.ceil(n / 5) }, (_, i) => Math.min(5, n - i * 5));
+  console.assert(groups(7).join() === '5,2' && groups(10).join() === '5,5' && groups(0).length === 0, 'btn-14 tally groups');
+  const MAX = 40, NS = 'http://www.w3.org/2000/svg', r = (a, b) => a + Math.random() * (b - a);
+  let n = 0, g = null;
+  add.addEventListener('click', () => {
+    if (n >= MAX) return;
+    const i = n % 5; n++;
+    if (i === 0) { g = document.createElementNS(NS, 'svg'); g.setAttribute('viewBox', '0 0 64 80'); g.setAttribute('aria-hidden', 'true'); marks.append(g); }
+    const p = document.createElementNS(NS, 'path'), x = 8 + i * 12;
+    p.setAttribute('d', i < 4 ? `M${x + r(-2, 2)} ${r(6, 12)}Q${x + r(-3, 3)} 40 ${x + r(-2, 3)} ${r(68, 76)}` : `M${r(0, 4)} ${r(58, 64)}Q32 ${r(38, 46)} ${r(58, 62)} ${r(14, 22)}`);
+    p.setAttribute('pathLength', '1'); g.append(p);
+    p.getBoundingClientRect(); p.classList.add('on'); // flush first so the stroke draws in
+    count.textContent = `${n} ${n === 1 ? 'vote' : 'votes'}`;
+    if (n >= MAX) { add.setAttribute('aria-disabled', 'true'); add.textContent = 'Board full'; }
+  });
+}
+
+// btn-15 Zipper
+{
+  const root = document.getElementById('btn-15');
+  const svg = root.querySelector('svg'), btn = root.querySelector('.pull'), det = root.querySelector('.det');
+  const cut = root.querySelector('.cut'), keep = root.querySelector('.keep'), up = root.querySelector('.up'), dn = root.querySelector('.dn'), slider = root.querySelector('.slider');
+  const RUN = 312, A = Math.atan(17 / RUN) * 180 / Math.PI; // the slider's width sets one fixed V angle, however far it has run
+  console.assert(Math.abs(Math.tan(A * Math.PI / 180) * RUN - 17) < 1e-9, 'btn-15 V angle');
+  let p = 0, raf = 0, drag = null, moved = false;
+  const set = v => {
+    p = Math.max(0, Math.min(1, v));
+    const x = 4 + p * RUN;
+    cut.setAttribute('width', x + 20); keep.setAttribute('x', x); keep.setAttribute('width', 340 - x);
+    up.setAttribute('transform', `rotate(${-A} ${x} 60)`); dn.setAttribute('transform', `rotate(${A} ${x} 60)`);
+    slider.setAttribute('transform', `translate(${x} 0)`); btn.style.left = (x + 7) / 320 * 100 + '%';
+  };
+  const show = open => { det.hidden = !open; btn.setAttribute('aria-expanded', open); };
+  const go = to => {
+    cancelAnimationFrame(raf);
+    if (to === 0) show(false);
+    if (reduce) { set(to); return show(to === 1); }
+    const from = p, t0 = performance.now(), ms = 250 + 650 * Math.abs(to - from);
+    const step = now => {
+      const k = Math.min(1, (now - t0) / ms);
+      set(from + (to - from) * (k < .5 ? 4 * k * k * k : 1 - (-2 * k + 2) ** 3 / 2));
+      if (k < 1) raf = requestAnimationFrame(step); else show(to === 1);
+    };
+    raf = requestAnimationFrame(step);
+  };
+  btn.addEventListener('pointerdown', e => { drag = { x: e.clientX, p }; moved = false; btn.setPointerCapture(e.pointerId); cancelAnimationFrame(raf); });
+  btn.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const dp = (e.clientX - drag.x) / svg.getBoundingClientRect().width * 320 / RUN;
+    if (Math.abs(dp) > .03) moved = true;
+    if (moved) set(drag.p + dp);
+  });
+  const drop = () => { if (drag && moved) go(p > .5 ? 1 : 0); drag = null; };
+  btn.addEventListener('pointerup', drop);
+  btn.addEventListener('pointercancel', drop);
+  btn.addEventListener('click', () => { if (moved) { moved = false; return; } go(p > .5 ? 0 : 1); });
+  set(0);
+}
+
+// btn-17 Embroidered patch
+{
+  const root = document.getElementById('btn-17');
+  const patch = root.querySelector('.patch'), state = root.querySelector('.state');
+  patch.addEventListener('click', () => {
+    const on = patch.getAttribute('aria-pressed') !== 'true';
+    patch.setAttribute('aria-pressed', on);
+    state.textContent = on ? 'Sewn on: joined' : 'Not joined yet';
+  });
+}
+</script>
+</body>
+</html>

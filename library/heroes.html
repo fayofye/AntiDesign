@@ -1,0 +1,1173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AntiDesign library: heroes</title>
+<link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@400;700&family=Alegreya+SC:wght@500;800&family=Bevan&family=Calistoga&family=Corben:wght@400;700&family=Coustard:wght@400;900&family=Gelasio:ital,wght@0,400;0,700;1,400&family=Lexend+Zetta:wght@400;700&family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Overpass+Mono:wght@400;600&family=Sedan+SC&family=Shippori+Mincho:wght@500;800&family=Sometype+Mono:wght@400;700&family=Vollkorn+SC:wght@400;700&family=Young+Serif&family=Zilla+Slab+Highlight:wght@700&display=swap" rel="stylesheet">
+<style>
+/* Shell: the gallery around the specimens. Not part of any specimen; never copy it. */
+body{margin:0;background:#E8E8E3;color:#141414;font:16px/1.5 ui-sans-serif,system-ui,sans-serif}
+.shell{max-width:1240px;margin:0 auto;padding:32px 16px 96px}
+.shell>h1{margin:0;font-size:24px}
+.shell>p{margin:4px 0 0;max-width:70ch}
+.index{display:flex;flex-wrap:wrap;gap:6px 16px;margin:20px 0 36px;padding:0;list-style:none;font-size:14px}
+.index a{color:#141414}
+.spec{margin:0 0 40px;border:2px solid #141414;background:#FFFFFF;scroll-margin-top:16px}
+.spec>header{display:flex;flex-wrap:wrap;gap:4px 20px;align-items:baseline;padding:10px 14px;border-bottom:2px solid #141414;font-size:14px}
+.spec>header h2{margin:0;font-size:16px}
+.spec>header code{font:600 13px ui-monospace,monospace;background:#141414;color:#FFFFFF;padding:2px 6px}
+.spec>header p{margin:0;flex:1 1 320px}
+.stage{position:relative;min-height:600px;overflow:hidden;box-sizing:border-box}
+.replay{position:absolute;top:10px;right:10px;font:600 13px ui-sans-serif,system-ui,sans-serif;padding:8px 12px;min-height:40px;border:2px solid currentColor;background:transparent;color:inherit;cursor:pointer}
+.replay:focus-visible,.index a:focus-visible{outline:3px solid currentColor;outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* hero-01 Fill-in sentence */
+#hero-01 .h01-slip{display:flex;min-height:600px;color:#5B1028;font-family:'Young Serif',Georgia,'Times New Roman',serif}
+#hero-01 .h01-feed{flex:0 0 32px;background:radial-gradient(circle,#FFFFFF 0 5px,transparent 5.5px) 50% 12px/32px 32px repeat-y;border-right:2px dashed #A0607A}
+#hero-01 .h01-feed:last-child{border-right:0;border-left:2px dashed #A0607A}
+#hero-01 .h01-form{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:24px;padding:clamp(20px,4vw,52px) clamp(16px,4vw,56px)}
+#hero-01 .h01-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;margin:0;padding:6px 0;border-block:3px double #5B1028;font:700 12px/1.4 'Sometype Mono',ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase}
+#hero-01 .h01-h{margin:0;max-width:19ch;font-weight:400;font-size:clamp(30px,5.4vw,70px);line-height:1.3}
+#hero-01 .h01-h input,#hero-01 .h01-h select{display:inline-block;margin:0;padding:0 .1em;font:700 .9em/1.15 'Sometype Mono',ui-monospace,Menlo,monospace;color:#1B2A6B;background:transparent;border:0;border-bottom:3px dotted #5B1028;border-radius:0;transform:rotate(-1deg) translateY(-.04em);appearance:none;-webkit-appearance:none;-moz-appearance:textfield;cursor:pointer}
+#hero-01 .h01-h input{width:2.6ch;text-align:center}
+#hero-01 .h01-h input::-webkit-inner-spin-button,#hero-01 .h01-h input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+#hero-01 .h01-h select{padding-right:.7em;background:conic-gradient(from -45deg at 50% 100%,#1B2A6B 90deg,transparent 0) right .08em center/.42em .3em no-repeat}
+#hero-01 .h01-line{margin:0;max-width:52ch;font-size:clamp(17px,1.5vw,20px);line-height:1.7}
+#hero-01 .h01-line output{padding:0 .35em;font:700 1.05em 'Sometype Mono',ui-monospace,Menlo,monospace;color:#1B2A6B;background:#FBEAEE;border:2px solid #5B1028;white-space:nowrap}
+#hero-01 .h01-tear{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px;padding-top:22px;border-top:2px dashed #5B1028}
+#hero-01 .h01-tear::before{content:"\2702";position:absolute;top:-.8em;left:6px;padding:0 4px;font-size:20px;line-height:1;background:#F6D6DE}
+#hero-01 .h01-go{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;background:#5B1028;color:#F6D6DE;font-size:18px;text-decoration:none;border:2px solid #5B1028}
+#hero-01 .h01-go:hover{background:transparent;color:#5B1028}
+#hero-01 .h01-note{margin:0;font:400 12px/1.4 'Sometype Mono',ui-monospace,Menlo,monospace;letter-spacing:.06em;text-transform:uppercase}
+#hero-01 :focus-visible{outline:3px solid #1B2A6B;outline-offset:3px}
+@media (max-width:600px){#hero-01 .h01-feed{flex-basis:18px;background:radial-gradient(circle,#FFFFFF 0 3.5px,transparent 4px) 50% 8px/18px 24px repeat-y}}
+/* hero-02 Front page */
+#hero-02 .h02-paper{max-width:1120px;margin:0 auto;padding:clamp(14px,3vw,34px);color:#141414;font-family:'Libre Caslon Text',Georgia,'Times New Roman',serif}
+#hero-02 .h02-ears{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px}
+#hero-02 .h02-ear{justify-self:start;max-width:150px;margin:0;padding:6px 8px;border:1px solid #141414;font-size:11px;line-height:1.35;letter-spacing:.06em;text-transform:uppercase;text-align:center}
+#hero-02 .h02-ear:last-child{justify-self:end}
+#hero-02 .h02-ear b{display:block;font-size:15px;letter-spacing:0;text-transform:none}
+#hero-02 .h02-mast{margin:0;font:400 clamp(40px,8vw,100px)/1.05 'Libre Caslon Display','Big Caslon',Georgia,serif;letter-spacing:-.01em;white-space:nowrap;text-align:center}
+#hero-02 .h02-folio{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 16px;margin:8px 0 0;padding:5px 0;border-top:1px solid #141414;border-bottom:4px double #141414;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+#hero-02 .h02-grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,1fr);margin-top:16px}
+#hero-02 .h02-lead{padding-right:22px;border-right:1px solid #141414}
+#hero-02 .h02-side{padding-left:22px}
+#hero-02 .h02-kick{margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+#hero-02 .h02-hl{margin:0;font:400 clamp(32px,4.4vw,60px)/1.02 'Libre Caslon Display','Big Caslon',Georgia,serif;letter-spacing:-.015em}
+#hero-02 .h02-deck{margin:12px 0 14px;padding-bottom:14px;border-bottom:1px solid #141414;font-style:italic;font-size:clamp(17px,1.5vw,20px);line-height:1.4}
+#hero-02 .h02-body{columns:3 170px;column-gap:22px;column-rule:1px solid #141414;font-size:14px;line-height:1.5;text-align:justify;hyphens:auto}
+#hero-02 .h02-body p{margin:0 0 8px}
+#hero-02 .h02-body .h02-by{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-align:left}
+#hero-02 .h02-by+p::first-letter{float:left;padding:.06em .08em 0 0;font:400 3.3em/.8 'Libre Caslon Display','Big Caslon',Georgia,serif}
+#hero-02 .h02-body .h02-jump{font-style:italic;text-align:right}
+#hero-02 figure{margin:0 0 10px;break-inside:avoid}
+#hero-02 figcaption{margin-top:4px;font-size:12px;font-style:italic;line-height:1.35;text-align:left}
+#hero-02 .h02-photo{position:relative;aspect-ratio:4/3;border:1px solid #141414;background:radial-gradient(circle,#141414 .8px,transparent 1.2px) 0 0/5px 5px}
+#hero-02 .h02-photo::before,#hero-02 .h02-photo::after{content:"";position:absolute;inset:0}
+#hero-02 .h02-photo::before{background:radial-gradient(circle,#141414 1.9px,transparent 2.3px) 0 0/5px 5px;-webkit-mask:radial-gradient(ellipse 42% 28% at 50% 58%,#000 97%,transparent 100%);mask:radial-gradient(ellipse 42% 28% at 50% 58%,#000 97%,transparent 100%)}
+#hero-02 .h02-photo::after{background:repeating-linear-gradient(120deg,transparent 0 30px,#E9E6DF 30px 35px);-webkit-mask:radial-gradient(ellipse 32% 15% at 50% 52%,#000 97%,transparent 100%);mask:radial-gradient(ellipse 32% 15% at 50% 52%,#000 97%,transparent 100%)}
+#hero-02 .h02-sideh{margin:0 0 6px;padding-bottom:4px;border-bottom:1px solid #141414;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+#hero-02 .h02-inside{list-style:none;margin:0 0 18px;padding:0;font-size:14px}
+#hero-02 .h02-inside li{display:flex;gap:6px;padding:5px 0;border-bottom:1px dotted #141414}
+#hero-02 .h02-inside li span{margin-left:auto;font-style:italic;white-space:nowrap}
+#hero-02 .h02-ad{padding:12px;border:4px double #141414;text-align:center}
+#hero-02 .h02-ad p{margin:0}
+#hero-02 .h02-ad .h02-adk{padding-bottom:4px;border-bottom:1px solid #141414;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+#hero-02 .h02-ad .h02-adh{margin:10px 0;font:400 22px/1.15 'Libre Caslon Display','Big Caslon',Georgia,serif}
+#hero-02 .h02-ad .h02-small{margin-top:8px;font-size:12px}
+#hero-02 .h02-go{display:block;box-sizing:border-box;min-height:48px;padding:13px 10px;background:#141414;color:#E9E6DF;font-weight:700;font-size:16px;text-decoration:none;border:2px solid #141414}
+#hero-02 .h02-go:hover{background:#E9E6DF;color:#141414}
+#hero-02 .h02-go:focus-visible{outline:3px solid #141414;outline-offset:3px}
+@media (max-width:720px){
+  #hero-02 .h02-ears{grid-template-columns:1fr}
+  #hero-02 .h02-ear{display:none}
+  #hero-02 .h02-grid{grid-template-columns:1fr}
+  #hero-02 .h02-lead{display:contents}
+  #hero-02 .h02-body{order:3;margin-top:18px}
+  #hero-02 .h02-side{padding:14px 0 0;border-top:4px double #141414}
+}
+/* hero-03 Proof divider */
+#hero-03 .h03-wrap{min-height:600px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;padding:clamp(24px,4vw,56px) 0;color:#FFFFFF;font-family:Newsreader,'Iowan Old Style',Georgia,serif}
+#hero-03 .h03-tag{margin:0 clamp(20px,4vw,56px) 16px;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+#hero-03 .h03-cmp{--v:0;position:relative;display:grid}
+#hero-03 .h03-side{grid-area:1/1;padding:26px clamp(20px,4vw,56px) 34px}
+#hero-03 .h03-before{background:#FFFFFF;color:#141414}
+#hero-03 .h03-after{position:relative;z-index:1;background:#C4321E;clip-path:inset(0 calc(100% - 24px - var(--v) * (100% - 48px)) 0 0)}
+#hero-03 .h03-cmp:not(.h03-live) .h03-after{clip-path:none}
+#hero-03 .h03-cmp:not(.h03-live) .h03-bar{display:none}
+#hero-03 .h03-before .h03-label{text-align:right}
+#hero-03 .h03-label{margin:0 0 12px;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+#hero-03 .h03-hl{margin:0;max-width:17ch;font-size:clamp(30px,6vw,84px);line-height:1.05;font-weight:600;letter-spacing:-.01em}
+#hero-03 .h03-before .h03-hl{margin-left:auto;font-weight:400;font-style:italic;text-align:right}
+#hero-03 .h03-before s{text-decoration-color:#C4321E;text-decoration-thickness:.08em}
+#hero-03 .h03-mark{margin-left:.1em;font-style:normal;font-weight:600;font-size:.34em;color:#C4321E;vertical-align:super}
+#hero-03 .h03-bar{position:absolute;z-index:2;top:0;bottom:0;left:calc(24px + var(--v) * (100% - 48px));width:4px;margin-left:-2px;background:#141414;pointer-events:none}
+#hero-03 .h03-knob{position:absolute;top:50%;left:50%;width:46px;height:46px;margin:-23px 0 0 -23px;display:grid;place-items:center;border-radius:50%;background:#141414;color:#FFFFFF}
+#hero-03 .h03-range{position:absolute;z-index:3;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;-webkit-appearance:none;appearance:none;background:none}
+#hero-03 .h03-range::-webkit-slider-thumb{-webkit-appearance:none;width:48px;height:400px}
+#hero-03 .h03-range::-moz-range-thumb{width:48px;height:400px;border:0;border-radius:0}
+#hero-03 .h03-cmp:has(.h03-range:focus-visible) .h03-knob{outline:3px solid #FFFFFF;box-shadow:0 0 0 7px #141414}
+#hero-03 .h03-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px 32px;margin:24px clamp(20px,4vw,56px) 0}
+#hero-03 .h03-foot p{margin:0;max-width:56ch;font-size:clamp(17px,1.5vw,19px);line-height:1.5}
+#hero-03 .h03-go{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;background:#FFFFFF;color:#C4321E;font-weight:600;font-size:18px;text-decoration:none;border:2px solid #FFFFFF}
+#hero-03 .h03-go:hover{background:transparent;color:#FFFFFF}
+#hero-03 .h03-go:focus-visible{outline:3px solid #FFFFFF;outline-offset:4px}
+/* hero-04 Exploded view */
+#hero-04 .h04-in{min-height:600px;box-sizing:border-box;padding:clamp(20px,3.5vw,44px);display:flex;flex-direction:column;gap:18px;color:#141414;font-family:'Overpass Mono',ui-monospace,Menlo,monospace}
+#hero-04 .h04-top{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px 40px;align-items:end}
+#hero-04 .h04-hl{margin:0;font:700 clamp(30px,4.6vw,62px)/1.22 'Zilla Slab Highlight',Rockwell,'Courier New',serif;color:#141414}
+#hero-04 .h04-meta p{margin:0}
+#hero-04 .h04-meta .h04-sheet{margin-bottom:12px;padding:6px 0;border-block:2px solid #141414;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+#hero-04 .h04-line{font-size:15px;line-height:1.55}
+#hero-04 .h04-fig{position:relative;width:100%;max-width:1060px;margin:0 auto}
+#hero-04 .h04-fig svg{display:block;width:100%;height:auto}
+#hero-04 .h04-parts .h04-on{fill:#141414}
+#hero-04 .h04-parts .h04-on .h04-hole{fill:#F3C92A}
+#hero-04 .h04-leads .h04-on{stroke-width:4}
+#hero-04 .h04-call{position:absolute;transform:translate(-50%,-50%);width:clamp(30px,3.6vw,44px);height:clamp(30px,3.6vw,44px);padding:0;border-radius:50%;border:2.5px solid #141414;background:#FFFFFF;color:#141414;font:600 clamp(14px,1.5vw,18px)/1 'Overpass Mono',ui-monospace,Menlo,monospace;cursor:pointer}
+#hero-04 .h04-call[aria-pressed="true"]{background:#141414;color:#F3C92A}
+#hero-04 .h04-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 28px;padding-top:14px;border-top:2px solid #141414}
+#hero-04 .h04-detail{display:flex;align-items:baseline;gap:12px;max-width:62ch;margin:0;font-size:15px;line-height:1.5}
+#hero-04 .h04-n{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#141414;color:#F3C92A}
+#hero-04 .h04-go{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;background:#141414;color:#F3C92A;font-weight:600;font-size:16px;text-decoration:none;border:2px solid #141414}
+#hero-04 .h04-go:hover{background:transparent;color:#141414}
+#hero-04 .h04-call:focus-visible,#hero-04 .h04-go:focus-visible{outline:3px solid #141414;outline-offset:3px}
+@media (max-width:720px){#hero-04 .h04-top{grid-template-columns:1fr}}
+/* hero-05 Crossword */
+#hero-05 .h05-in{position:relative;min-height:600px;box-sizing:border-box;padding:clamp(22px,4vw,52px);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px clamp(24px,4vw,56px);align-items:start;color:#FFFFFF;font-family:'Abhaya Libre',Georgia,serif}
+#hero-05 .h05-tag{margin:0 0 14px;font:500 15px/1.3 'Alegreya SC',Georgia,serif;letter-spacing:.06em}
+#hero-05 .h05-hl{margin:0;font:800 clamp(34px,5vw,66px)/1.02 'Alegreya SC',Georgia,serif}
+#hero-05 .h05-line{max-width:44ch;margin:16px 0 22px;font-size:19px;line-height:1.45}
+#hero-05 .h05-go{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;background:#FFFFFF;color:#1E4A2E;font:800 17px/1 'Alegreya SC',Georgia,serif;text-decoration:none;border:2px solid #FFFFFF}
+#hero-05 .h05-go:hover{background:transparent;color:#FFFFFF}
+#hero-05 .h05-go:focus-visible,#hero-05 .h05-tools button:focus-visible{outline:3px solid #FFFFFF;outline-offset:3px}
+#hero-05 .h05-puz{--s:clamp(34px,9.4vw,52px)}
+#hero-05 .h05-grid{display:grid;grid-template-columns:repeat(8,var(--s));grid-template-rows:repeat(7,var(--s))}
+#hero-05 .h05-cell{position:relative;background:#FFFFFF;outline:2px solid #0F2417;outline-offset:-1px}
+#hero-05 .h05-cell.h05-on{background:#D7EBC9}
+#hero-05 .h05-cell input{position:absolute;inset:0;width:100%;height:100%;box-sizing:border-box;margin:0;padding:12% 0 0;border:0;border-radius:0;background:transparent;text-align:center;font:700 calc(var(--s) * .58)/1 'Abhaya Libre',Georgia,serif;color:#0F2417;text-transform:uppercase;caret-color:#1E4A2E}
+#hero-05 .h05-cell input:focus{outline:none;background:#F2D98D}
+#hero-05 .h05-cell input:focus-visible{outline:3px solid #0F2417;outline-offset:-5px}
+#hero-05 .h05-cell input.h05-bad{color:#B3261E;text-decoration:line-through}
+#hero-05 .h05-num{position:absolute;z-index:1;top:2px;left:3px;font:700 calc(var(--s) * .24)/1 'Abhaya Libre',Georgia,serif;color:#0F2417;pointer-events:none}
+#hero-05 .h05-tools:not([hidden]){display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin:16px 0 14px}
+#hero-05 .h05-tools button{min-height:44px;padding:0 16px;background:transparent;color:#FFFFFF;border:2px solid #FFFFFF;font:800 15px/1 'Alegreya SC',Georgia,serif;cursor:pointer}
+#hero-05 .h05-tools button:hover{background:#FFFFFF;color:#1E4A2E}
+#hero-05 .h05-status{margin:0;font-size:17px}
+#hero-05 .h05-clues{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;max-width:calc(var(--s) * 8);font-size:16px;line-height:1.35}
+#hero-05 .h05-clues h4{margin:0 0 6px;padding-bottom:4px;border-bottom:1px solid #8FB89A;font:800 14px/1 'Alegreya SC',Georgia,serif;letter-spacing:.12em}
+#hero-05 .h05-clues ol{list-style:none;margin:0;padding:0}
+#hero-05 .h05-clues li{margin:0 0 6px;padding-left:1.4em;text-indent:-1.4em}
+#hero-05 .h05-clues b{display:inline-block;width:1.4em;text-indent:0}
+#hero-05 .h05-stamp{position:absolute;left:clamp(22px,4vw,52px);bottom:clamp(22px,4vw,44px);margin:0;padding:6px 10px;border:3px double #CDE8A0;color:#CDE8A0;font:800 13px/1.15 'Alegreya SC',Georgia,serif;letter-spacing:.1em;text-align:center;transform:rotate(-8deg)}
+@media (max-width:820px){#hero-05 .h05-in{grid-template-columns:1fr} #hero-05 .h05-stamp{display:none}}
+/* hero-06 Tape measure */
+#hero-06 .h06-in{min-height:600px;box-sizing:border-box;padding:clamp(22px,4vw,52px);display:flex;flex-direction:column;justify-content:center;gap:16px;color:#F2F0EA;font-family:'Sedan SC',Georgia,serif;background:repeating-linear-gradient(90deg,transparent 0 31px,rgba(255,255,255,.14) 31px 32px),repeating-linear-gradient(45deg,rgba(255,255,255,.035) 0 2px,transparent 2px 5px),#2A2A2E}
+#hero-06 .h06-tag{margin:0;font-size:14px;letter-spacing:.12em}
+#hero-06 .h06-hl{max-width:18ch;margin:0;font-weight:400;font-size:clamp(32px,5.2vw,68px);line-height:1.05}
+#hero-06 .h06-line{max-width:52ch;margin:0;font-size:clamp(17px,1.5vw,20px);line-height:1.5}
+#hero-06 .h06-track{--x0:20px;--cw:96px;--k:26px;--len:487;--hq:#141414;--x:calc(var(--x0) + var(--len) / 576 * (100% - var(--x0) - var(--cw) - 8px));position:relative;height:190px;margin:4px 0}
+#hero-06 .h06-tape{position:absolute;left:var(--x0);top:128px;height:38px;width:calc(var(--x) - var(--x0));box-sizing:border-box;overflow:hidden;border-block:2px solid #141414;background:linear-gradient(90deg,#141414 0 2px,transparent 0) 0 0/var(--k) 60% repeat-x,linear-gradient(90deg,var(--hq) 0 1px,transparent 0) calc(var(--k) / 2) 0/var(--k) 42% repeat-x,linear-gradient(90deg,var(--hq) 0 1px,transparent 0) calc(var(--k) / 4) 0/calc(var(--k) / 2) 26% repeat-x,#FAF7EE}
+#hero-06 .h06-nums span{position:absolute;bottom:1px;transform:translateX(-50%);font:400 11px/1 Bevan,Rockwell,Georgia,serif;color:#141414}
+#hero-06 .h06-nums .h06-ft{color:#B3262E}
+#hero-06 .h06-hook{position:absolute;left:calc(var(--x0) - 9px);top:120px;width:11px;height:54px;box-sizing:border-box;border:1.5px solid #141414;border-radius:2px;background:linear-gradient(90deg,#8A6A1E,#D9B65A 60%,#8A6A1E)}
+#hero-06 .h06-chalk{position:absolute;left:var(--x);top:-6px;bottom:-4px;margin-left:-1.5px;border-left:3px dashed rgba(255,255,255,.8)}
+#hero-06 .h06-case{position:absolute;left:var(--x);top:107px;width:var(--cw);height:80px;box-sizing:border-box;display:grid;place-items:center;border:3px solid #141414;border-radius:12px 26px 26px 12px;background:#B3262E;color:#FFFFFF;font:400 11px/1.1 Bevan,Rockwell,Georgia,serif;text-align:center}
+#hero-06 .h06-loupe{position:absolute;left:max(0px,calc(var(--x) - 60px));top:0;width:120px;height:120px;box-sizing:border-box;overflow:hidden;border:5px solid #C9A44A;border-radius:50%;background:#FAF7EE}
+#hero-06 .h06-loupe::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;background:#B3262E}
+#hero-06 .h06-zoom{position:absolute;top:24px;height:62px;left:calc(55px - var(--len) / 16 * 96px);width:3552px;background:linear-gradient(90deg,#141414 0 2px,transparent 0) -1px 0/96px 72% repeat-x,linear-gradient(90deg,#141414 0 1.5px,transparent 0) -.75px 0/48px 54% repeat-x,linear-gradient(90deg,#141414 0 1px,transparent 0) -.5px 0/24px 40% repeat-x,linear-gradient(90deg,#141414 0 1px,transparent 0) -.5px 0/12px 28% repeat-x,linear-gradient(90deg,#141414 0 1px,transparent 0) -.5px 0/6px 18% repeat-x}
+#hero-06 .h06-zoom span{position:absolute;bottom:0;transform:translateX(-50%);font:400 15px/1 Bevan,Rockwell,Georgia,serif;color:#141414}
+#hero-06 .h06-range{position:absolute;left:calc(var(--x0) - 32px);width:calc(100% - var(--x0) - var(--cw) - 8px + 64px);top:96px;height:94px;margin:0;opacity:0;cursor:ew-resize;-webkit-appearance:none;appearance:none}
+#hero-06 .h06-range::-webkit-slider-thumb{-webkit-appearance:none;width:64px;height:94px}
+#hero-06 .h06-range::-moz-range-thumb{width:64px;height:94px;border:0;border-radius:0}
+#hero-06 .h06-track:has(.h06-range:focus-visible) .h06-case{outline:3px solid #FFFFFF;outline-offset:4px}
+#hero-06 .h06-foot{display:flex;flex-wrap:wrap;align-items:center;gap:12px 32px}
+#hero-06 .h06-read{margin:0;font-size:16px;letter-spacing:.06em}
+#hero-06 .h06-out{display:inline-block;margin:0 .3em;font:400 clamp(26px,3vw,36px)/1 Bevan,Rockwell,Georgia,serif;color:#FFFFFF;letter-spacing:0}
+#hero-06 .h06-out sup,#hero-06 .h06-out sub{font-size:.5em}
+#hero-06 .h06-price{margin:0;font-size:15px}
+#hero-06 .h06-go{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;background:#FAF7EE;color:#141414;font-size:18px;text-decoration:none;border:2px solid #FAF7EE}
+#hero-06 .h06-go:hover{background:transparent;color:#FAF7EE}
+#hero-06 .h06-go:focus-visible{outline:3px solid #FFFFFF;outline-offset:3px}
+@media (max-width:600px){#hero-06 .h06-track{--cw:70px} #hero-06 .h06-loupe{width:100px;height:100px;left:max(0px,calc(var(--x) - 50px))} #hero-06 .h06-zoom{top:16px;left:calc(45px - var(--len) / 16 * 96px)}}
+/* hero-07 Local sky */
+#hero-07 .h07-sky{--b1:#4A1230;--b2:#6B1A38;--b3:#8E2A3B;--b4:#B23D36;--b5:#D9613A;--b6:#F09447;--land:#22101E;--ink:#FFF3E8;--orb:#FFD7A8;--ox:82%;--oy:calc(100% - 58px);position:relative;min-height:600px;display:flex;flex-direction:column;color:var(--ink);font-family:Corben,'Cooper Black',Georgia,serif}
+#hero-07 [data-sky="dawn"]{--b1:#F3E6EE;--b2:#F5D5DE;--b3:#F7C3C8;--b4:#F8B1A6;--b5:#F8C08E;--b6:#F6D79A;--land:#2E3A3A;--ink:#331526;--orb:#FFF6DC;--ox:16%}
+#hero-07 [data-sky="day"]{--b1:#8CCBEE;--b2:#9DD3F0;--b3:#AEDBF2;--b4:#C0E3F4;--b5:#D2EBF6;--b6:#E4F3F8;--land:#2F5D3A;--ink:#062437;--orb:#FFFFFF;--ox:78%;--oy:70px}
+#hero-07 [data-sky="night"]{--b1:#120C08;--b2:#1D130C;--b3:#2A1A0F;--b4:#3B2312;--b5:#533016;--b6:#6E3E1A;--land:#0B0806;--ink:#F6E7D2;--orb:transparent;--ox:22%}
+#hero-07 .h07-air{position:relative;flex:1;padding:clamp(22px,4vw,52px) clamp(22px,4vw,52px) clamp(120px,14vw,170px)}
+#hero-07 .h07-bands{position:absolute;inset:0;display:flex;flex-direction:column}
+#hero-07 .h07-bands i{flex:5;background:var(--b1);transition:background-color 1.4s}
+#hero-07 .h07-bands i:nth-child(2){flex:3;background:var(--b2)}
+#hero-07 .h07-bands i:nth-child(3){flex:2.4;background:var(--b3)}
+#hero-07 .h07-bands i:nth-child(4){flex:2;background:var(--b4)}
+#hero-07 .h07-bands i:nth-child(5){flex:1.6;background:var(--b5)}
+#hero-07 .h07-bands i:nth-child(6){flex:1.3;background:var(--b6)}
+#hero-07 .h07-stars{position:absolute;inset:0;opacity:0;transition:opacity 1.4s;background:radial-gradient(circle at 8% 14%,#F6E7D2 0 1.5px,transparent 2px),radial-gradient(circle at 31% 7%,#F6E7D2 0 1px,transparent 1.5px),radial-gradient(circle at 47% 22%,#F6E7D2 0 1.5px,transparent 2px),radial-gradient(circle at 63% 9%,#F6E7D2 0 1px,transparent 1.5px),radial-gradient(circle at 76% 30%,#F6E7D2 0 1.5px,transparent 2px),radial-gradient(circle at 91% 12%,#F6E7D2 0 1px,transparent 1.5px),radial-gradient(circle at 86% 47%,#F6E7D2 0 1px,transparent 1.5px),radial-gradient(circle at 58% 41%,#F6E7D2 0 1px,transparent 1.5px)}
+#hero-07 [data-sky="night"] .h07-stars{opacity:1}
+#hero-07 .h07-orb{position:absolute;left:var(--ox);top:var(--oy);width:clamp(56px,8vw,96px);aspect-ratio:1;border-radius:50%;background:var(--orb);transform:translate(-50%,-50%);transition:left 1.4s,top 1.4s,background-color 1.4s}
+#hero-07 [data-sky="night"] .h07-orb{box-shadow:inset 18px -8px 0 0 #F3E3C3}
+#hero-07 .h07-text{position:relative;max-width:780px}
+#hero-07 .h07-tag{margin:0 0 14px;font-size:14px;line-height:1.4}
+#hero-07 .h07-hl{margin:0;font-weight:700;font-size:clamp(34px,5.6vw,74px);line-height:1.05;letter-spacing:-.01em}
+#hero-07 .h07-line{max-width:48ch;margin:16px 0 0;font-size:clamp(17px,1.5vw,20px);line-height:1.5}
+#hero-07 .h07-low{position:relative;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 24px;padding:6px clamp(22px,4vw,52px) clamp(22px,3vw,34px);background:var(--land);color:#FFFFFF;transition:background-color 1.4s}
+#hero-07 .h07-land{position:absolute;left:0;bottom:calc(100% - 1px);display:block;width:100%;height:70px}
+#hero-07 .h07-land path{fill:var(--land);transition:fill 1.4s}
+#hero-07 .h07-go{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;background:#FFFFFF;color:var(--land);font:700 17px/1 Corben,'Cooper Black',Georgia,serif;text-decoration:none;border:2px solid #FFFFFF}
+#hero-07 .h07-go:hover{background:transparent;color:#FFFFFF}
+#hero-07 .h07-times{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+#hero-07 .h07-times span{margin-right:4px;font-size:14px}
+#hero-07 .h07-times button{min-height:44px;padding:0 14px;background:transparent;color:#FFFFFF;border:2px solid #FFFFFF;font:400 15px/1 Corben,'Cooper Black',Georgia,serif;cursor:pointer}
+#hero-07 .h07-times button[aria-pressed="true"]{background:#FFFFFF;color:var(--land)}
+#hero-07 .h07-go:focus-visible,#hero-07 .h07-times button:focus-visible{outline:3px solid #FFFFFF;outline-offset:3px}
+@media (prefers-reduced-motion:reduce){#hero-07 .h07-sky,#hero-07 .h07-sky *{transition:none!important}}
+/* hero-08 Venn overlap */
+#hero-08 .h08-in{min-height:600px;box-sizing:border-box;padding:clamp(20px,3.5vw,44px);display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,340px);grid-template-areas:"plot tag" "plot copy";align-content:center;gap:12px clamp(20px,3vw,40px);color:#0B0B0B;font-family:Coustard,Rockwell,Georgia,serif;background:linear-gradient(90deg,#B9DCE6 1px,transparent 1px) 0 0/120px 120px,linear-gradient(#B9DCE6 1px,transparent 1px) 0 0/120px 120px,linear-gradient(90deg,#DCEEF3 1px,transparent 1px) 0 0/24px 24px,linear-gradient(#DCEEF3 1px,transparent 1px) 0 0/24px 24px,#FAFBFC}
+#hero-08 .h08-tag{grid-area:tag;align-self:end;margin:0;font-size:14px;letter-spacing:.04em}
+#hero-08 .h08-copy{grid-area:copy}
+#hero-08 .h08-plot{--r:clamp(150px,17vw,220px);--d:calc(var(--r) * (1.18 - .5 * var(--o)));grid-area:plot;position:relative;height:calc(var(--r) * 2 + 40px)}
+#hero-08 .h08-c{position:absolute;top:20px;left:calc(50% - var(--r) - var(--d) / 2);width:calc(var(--r) * 2);height:calc(var(--r) * 2);border-radius:50%;background:#00B5D8;mix-blend-mode:multiply;cursor:grab;touch-action:none}
+#hero-08 .h08-b{left:calc(50% - var(--r) + var(--d) / 2);background:#F0368C}
+#hero-08 .h08-c span{position:absolute;top:50%;width:calc(var(--r) * .55);transform:translateY(-50%);font-size:15px;line-height:1.25}
+#hero-08 .h08-a span{left:calc(var(--r) * .14)}
+#hero-08 .h08-b span{right:calc(var(--r) * .14);text-align:right}
+#hero-08 .h08-hl{position:absolute;left:50%;top:calc(20px + var(--r));width:calc(var(--r) * .76);margin:0;transform:translate(-50%,-50%);text-align:center;color:#FFFFFF;font-weight:900;font-size:calc(var(--r) * .145);line-height:1.05;pointer-events:none}
+#hero-08 .h08-ctl{display:flex;align-items:center;gap:12px;margin:0 0 16px;font-size:15px}
+#hero-08 .h08-ctl input{flex:1;min-height:32px;accent-color:#F0368C}
+#hero-08 .h08-line{margin:0 0 20px;font-size:17px;line-height:1.5}
+#hero-08 .h08-go{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;background:#0B0B0B;color:#FFFFFF;font-weight:900;font-size:17px;text-decoration:none;border:2px solid #0B0B0B}
+#hero-08 .h08-go:hover{background:#FFFFFF;color:#0B0B0B}
+#hero-08 .h08-go:focus-visible,#hero-08 .h08-ctl input:focus-visible{outline:3px solid #0B0B0B;outline-offset:3px}
+@media (max-width:1000px){#hero-08 .h08-in{grid-template-columns:1fr;grid-template-areas:"tag" "plot" "copy"}}
+@media (max-width:640px){
+  #hero-08 .h08-plot{--r:min(150px,calc(50vw - 42px));height:calc(var(--r) * 3.2 + 20px)}
+  #hero-08 .h08-c{left:calc(50% - var(--r));top:calc(50% - var(--r) - var(--d) / 2);touch-action:pan-y}
+  #hero-08 .h08-b{top:calc(50% - var(--r) + var(--d) / 2)}
+  #hero-08 .h08-c span{left:15%;right:15%;top:calc(var(--r) * .2);width:auto;transform:none;text-align:center}
+  #hero-08 .h08-b span{top:auto;bottom:calc(var(--r) * .2)}
+  #hero-08 .h08-hl{top:50%;width:calc(var(--r) * 1.4);font-size:calc(var(--r) * .16)}
+}
+/* hero-09 Dictionary entry */
+#hero-09 .h09-page{position:relative;min-height:600px;box-sizing:border-box;padding:clamp(20px,3.5vw,44px) clamp(60px,7vw,100px) clamp(24px,4vw,48px) clamp(20px,4vw,56px);color:#17121F;font-family:Gelasio,Georgia,'Times New Roman',serif;background:repeating-linear-gradient(180deg,transparent 0 25px,rgba(60,40,90,.05) 25px 26px),#E5DFF1}
+#hero-09 .h09-run{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 18px;padding-bottom:6px;border-bottom:1.5px solid #17121F;font-weight:700;font-size:15px}
+#hero-09 .h09-run span:nth-child(2){font-weight:400;font-size:13px}
+#hero-09 .h09-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.6fr);gap:0 32px}
+#hero-09 .h09-ghosts{padding-right:24px;border-right:1px solid #8E86A3;font-size:14px;line-height:1.5;color:#4E4760}
+#hero-09 .h09-ghosts p{margin:0 0 12px;padding-left:1em;text-indent:-1em}
+#hero-09 .h09-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin:0;font-size:18px}
+#hero-09 .h09-hw{font-weight:700;font-size:clamp(46px,6.6vw,88px);line-height:1;letter-spacing:-.01em}
+#hero-09 .h09-pron{font-size:20px}
+#hero-09 .h09-say{align-self:center;min-height:40px;padding:0 12px;border:1.5px solid #4B2A7B;background:transparent;color:#4B2A7B;font:italic 400 15px/1 Gelasio,Georgia,serif;cursor:pointer}
+#hero-09 .h09-say:hover{background:#4B2A7B;color:#FFFFFF}
+#hero-09 .h09-hl{max-width:24ch;margin:14px 0 0;font-weight:400;font-size:clamp(26px,3.4vw,44px);line-height:1.2}
+#hero-09 .h09-n{display:inline-block;width:1.3em;font-weight:700;font-size:.8em}
+#hero-09 .h09-sense{max-width:60ch;margin:14px 0 0;font-size:clamp(16px,1.4vw,19px);line-height:1.55}
+#hero-09 .h09-eg{font-style:italic;color:#4E4760}
+#hero-09 .h09-origin{max-width:64ch;margin:16px 0 0;padding-top:10px;border-top:1px solid #8E86A3;font-size:15px;line-height:1.5}
+#hero-09 .h09-origin b,#hero-09 .h09-sc{font-variant-caps:all-small-caps;letter-spacing:.06em}
+#hero-09 .h09-x{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:22px 0 0;font-style:italic;font-size:17px}
+#hero-09 .h09-go{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;background:#4B2A7B;color:#FFFFFF;font:normal 700 19px/1 Gelasio,Georgia,serif;font-variant-caps:all-small-caps;letter-spacing:.08em;text-decoration:none;border:2px solid #4B2A7B}
+#hero-09 .h09-go:hover{background:transparent;color:#4B2A7B}
+#hero-09 .h09-go:focus-visible,#hero-09 .h09-say:focus-visible{outline:3px solid #17121F;outline-offset:3px}
+#hero-09 .h09-tabs{position:absolute;top:0;right:0;bottom:0;width:clamp(40px,5vw,60px);display:flex;flex-direction:column;justify-content:center;gap:4px}
+#hero-09 .h09-tabs span{display:grid;place-items:center;height:72px;border-radius:36px 0 0 36px;background:#CFC6E2;color:#3F3854;font-weight:700;font-size:15px;line-height:1.1;text-align:center}
+#hero-09 .h09-tabs .h09-cur{height:100px;background:#4B2A7B;color:#FFFFFF;font-size:26px}
+@media (max-width:700px){#hero-09 .h09-cols{grid-template-columns:1fr} #hero-09 .h09-ghosts{margin-bottom:16px;padding:0;border:0;border-bottom:1px solid #8E86A3} #hero-09 .h09-ghosts p:nth-child(n+2){display:none}}
+/* hero-10 Sampler */
+#hero-10 .h10-in{min-height:600px;box-sizing:border-box;padding:clamp(20px,3.5vw,44px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;color:#F4EBDC;font-family:Calistoga,'Cooper Black',Georgia,serif;background:radial-gradient(circle,#2E142B 0 1px,transparent 1.6px) 0 0/7px 7px,#43203F}
+#hero-10 .h10-cloth{width:100%;max-width:1000px}
+#hero-10 .h10-svg{display:block;width:100%;height:auto;border:3px solid #2A1027}
+#hero-10 .h10-svg:empty{display:none}
+#hero-10 .h10-hl{margin:0;text-align:center;font-weight:400;font-size:clamp(34px,6vw,76px);line-height:1.05;letter-spacing:.02em}
+#hero-10 .h10-hl.h10-done{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#hero-10 .h10-text{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px 28px;max-width:900px;text-align:center}
+#hero-10 .h10-tag{flex-basis:100%;margin:0;color:#E6B851;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+#hero-10 .h10-line{max-width:52ch;margin:0;font-size:clamp(16px,1.5vw,19px);line-height:1.55}
+#hero-10 .h10-go{display:inline-flex;align-items:center;min-height:48px;padding:0 24px;background:#EE8299;color:#2A1027;font-size:18px;text-decoration:none;border:2px solid #EE8299}
+#hero-10 .h10-go:hover{background:transparent;color:#EE8299}
+#hero-10 .h10-go:focus-visible{outline:3px solid #F4EBDC;outline-offset:3px}
+/* hero-11 Sheet music */
+#hero-11 .h11-in{min-height:600px;box-sizing:border-box;padding:clamp(20px,3.5vw,44px);display:flex;flex-direction:column;justify-content:center;gap:16px;color:#1C1208;font-family:'Vollkorn SC',Georgia,serif}
+#hero-11 .h11-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 20px;margin:0;padding-bottom:8px;border-bottom:1.5px solid #1C1208;font-size:15px;letter-spacing:.04em}
+#hero-11 .h11-mark{display:inline-grid;place-items:center;width:28px;height:28px;margin-right:8px;border:2px solid #1C1208;font-weight:700}
+#hero-11 .h11-hl{margin:0;font-weight:700;font-size:clamp(30px,5vw,64px);line-height:1.1}
+#hero-11 .h11-hl.h11-done{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#hero-11 .h11-svg{display:block;width:100%;max-width:1000px;height:auto;margin:0 auto}
+#hero-11 .h11-svg:empty{display:none}
+#hero-11 .h11-svg text{font-family:'Vollkorn SC',Georgia,serif;fill:#1C1208}
+#hero-11 .h11-bg{fill:transparent}
+#hero-11 .h11-on .h11-bg{fill:#1C1208}
+#hero-11 .h11-on text{fill:#F4842D}
+#hero-11 .h11-on .h11-head{fill:#FFFFFF}
+#hero-11 .h11-foot{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
+#hero-11 .h11-line{flex:1 1 380px;max-width:60ch;margin:0;font-size:clamp(17px,1.5vw,19px);line-height:1.5}
+#hero-11 .h11-go{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;background:#1C1208;color:#F4842D;font-weight:700;font-size:18px;text-decoration:none;border:2px solid #1C1208}
+#hero-11 .h11-go:hover{background:transparent;color:#1C1208}
+#hero-11 .h11-play{min-height:48px;padding:0 18px;background:transparent;color:#1C1208;border:2px solid #1C1208;font:700 16px/1 'Vollkorn SC',Georgia,serif;cursor:pointer}
+#hero-11 .h11-play[aria-pressed="true"]{background:#1C1208;color:#F4842D}
+#hero-11 .h11-go:focus-visible,#hero-11 .h11-play:focus-visible{outline:3px solid #1C1208;outline-offset:3px}
+/* hero-12 Tide chart */
+#hero-12 .h12-in{position:relative;min-height:600px;color:#0F2F33;font-family:'Shippori Mincho','Hiragino Mincho ProN','Yu Mincho',Georgia,serif}
+#hero-12 .h12-map{position:absolute;top:0;left:0;display:block;width:100%;height:100%}
+#hero-12 .h12-in::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 2px #0F2F33,inset 0 0 0 8px #F4F6F2,inset 0 0 0 9px #0F2F33}
+#hero-12 .h12-summit{position:absolute;left:33%;top:47%;width:250px;transform:translate(-50%,-50%);text-align:center}
+#hero-12 .h12-spot{margin:0 0 6px;font-size:13px;font-weight:500}
+#hero-12 .h12-hl{margin:0;font-weight:800;font-size:30px;line-height:1.12}
+#hero-12 .h12-panel{position:absolute;top:28px;right:28px;width:min(360px,calc(100% - 56px));box-sizing:border-box;padding:18px 20px 20px;background:#F4F6F2;border:2px solid #0F2F33}
+#hero-12 .h12-tag{margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid #0F2F33;font-size:13px;letter-spacing:.06em}
+#hero-12 .h12-line{margin:0 0 14px;font-size:15px;line-height:1.55}
+#hero-12 .h12-ctl{display:block;font-size:15px;font-weight:800}
+#hero-12 .h12-ctl input{display:block;width:100%;min-height:32px;margin:8px 0 4px;accent-color:#1F5357}
+#hero-12 .h12-state{margin:0 0 14px;font-size:15px;line-height:1.45}
+#hero-12 .h12-go{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;background:#0F2F33;color:#F4F6F2;font-weight:800;font-size:17px;text-decoration:none;border:2px solid #0F2F33}
+#hero-12 .h12-go:hover{background:transparent;color:#0F2F33}
+#hero-12 .h12-go:focus-visible,#hero-12 .h12-ctl input:focus-visible{outline:3px solid #0F2F33;outline-offset:3px}
+#hero-12 .h12-cart{position:absolute;left:28px;bottom:24px;margin:0;padding:4px 8px;background:#F4F6F2;border:1px solid #0F2F33;font-size:12px;letter-spacing:.06em}
+@media (max-width:700px){
+  #hero-12 .h12-in{display:flow-root}
+  #hero-12 .h12-map{height:520px}
+  #hero-12 .h12-summit{left:42%;top:177px;width:190px}
+  #hero-12 .h12-hl{font-size:20px}
+  #hero-12 .h12-panel{position:relative;top:auto;right:auto;width:auto;margin:520px 0 0;border-width:2px 0 0}
+  #hero-12 .h12-cart{left:18px;top:478px;bottom:auto}
+}
+/* hero-13 Transit line */
+#hero-13 .h13-in{position:relative;min-height:600px;box-sizing:border-box;padding:clamp(22px,4vw,52px);display:flex;flex-direction:column;justify-content:center;gap:18px;color:#FFFFFF;font-family:'Lexend Zetta',Verdana,Tahoma,sans-serif}
+#hero-13 .h13-tag{margin:0;padding-right:96px;font-size:12px;letter-spacing:-.02em}
+#hero-13 .h13-hl{max-width:24ch;margin:0;font-weight:700;font-size:clamp(24px,3.6vw,46px);line-height:1.15;letter-spacing:-.05em}
+#hero-13 .h13-line{max-width:64ch;margin:0;font-size:clamp(14px,1.2vw,16px);line-height:1.6;letter-spacing:-.03em}
+#hero-13 .h13-map{margin-top:8px;padding-top:18px;border-top:3px solid #FFFFFF}
+#hero-13 .h13-bullet{display:flex;align-items:center;gap:12px;margin:0;font-size:13px;letter-spacing:-.03em}
+#hero-13 .h13-bullet b{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#7CE0A3;color:#0B1F55;font-size:16px}
+#hero-13 .h13-stops{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));margin:14px 0 0;padding:0;list-style:none}
+#hero-13 .h13-stops li{position:relative}
+#hero-13 .h13-stops li:not(:last-child)::before{content:"";position:absolute;left:50%;top:34px;width:100%;height:12px;background:repeating-linear-gradient(90deg,#7CE0A3 0 14px,transparent 14px 22px)}
+#hero-13 .h13-stops li.h13-past::before{background:#7CE0A3}
+#hero-13 .h13-stops button{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;padding:30px 4px 8px;background:none;border:0;color:#FFFFFF;font:inherit;cursor:pointer}
+#hero-13 .h13-dot{position:relative;flex:none;width:20px;height:20px;box-sizing:border-box;border:4px solid #0B1F55;border-radius:50%;background:#FFFFFF}
+#hero-13 .h13-x .h13-dot{width:28px;height:28px;margin-top:-4px;margin-bottom:-4px;border-width:5px;box-shadow:0 0 0 4px #FF9EBB}
+#hero-13 .h13-txt{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+#hero-13 .h13-name{font-weight:700;font-size:13px;line-height:1.25;letter-spacing:-.04em}
+#hero-13 .h13-time{color:#BFD0FF;font-size:12px}
+#hero-13 .h13-chg{color:#FFC2D4;font-size:11px;letter-spacing:-.03em}
+#hero-13 button[aria-current] .h13-name{text-decoration:underline 3px #7CE0A3;text-underline-offset:5px}
+#hero-13 .h13-stops button:focus-visible{outline:3px solid #FFFFFF;outline-offset:-2px}
+#hero-13 .h13-bag{position:absolute;left:50%;bottom:100%;width:26px;height:28px;margin:0 0 6px -13px;animation:hero13-hop .45s ease-out}
+@keyframes hero13-hop{from{transform:translateY(-14px)}to{transform:none}}
+#hero-13 .h13-now{min-height:3em;max-width:72ch;margin:14px 0 0;font-size:14px;line-height:1.5;letter-spacing:-.03em}
+#hero-13 .h13-go{align-self:flex-start;display:inline-flex;align-items:center;min-height:48px;padding:0 24px;background:#7CE0A3;color:#0B1F55;font-weight:700;font-size:15px;letter-spacing:-.03em;text-decoration:none;border:2px solid #7CE0A3}
+#hero-13 .h13-go:hover{background:transparent;color:#7CE0A3}
+#hero-13 .h13-go:focus-visible{outline:3px solid #FFFFFF;outline-offset:3px}
+@media (max-width:760px){
+  #hero-13 .h13-stops{grid-template-columns:1fr}
+  #hero-13 .h13-stops li:not(:last-child)::before{left:18px;top:30px;bottom:-30px;width:12px;height:auto;background:repeating-linear-gradient(180deg,#7CE0A3 0 14px,transparent 14px 22px)}
+  #hero-13 .h13-stops button{flex-direction:row;align-items:flex-start;gap:16px;padding:20px 4px 12px 14px}
+  #hero-13 .h13-x .h13-dot{margin:-4px -4px 0}
+  #hero-13 .h13-txt{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:2px 12px;text-align:left}
+  #hero-13 .h13-bag{left:auto;right:100%;bottom:auto;top:-4px;margin:0 6px 0 0;width:20px;height:22px}
+}
+@media (prefers-reduced-motion:reduce){#hero-13 .h13-bag{animation:none}}
+</style>
+</head>
+<body>
+<main class="shell">
+<h1>Heroes</h1>
+<p>Specimens to re-cut, never to ship as they are: change the copy, colours and type to the product's own. Each headline is an h3 here and becomes the page's h1 when used. Roll for one with <code>python3 scripts/roll.py --library heroes</code>.</p>
+<ul class="index"><li><a href="#hero-01">hero-01 Fill-in sentence</a></li><li><a href="#hero-02">hero-02 Front page</a></li><li><a href="#hero-03">hero-03 Proof divider</a></li><li><a href="#hero-04">hero-04 Exploded view</a></li><li><a href="#hero-05">hero-05 Crossword</a></li><li><a href="#hero-06">hero-06 Tape measure</a></li><li><a href="#hero-07">hero-07 Local sky</a></li><li><a href="#hero-08">hero-08 Venn overlap</a></li><li><a href="#hero-09">hero-09 Dictionary entry</a></li><li><a href="#hero-10">hero-10 Sampler</a></li><li><a href="#hero-11">hero-11 Sheet music</a></li><li><a href="#hero-12">hero-12 Tide chart</a></li><li><a href="#hero-13">hero-13 Transit line</a></li></ul>
+<article class="spec" id="hero-01" data-name="Fill-in sentence">
+<header><h2><code>hero-01</code> Fill-in sentence</h2><p><b>Use it when:</b> the product's value is a sum of the visitor's own numbers. <b>Change:</b> the sentence, its blanks, the formula and the sample assumption printed under the action.</p></header>
+<div class="stage" style="background:#F6D6DE">
+  <div class="h01-slip">
+    <div class="h01-feed" aria-hidden="true"></div>
+    <div class="h01-form">
+      <p class="h01-top"><span>Stub · pay advice</span><span>Sample product</span><span>Private &amp; confidential</span></p>
+      <h3 class="h01-h">Pay <input name="people" type="number" min="1" max="999" value="12" inputmode="numeric" aria-label="How many people you pay"> people every <select name="every" aria-label="How often you pay them"><option value="52">week</option><option value="26" selected>fortnight</option><option value="13">four weeks</option><option value="12">month</option></select> and never open a spreadsheet.</h3>
+      <p class="h01-line">That is <output class="h01-slips">312</output> payslips a year, worked out, filed and sent on payday, and about <output class="h01-hrs">26</output> hours of admin you get back.</p>
+      <div class="h01-tear">
+        <a class="h01-go" href="#run-payroll">Run a sample payroll</a>
+        <p class="h01-note">Sample figures · 5 minutes of admin per payslip</p>
+      </div>
+    </div>
+    <div class="h01-feed" aria-hidden="true"></div>
+  </div>
+</div>
+</article>
+<article class="spec" id="hero-02" data-name="Front page">
+<header><h2><code>hero-02</code> Front page</h2><p><b>Use it when:</b> the product makes something fresh every day or has real news to tell. <b>Change:</b> the masthead, ears, folio line and story; never borrow a real paper's name or layout.</p></header>
+<div class="stage" style="background:#E9E6DF">
+  <div class="h02-paper">
+    <div class="h02-ears">
+      <p class="h02-ear">Ovens lit<b>4:10 a.m.</b>sample time</p>
+      <p class="h02-mast">The Early Proof</p>
+      <p class="h02-ear">Oven forecast<b>230°C, dry</b>sample figure</p>
+    </div>
+    <p class="h02-folio"><span>Vol. I · No. 112</span><span>Sample product: Lowfield Bakery's order paper</span><span>Free with every loaf</span></p>
+    <div class="h02-grid">
+      <div class="h02-lead">
+        <p class="h02-kick">Overnight bake · Home delivery</p>
+        <h3 class="h02-hl">Bread baked while you sleep, on your step before the kettle boils</h3>
+        <p class="h02-deck">Order by 8 p.m. and the night shift bakes it; it is at your door by 7 a.m. Sample times for one neighbourhood.</p>
+        <div class="h02-body">
+          <figure><div class="h02-photo" role="img" aria-label="Halftone illustration of a scored loaf"></div><figcaption>A country loaf at 6:52 a.m. Illustration, not a photograph.</figcaption></figure>
+          <p class="h02-by">By the night shift</p>
+          <p>The ovens go on when the street goes quiet. The sourdough has been proving since the afternoon before, the rye since the morning. By four the first trays are out and cooling on racks by the open back door.</p>
+          <p>Each loaf leaves in a paper bag with the time it came out of the oven pencilled on the side, so you know how fresh it is. Nothing is sliced unless you ask.</p>
+          <p>Deliveries go out by bicycle in two rounds, the first at half past five. If you are not up, the loaf waits on the step in a bag the birds cannot open.</p>
+          <p class="h02-jump">Continued on page 2, column 3</p>
+        </div>
+      </div>
+      <div class="h02-side">
+        <p class="h02-sideh">Inside today</p>
+        <ul class="h02-inside"><li>Rye is back <span>p. 3</span></li><li>The night shift, in pictures <span>p. 5</span></li><li>Letters to the baker <span>p. 6</span></li><li>Tomorrow's bake <span>p. 8</span></li></ul>
+        <div class="h02-ad">
+          <p class="h02-adk">Classified</p>
+          <p class="h02-adh">Wanted: one empty bread bin, by morning.</p>
+          <a class="h02-go" href="#order">Order tomorrow's loaf</a>
+          <p class="h02-small">Orders close at 8 p.m. (sample)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</article>
+<article class="spec" id="hero-03" data-name="Proof divider">
+<header><h2><code>hero-03</code> Proof divider</h2><p><b>Use it when:</b> the product turns a clumsy version of something into a good one. <b>Change:</b> both sentences and the editor's marks; start them with the same words so the cut lands mid-thought.</p></header>
+<div class="stage" style="background:#C4321E">
+  <div class="h03-wrap">
+    <p class="h03-tag">Sample product: Fairword, translation with a human editor</p>
+    <div class="h03-cmp">
+      <div class="h03-side h03-after">
+        <p class="h03-label">Said properly</p>
+        <h3 class="h03-hl">Your words, arriving the way you meant them.</h3>
+      </div>
+      <div class="h03-side h03-before">
+        <p class="h03-label">Word for word</p>
+        <p class="h03-hl">Your words, arriving <s>of the manner that</s><span class="h03-mark" aria-hidden="true">del.</span> you them<span class="h03-mark" aria-hidden="true">tr.</span> <s>wanted to say</s><span class="h03-mark" aria-hidden="true">del.</span></p>
+      </div>
+      <div class="h03-bar" aria-hidden="true"><span class="h03-knob"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.5"/></svg></span></div>
+      <input class="h03-range" type="range" min="0" max="100" value="70" aria-label="Slide between the word-for-word and the edited sentence">
+    </div>
+    <div class="h03-foot">
+      <p>A machine draft is fast and literal. An editor who lives in the language turns it into something a person would say. Forty languages; a sample turnaround of two working days.</p>
+      <a class="h03-go" href="#quote">Get a quote for one page</a>
+    </div>
+  </div>
+</div>
+</article>
+<article class="spec" id="hero-04" data-name="Exploded view">
+<header><h2><code>hero-04</code> Exploded view</h2><p><b>Use it when:</b> the product is an object or a service with parts worth naming. <b>Change:</b> the drawing, the callout positions, the parts list and every price.</p></header>
+<div class="stage" style="background:#F3C92A">
+  <div class="h04-in">
+    <div class="h04-top">
+      <h3 class="h04-hl">Every part out, cleaned, and back in by Friday.</h3>
+      <div class="h04-meta">
+        <p class="h04-sheet">Sample product: Cog Hospital, bike repair<br>Service manual · Fig. 7 · Rear hub, exploded</p>
+        <p class="h04-line">A full strip-down: we take the hub and drivetrain apart on the bench, replace what is worn and hand you the parts list. Press a number to see what happens to each part.</p>
+      </div>
+    </div>
+    <div class="h04-fig">
+      <svg viewBox="0 0 1000 380" aria-hidden="true" focusable="false">
+        <path d="M16 190H984" fill="none" stroke="#141414" stroke-width="1.5" stroke-dasharray="18 6 4 6"/>
+        <g class="h04-leads" stroke="#141414" stroke-width="1.5" fill="none">
+          <path data-part="1" d="M70 46L76 118"/>
+          <path data-part="2" d="M250 334L300 230"/>
+          <path data-part="3" d="M330 46L354 148"/>
+          <path data-part="4" d="M430 334L407 237"/>
+          <path data-part="5" class="h04-on" d="M560 46L540 156"/>
+          <path data-part="6" d="M700 334L720 232"/>
+          <path data-part="7" d="M860 46L842 112"/>
+        </g>
+        <g class="h04-parts" fill="#FFF7D6" stroke="#141414" stroke-width="2.5" stroke-linejoin="round">
+          <g data-part="1"><path d="M70 172C58 132 66 98 92 90L100 99C84 112 82 140 86 172Z"/><rect x="58" y="170" width="30" height="40" rx="6"/><rect x="88" y="186" width="162" height="8"/><path d="M232 186v8M238 186v8M244 186v8" stroke-width="1.5"/></g>
+          <g data-part="2"><rect x="290" y="152" width="24" height="76" rx="2"/><path d="M290 172h24M290 208h24" stroke-width="1.5"/></g>
+          <g data-part="3"><path d="M338 150H362L374 166V214L362 230H338Z"/></g>
+          <g data-part="4"><circle cx="405" cy="151" r="6.5"/><circle cx="405" cy="164" r="6.5"/><circle cx="405" cy="177" r="6.5"/><circle cx="405" cy="190" r="6.5"/><circle cx="405" cy="203" r="6.5"/><circle cx="405" cy="216" r="6.5"/><circle cx="405" cy="229" r="6.5"/></g>
+          <g data-part="5" class="h04-on"><rect x="456" y="158" width="168" height="64"/><rect x="440" y="108" width="16" height="164" rx="4"/><rect x="624" y="108" width="16" height="164" rx="4"/><g stroke="none" fill="#141414"><circle class="h04-hole" cx="448" cy="124" r="3.5"/><circle class="h04-hole" cx="448" cy="148" r="3.5"/><circle class="h04-hole" cx="448" cy="232" r="3.5"/><circle class="h04-hole" cx="448" cy="256" r="3.5"/><circle class="h04-hole" cx="632" cy="124" r="3.5"/><circle class="h04-hole" cx="632" cy="148" r="3.5"/><circle class="h04-hole" cx="632" cy="232" r="3.5"/><circle class="h04-hole" cx="632" cy="256" r="3.5"/></g></g>
+          <g data-part="6"><rect x="680" y="150" width="82" height="80" rx="3"/><path d="M692 150v80M702 150v80M712 150v80M722 150v80M732 150v80M742 150v80M752 150v80" stroke-width="1.2"/></g>
+          <g data-part="7"><rect x="800" y="90" width="7" height="200"/><rect x="813" y="98" width="7" height="184"/><rect x="826" y="106" width="7" height="168"/><rect x="839" y="114" width="7" height="152"/><rect x="852" y="121" width="7" height="138"/><rect x="865" y="128" width="7" height="124"/><rect x="878" y="135" width="7" height="110"/><rect x="891" y="141" width="7" height="98"/><rect x="904" y="147" width="7" height="86"/><rect x="917" y="153" width="7" height="74"/><rect x="932" y="160" width="10" height="60"/></g>
+        </g>
+      </svg>
+      <button type="button" class="h04-call" data-p="1" style="left:7%;top:12.1%" aria-label="Part 1, skewer" aria-pressed="false" data-t="Quick-release skewer: cam cleaned and greased, lever set so it closes firmly. Included.">1</button>
+      <button type="button" class="h04-call" data-p="2" style="left:25%;top:87.9%" aria-label="Part 2, locknut" aria-pressed="false" data-t="Locknut: set hard against the cone so the wheel spins with no play. Included.">2</button>
+      <button type="button" class="h04-call" data-p="3" style="left:33%;top:12.1%" aria-label="Part 3, cone" aria-pressed="false" data-t="Cone: swapped if its bearing track is pitted. Sample price £8.">3</button>
+      <button type="button" class="h04-call" data-p="4" style="left:43%;top:87.9%" aria-label="Part 4, bearings" aria-pressed="false" data-t="Loose ball bearings: always replaced, never reused. Sample price £4.">4</button>
+      <button type="button" class="h04-call" data-p="5" style="left:56%;top:12.1%" aria-label="Part 5, hub shell" aria-pressed="true" data-t="Hub shell: degreased, races checked by hand for pitting. Included.">5</button>
+      <button type="button" class="h04-call" data-p="6" style="left:70%;top:87.9%" aria-label="Part 6, freehub body" aria-pressed="false" data-t="Freehub body: pawls cleaned and re-greased so it clicks again. Sample price £12.">6</button>
+      <button type="button" class="h04-call" data-p="7" style="left:86%;top:12.1%" aria-label="Part 7, cassette" aria-pressed="false" data-t="Cassette, ten cogs: measured for wear, replaced only if worn. Sample price £35.">7</button>
+    </div>
+    <div class="h04-foot">
+      <p class="h04-detail" aria-live="polite"><b class="h04-n">5</b><span class="h04-txt">Hub shell: degreased, races checked by hand for pitting. Included.</span></p>
+      <a class="h04-go" href="#bench">Book a bench slot</a>
+    </div>
+  </div>
+</div>
+</article>
+<article class="spec" id="hero-05" data-name="Crossword">
+<header><h2><code>hero-05</code> Crossword</h2><p><b>Use it when:</b> the product's whole idea fits in a handful of short words. <b>Change:</b> the answers, clues and grid; the self-check confirms the clue numbers still match the grid.</p></header>
+<div class="stage" style="background:#1E4A2E">
+  <div class="h05-in">
+    <div class="h05-text">
+      <p class="h05-tag">Sample product: the Commons Seed Library</p>
+      <h3 class="h05-hl">Borrow a seed. Sow it, grow it, return some.</h3>
+      <p class="h05-line">A library card for your garden: take a packet free, grow it out, and bring back a few seeds from your best plant. Seven words say how; the puzzle holds them.</p>
+      <a class="h05-go" href="#card">Get a library card</a>
+    </div>
+    <div class="h05-puz">
+      <div class="h05-grid" role="group" aria-label="Crossword, seven answers"></div>
+      <div class="h05-tools" hidden><button type="button" class="h05-check">Check</button><button type="button" class="h05-reveal">Reveal all</button><p class="h05-status" aria-live="polite">1 of 7 answers solved.</p></div>
+      <div class="h05-clues">
+        <div><h4>Across</h4><ol><li><b>1</b>What you do with a borrowed packet in spring (3)</li><li><b>4</b>Owed back, like a library book (3)</li><li><b>6</b>Bring some seed back from what you grew (6)</li></ol></div>
+        <div><h4>Down</h4><ol><li><b>1</b>What the library lends, a packet at a time (4)</li><li><b>2</b>Give it daily in a dry week (5)</li><li><b>3</b>A patch of ground to grow in (4)</li><li><b>5</b>What a seed does after 1 Across (4)</li></ol></div>
+      </div>
+    </div>
+    <p class="h05-stamp" aria-hidden="true">Due back<br>at harvest</p>
+  </div>
+</div>
+</article>
+<article class="spec" id="hero-06" data-name="Tape measure">
+<header><h2><code>hero-06</code> Tape measure</h2><p><b>Use it when:</b> the product works to a measurement the visitor already knows. <b>Change:</b> the unit, range and scale, what the reading prices, and the case's label.</p></header>
+<div class="stage" style="background:#2A2A2E">
+  <div class="h06-in">
+    <p class="h06-tag">Sample product: Hem &amp; Haw, alterations by post</p>
+    <h3 class="h06-hl">Trousers taken up to the sixteenth of an inch.</h3>
+    <p class="h06-line">Pull the tape out to your inside leg. We hem to that number, not to the nearest size.</p>
+    <div class="h06-track">
+      <div class="h06-chalk" aria-hidden="true"></div>
+      <div class="h06-tape" aria-hidden="true"><div class="h06-nums"></div></div>
+      <div class="h06-hook" aria-hidden="true"></div>
+      <div class="h06-case" aria-hidden="true">Hem &amp;<br>Haw</div>
+      <div class="h06-loupe" aria-hidden="true"><div class="h06-zoom"></div></div>
+      <input class="h06-range" type="range" min="0" max="576" step="1" value="487" aria-label="Inside leg, in sixteenths of an inch" aria-valuetext="30 and 7/16 inches, 77.3 centimetres">
+    </div>
+    <div class="h06-foot">
+      <p class="h06-read">Inside leg <output class="h06-out">30 <sup>7</sup>⁄<sub>16</sub> in</output> <span class="h06-cm">77.3 cm</span></p>
+      <p class="h06-price">Any length, one sample price: £14.</p>
+      <a class="h06-go" href="#post">Post us a pair</a>
+    </div>
+  </div>
+</div>
+</article>
+<article class="spec" id="hero-07" data-name="Local sky">
+<header><h2><code>hero-07</code> Local sky</h2><p><b>Use it when:</b> the product is used at different times of day. <b>Change:</b> the four lines, the hours of each bucket, and the band colours (keep each set readable under its ink).</p></header>
+<div class="stage" style="background:#4A1230">
+  <div class="h07-sky" data-sky="dusk">
+    <div class="h07-air">
+      <div class="h07-bands" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="h07-stars" aria-hidden="true"></div>
+      <div class="h07-orb" aria-hidden="true"></div>
+      <div class="h07-text">
+        <p class="h07-tag">Sample product: Small Hours, a walking podcast · <span class="h07-when">the sky shows dusk</span></p>
+        <h3 class="h07-hl">Twenty minutes of somewhere else.</h3>
+        <p class="h07-line" data-dawn="For the kettle and the first light: today's walk is 18 minutes along a harbour wall as the boats go out. Sample episode." data-day="For the lunch break you take outside: today's walk is 22 minutes through a covered market at its busiest. Sample episode." data-dusk="For the walk home: today's walk is 20 minutes across a city bridge while the lights come on. Sample episode." data-night="For when sleep will not come: today's walk is 25 minutes through a snowed-in village, nobody talking. Sample episode.">For the walk home: today's walk is 20 minutes across a city bridge while the lights come on. Sample episode.</p>
+      </div>
+    </div>
+    <div class="h07-low">
+      <svg class="h07-land" viewBox="0 0 1200 70" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 70V40C90 26 170 44 260 34S420 14 520 30H600V12H612V30H700C800 34 880 10 980 20S1130 40 1200 26V70Z"/></svg>
+      <a class="h07-go" href="#listen">Play today's walk</a>
+      <div class="h07-times" role="group" aria-label="Show the sky at another time of day"><span>See it at</span><button type="button" data-t="dawn" aria-pressed="false">dawn</button><button type="button" data-t="day" aria-pressed="false">midday</button><button type="button" data-t="dusk" aria-pressed="true">dusk</button><button type="button" data-t="night" aria-pressed="false">night</button></div>
+    </div>
+  </div>
+</div>
+</article>
+<article class="spec" id="hero-08" data-name="Venn overlap">
+<header><h2><code>hero-08</code> Venn overlap</h2><p><b>Use it when:</b> the product lives where two things meet. <b>Change:</b> the circle labels, the two inks and the headline; keep the overlap range so the lens always holds the headline.</p></header>
+<div class="stage" style="background:#FAFBFC">
+  <div class="h08-in">
+    <p class="h08-tag">Sample product: Shoebox, a tax helper for freelancers</p>
+    <div class="h08-plot" style="--o:.35">
+      <div class="h08-c h08-a"><span>What you spent on the work</span></div>
+      <div class="h08-c h08-b"><span>What the rules let you claim</span></div>
+      <h3 class="h08-hl">Your refund lives here.</h3>
+    </div>
+    <div class="h08-copy">
+      <label class="h08-ctl"><span>Overlap</span><input class="h08-range" type="range" min="0" max="100" value="35"></label>
+      <p class="h08-line">Photograph receipts as they happen. Shoebox sorts the ones that count and files them with your return. Drag either circle or use the slider. An illustration, not tax advice.</p>
+      <a class="h08-go" href="#start">Start with one receipt</a>
+    </div>
+  </div>
+</div>
+</article>
+<article class="spec" id="hero-09" data-name="Dictionary entry">
+<header><h2><code>hero-09</code> Dictionary entry</h2><p><b>Use it when:</b> the product's name is, or could be, a word you can define. <b>Change:</b> headword, pronunciation, senses, origin, guide words and the thumb tab's letter.</p></header>
+<div class="stage" style="background:#E5DFF1">
+  <div class="h09-page">
+    <p class="h09-run"><span>hush</span><span>page 811 · sample</span><span>husky</span></p>
+    <div class="h09-cols">
+      <div class="h09-ghosts" aria-hidden="true">
+        <p><b>hush</b> <i>verb</i> to make or become quiet. <i>noun</i> a sudden quiet in a busy room.</p>
+        <p><b>hush-hush</b> <i>adjective, informal</i> kept secret on purpose.</p>
+        <p><b>husk</b> <i>noun</i> the dry outer skin of some seeds and fruit.</p>
+      </div>
+      <div class="h09-entry">
+        <p class="h09-head"><span class="h09-hw">hush<span aria-hidden="true">·</span>er<span aria-hidden="true">·</span>y</span> <span class="h09-pron">/ˈhʌʃ.ə.ri/</span> <i>noun</i> <button class="h09-say" type="button" hidden>hear it</button></p>
+        <h3 class="h09-hl"><span class="h09-n" aria-hidden="true">1</span>A room where nobody talks, rented by the hour.</h3>
+        <p class="h09-sense"><span class="h09-n">2</span>Sample product: quiet rooms near you, booked from your phone; a desk, a lamp and a door that shuts, phones face down once you are in. <span class="h09-eg">booked the hushery for the afternoon</span></p>
+        <p class="h09-sense"><span class="h09-n">3</span><i>informal</i> The ten minutes after everyone else has left the house.</p>
+        <p class="h09-origin"><b>Origin</b> 2020s, a sample coinage: from <span class="h09-sc">hush</span> + <span class="h09-sc">-ery</span>, on the pattern of <i>bakery</i> and <i>brewery</i>.</p>
+        <p class="h09-x">see also <a class="h09-go" href="#book">Book an hour</a></p>
+      </div>
+    </div>
+    <div class="h09-tabs" aria-hidden="true"><span>F<br>G</span><span class="h09-cur">H</span><span>I<br>J</span></div>
+  </div>
+</div>
+</article>
+<article class="spec" id="hero-10" data-name="Sampler">
+<header><h2><code>hero-10</code> Sampler</h2><p><b>Use it when:</b> the product is domestic, slow or made by hand. <b>Change:</b> the motto (add any missing letters to the 5 × 7 table), the motifs and the thread colours.</p></header>
+<div class="stage" style="background:#43203F">
+  <div class="h10-in">
+    <div class="h10-cloth">
+      <h3 class="h10-hl">Home kept while you roam.</h3>
+      <svg class="h10-svg" aria-hidden="true" focusable="false"></svg>
+    </div>
+    <div class="h10-text">
+      <p class="h10-tag">Sample product: Keepwell, house-sitting</p>
+      <p class="h10-line">A sitter moves in while you are away: plants watered, cat fed, post taken in, a lamp on in the evening. Sitters are local and vetted; sample terms.</p>
+      <a class="h10-go" href="#sitter">Find a sitter for your dates</a>
+    </div>
+  </div>
+</div>
+</article>
+<article class="spec" id="hero-11" data-name="Sheet music">
+<header><h2><code>hero-11</code> Sheet music</h2><p><b>Use it when:</b> the product is about voice, sound or rhythm. <b>Change:</b> the lyric, the melody and the tempo; the self-check keeps four beats in every bar.</p></header>
+<div class="stage" style="background:#F4842D">
+  <div class="h11-in">
+    <p class="h11-top"><span><span class="h11-mark" aria-hidden="true">A</span>Sample product: Tuesday Choir, no auditions</span><span>All voices · warmly, at a walking pace</span></p>
+    <h3 class="h11-hl">Come and sing, no audition; nobody alone.</h3>
+    <svg class="h11-svg" aria-hidden="true" focusable="false"></svg>
+    <div class="h11-foot">
+      <p class="h11-line">Tuesdays at seven in the library hall (sample). Nobody needs to read music: we teach every part by ear, and you stand next to someone who knows it.</p>
+      <button type="button" class="h11-play" aria-pressed="false" hidden>Hear the line</button>
+      <a class="h11-go" href="#rehearsal">Come to a rehearsal</a>
+    </div>
+  </div>
+</div>
+</article>
+<article class="spec" id="hero-12" data-name="Tide chart">
+<header><h2><code>hero-12</code> Tide chart</h2><p><b>Use it when:</b> the product turns a level that changes into a yes or a no. <b>Change:</b> the terrain recipe, the contour levels, the slider's unit and the question the state line answers.</p></header>
+<div class="stage" style="background:#A0D6D4">
+  <div class="h12-in">
+    <canvas class="h12-map" aria-hidden="true"></canvas>
+    <div class="h12-summit"><p class="h12-spot" aria-hidden="true">▲ summit</p><h3 class="h12-hl">Know when the causeway is dry.</h3></div>
+    <div class="h12-panel">
+      <p class="h12-tag">Sample product: Neap, a tide app for coast walkers</p>
+      <p class="h12-line">Neap draws the tide as the ground it covers. Raise the water and watch the path to the islet go under. Sample heights; not for navigation.</p>
+      <label class="h12-ctl">Tide height <output class="h12-h">1.5 m</output><input class="h12-range" type="range" min="0" max="6" step="0.1" value="1.5"></label>
+      <p class="h12-state" aria-live="polite">Causeway: dry and walkable at this height.</p>
+      <a class="h12-go" href="#tides">Get today's tides</a>
+    </div>
+    <p class="h12-cart" aria-hidden="true">Chart 7 · sample survey · heights in metres</p>
+  </div>
+</div>
+</article>
+<article class="spec" id="hero-13" data-name="Transit line">
+<header><h2><code>hero-13</code> Transit line</h2><p><b>Use it when:</b> the product is a run of steps with times. <b>Change:</b> the stops, times, the line's name and colour, and the interchange.</p></header>
+<div class="stage" style="background:#1D3F9E">
+  <div class="h13-in">
+    <p class="h13-tag">Sample product: Fold Line, same-day laundry pickup</p>
+    <h3 class="h13-hl">Out by nine, home by six, folded.</h3>
+    <p class="h13-line">Leave the bag on your step. It rides the Fold Line through wash, dry and fold and comes back the same day. Sample times for one area.</p>
+    <div class="h13-map">
+      <p class="h13-bullet"><b aria-hidden="true">F</b><span>Fold Line · towards Home · <span class="h13-total">9</span> hours door to door (sample)</span></p>
+      <ol class="h13-stops">
+        <li class="h13-past"><button type="button" data-t="Leave any bag on the step before nine, with a note on top for anything delicate."><span class="h13-dot"></span><span class="h13-txt"><span class="h13-name">Bag out</span><span class="h13-time">09:00</span></span></button></li>
+        <li class="h13-past"><button type="button" data-t="A rider picks it up and sends you a photo of the bag on the bike."><span class="h13-dot"></span><span class="h13-txt"><span class="h13-name">Collected</span><span class="h13-time">10:30</span></span></button></li>
+        <li class="h13-x"><button type="button" aria-current="step" data-t="Your load goes in on its own at 30°C, never mixed with anyone else's. Change here for Mending, a sample add-on."><span class="h13-dot"><svg class="h13-bag" viewBox="0 0 26 28" aria-hidden="true"><path d="M7 8h12l4 17H3z" fill="#FFFFFF" stroke="#0B1F55" stroke-width="2" stroke-linejoin="round"/><path d="M8 8c0-5 10-5 10 0M6 12h14" fill="none" stroke="#0B1F55" stroke-width="2"/></svg></span><span class="h13-txt"><span class="h13-name">Washed cold</span><span class="h13-time">12:00</span><span class="h13-chg">change for Mending</span></span></button></li>
+        <li><button type="button" data-t="Wool, and anything whose label says so, dries flat; the rest tumbles low."><span class="h13-dot"></span><span class="h13-txt"><span class="h13-name">Dried flat</span><span class="h13-time">14:00</span></span></button></li>
+        <li><button type="button" data-t="Folded the way you asked: socks paired, shirts on hangers if you want them."><span class="h13-dot"></span><span class="h13-txt"><span class="h13-name">Folded</span><span class="h13-time">16:00</span></span></button></li>
+        <li><button type="button" data-t="Back on your step by six, in the same bag it left in."><span class="h13-dot"></span><span class="h13-txt"><span class="h13-name">Home</span><span class="h13-time">18:00</span></span></button></li>
+      </ol>
+      <p class="h13-now" aria-live="polite">Stop 3 of 6, Washed cold at 12:00. Your load goes in on its own at 30°C, never mixed with anyone else's. Change here for Mending, a sample add-on.</p>
+    </div>
+    <a class="h13-go" href="#pickup">Book a pickup</a>
+    <button type="button" class="replay" hidden>Replay</button>
+  </div>
+</div>
+</article>
+</main>
+<script>
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// hero-01 Fill-in sentence
+{
+  const root = document.getElementById('hero-01');
+  const people = root.querySelector('[name=people]'), every = root.querySelector('[name=every]');
+  const slips = root.querySelector('.h01-slips'), hours = root.querySelector('.h01-hrs');
+  // Sample assumption, printed on the slip: 5 minutes of admin per payslip.
+  const calc = (n, perYear) => ({ slips: n * perYear, hours: Math.round(n * perYear * 5 / 60) });
+  console.assert(calc(12, 26).slips === 312 && calc(12, 26).hours === 26, 'hero-01: 12 people paid fortnightly');
+  const run = () => {
+    const n = Math.min(999, Math.max(0, Math.round(Number(people.value)) || 0));
+    const r = calc(n, Number(every.value));
+    slips.textContent = r.slips.toLocaleString('en-GB');
+    hours.textContent = r.hours.toLocaleString('en-GB');
+    people.style.width = Math.max(2, String(people.value).length) + 0.6 + 'ch';
+    every.style.width = every.selectedOptions[0].text.length + 1.6 + 'ch';
+  };
+  people.addEventListener('input', run);
+  every.addEventListener('change', run);
+  run();
+}
+// hero-03 Proof divider
+{
+  const root = document.getElementById('hero-03');
+  const range = root.querySelector('.h03-range'), cmp = root.querySelector('.h03-cmp');
+  // Without JS the edited sentence shows whole; JS opens the split.
+  const set = () => cmp.style.setProperty('--v', range.value / 100);
+  range.addEventListener('input', set);
+  if (cmp.clientWidth < 600) range.value = 88; // phones: start with nearly all of the edited sentence showing
+  set();
+  cmp.classList.add('h03-live');
+}
+// hero-04 Exploded view
+{
+  const root = document.getElementById('hero-04');
+  const calls = root.querySelectorAll('.h04-call'), num = root.querySelector('.h04-n'), txt = root.querySelector('.h04-txt');
+  const show = b => {
+    calls.forEach(c => c.setAttribute('aria-pressed', c === b));
+    root.querySelectorAll('[data-part]').forEach(el => el.classList.toggle('h04-on', el.dataset.part === b.dataset.p));
+    num.textContent = b.dataset.p;
+    txt.textContent = b.dataset.t;
+  };
+  calls.forEach(b => ['click', 'focus', 'pointerenter'].forEach(ev => b.addEventListener(ev, () => show(b))));
+}
+// hero-05 Crossword
+{
+  const root = document.getElementById('hero-05');
+  const grid = root.querySelector('.h05-grid'), status = root.querySelector('.h05-status');
+  const words = [ // number, direction, row, column, answer
+    [1, 'a', 0, 0, 'SOW'], [4, 'a', 3, 0, 'DUE'], [6, 'a', 4, 2, 'RETURN'],
+    [1, 'd', 0, 0, 'SEED'], [2, 'd', 0, 2, 'WATER'], [3, 'd', 1, 4, 'PLOT'], [5, 'd', 3, 6, 'GROW']
+  ];
+  const cells = {}, key = (r, c) => r + ',' + c;
+  const spots = ([, dir, r, c, ans]) => [...ans].map((ch, i) => dir === 'a' ? key(r, c + i) : key(r + i, c));
+  for (const w of words) spots(w).forEach((k, i) => {
+    const cell = cells[k] ||= { ch: w[4][i], words: [] };
+    console.assert(cell.ch === w[4][i], 'hero-05: crossing letters agree at ' + k);
+    cell.words.push(w);
+  });
+  // Standard numbering: scan rows, number every cell that starts an across or a down answer.
+  let next = 1;
+  const nums = {};
+  for (let r = 0; r < 7; r++) for (let c = 0; c < 8; c++) {
+    if (!cells[key(r, c)]) continue;
+    const across = !cells[key(r, c - 1)] && cells[key(r, c + 1)], down = !cells[key(r - 1, c)] && cells[key(r + 1, c)];
+    if (across || down) nums[key(r, c)] = next++;
+  }
+  console.assert(words.every(([n, , r, c]) => nums[key(r, c)] === n), 'hero-05: clue numbers match the grid');
+  for (const k in cells) {
+    const [r, c] = k.split(',').map(Number), div = document.createElement('div'), inp = document.createElement('input');
+    div.className = 'h05-cell';
+    div.style.gridArea = `${r + 1} / ${c + 1}`;
+    Object.assign(inp, { maxLength: 1, autocomplete: 'off', spellcheck: false });
+    inp.setAttribute('autocapitalize', 'characters');
+    inp.setAttribute('aria-label', cells[k].words.map(([n, d], j) => `${n} ${d === 'a' ? 'across' : 'down'}, letter ${spots(cells[k].words[j]).indexOf(k) + 1}`).join('; '));
+    inp.dataset.k = k;
+    if (nums[k]) div.innerHTML = `<span class="h05-num" aria-hidden="true">${nums[k]}</span>`;
+    div.append(inp);
+    grid.append(div);
+    cells[k].input = inp;
+  }
+  let dir = 'a';
+  const at = (r, c) => cells[key(r, c)]?.input;
+  const pos = inp => inp.dataset.k.split(',').map(Number);
+  const has = (inp, d) => cells[inp.dataset.k].words.some(w => w[1] === d);
+  const mark = inp => {
+    const w = cells[inp.dataset.k].words.find(w => w[1] === dir) || cells[inp.dataset.k].words[0];
+    const on = spots(w);
+    grid.querySelectorAll('.h05-cell').forEach(d => d.classList.toggle('h05-on', on.includes(d.lastChild.dataset.k)));
+  };
+  const solved = () => words.filter(w => spots(w).every(k => cells[k].input.value === cells[k].ch)).length;
+  let last;
+  const tally = () => {
+    const s = solved();
+    if (s !== last) status.textContent = s === words.length ? 'All seven solved: that is the whole library.' : `${s} of ${words.length} answers solved.`;
+    last = s;
+  };
+  grid.addEventListener('focusin', e => { if (!has(e.target, dir)) dir = dir === 'a' ? 'd' : 'a'; e.target.select(); mark(e.target); });
+  grid.addEventListener('pointerdown', e => {
+    if (e.target === document.activeElement && has(e.target, 'a') && has(e.target, 'd')) { dir = dir === 'a' ? 'd' : 'a'; mark(e.target); }
+  });
+  grid.addEventListener('input', e => {
+    const inp = e.target;
+    inp.value = inp.value.slice(-1).toUpperCase().replace(/[^A-Z]/g, '');
+    inp.classList.remove('h05-bad');
+    inp.removeAttribute('aria-invalid');
+    const [r, c] = pos(inp);
+    if (inp.value) (dir === 'a' ? at(r, c + 1) : at(r + 1, c))?.focus();
+    tally();
+  });
+  grid.addEventListener('keydown', e => {
+    const [r, c] = pos(e.target), moves = { ArrowLeft: [0, -1], ArrowRight: [0, 1], ArrowUp: [-1, 0], ArrowDown: [1, 0] };
+    if (moves[e.key]) {
+      const [dr, dc] = moves[e.key];
+      dir = dr ? 'd' : 'a';
+      e.preventDefault();
+      const t = at(r + dr, c + dc);
+      t ? t.focus() : mark(e.target);
+    } else if (e.key === 'Backspace' && !e.target.value) {
+      const t = dir === 'a' ? at(r, c - 1) : at(r - 1, c);
+      if (t) { e.preventDefault(); t.value = ''; t.focus(); tally(); }
+    }
+  });
+  root.querySelector('.h05-check').addEventListener('click', () => {
+    let wrong = 0;
+    for (const k in cells) {
+      const bad = cells[k].input.value !== '' && cells[k].input.value !== cells[k].ch;
+      cells[k].input.classList.toggle('h05-bad', bad);
+      bad ? cells[k].input.setAttribute('aria-invalid', 'true') : cells[k].input.removeAttribute('aria-invalid');
+      wrong += bad;
+    }
+    last = undefined;
+    tally();
+    if (wrong) status.textContent += ` ${wrong} letter${wrong > 1 ? 's' : ''} to fix, struck through.`;
+  });
+  root.querySelector('.h05-reveal').addEventListener('click', () => {
+    for (const k in cells) { cells[k].input.value = cells[k].ch; cells[k].input.classList.remove('h05-bad'); cells[k].input.removeAttribute('aria-invalid'); }
+    tally();
+  });
+  root.querySelector('.h05-tools').hidden = false;
+  spots(words[2]).forEach(k => { cells[k].input.value = cells[k].ch; }); // start with RETURN filled in
+  console.assert(solved() === 1, 'hero-05: one answer given at the start');
+  tally();
+}
+// hero-06 Tape measure
+{
+  const root = document.getElementById('hero-06');
+  const track = root.querySelector('.h06-track'), range = root.querySelector('.h06-range');
+  const nums = root.querySelector('.h06-nums'), zoom = root.querySelector('.h06-zoom');
+  const out = root.querySelector('.h06-out'), cm = root.querySelector('.h06-cm');
+  const gcd = (a, b) => b ? gcd(b, a % b) : a;
+  const parts = s => { const f = s % 16, g = gcd(f, 16); return [Math.floor(s / 16), f / g, 16 / g]; };
+  const text = s => { const [w, n, d] = parts(s); return n ? `${w} ${n}/${d}` : `${w}`; };
+  const toCm = s => (s / 16 * 2.54).toFixed(1);
+  console.assert(text(487) === '30 7/16' && text(488) === '30 1/2' && text(480) === '30' && toCm(487) === '77.3', 'hero-06: tape reading');
+  // The loupe holds the same tape at one real inch (96px), every sixteenth marked.
+  zoom.innerHTML = Array.from({ length: 37 }, (_, i) => `<span style="left:${i * 96}px">${i}</span>`).join('');
+  const layout = () => {
+    const cw = parseFloat(getComputedStyle(track).getPropertyValue('--cw')), k = (track.clientWidth - 20 - cw - 8) / 36;
+    track.style.setProperty('--k', k + 'px');
+    track.style.setProperty('--hq', k < 14 ? 'transparent' : '#141414');
+    const step = k < 10 ? 6 : k < 18 ? 3 : 1;
+    nums.innerHTML = Array.from({ length: 36 / step }, (_, i) => (i + 1) * step).map(n => `<span${n % 12 ? '' : ' class="h06-ft"'} style="left:${n * k}px">${n}</span>`).join('');
+  };
+  const set = () => {
+    const s = +range.value, [w, n, d] = parts(s);
+    track.style.setProperty('--len', s);
+    out.innerHTML = n ? `${w} <sup>${n}</sup>⁄<sub>${d}</sub> in` : `${w} in`;
+    cm.textContent = toCm(s) + ' cm';
+    range.setAttribute('aria-valuetext', `${n ? `${w} and ${n}/${d}` : w} inches, ${toCm(s)} centimetres`);
+  };
+  range.addEventListener('input', set);
+  new ResizeObserver(layout).observe(track);
+  set();
+}
+// hero-07 Local sky
+{
+  const root = document.getElementById('hero-07');
+  const sky = root.querySelector('.h07-sky'), line = root.querySelector('.h07-line'), when = root.querySelector('.h07-when');
+  const btns = root.querySelectorAll('.h07-times button');
+  const bucket = h => h >= 5 && h < 10 ? 'dawn' : h >= 10 && h < 17 ? 'day' : h >= 17 && h < 21 ? 'dusk' : 'night';
+  console.assert(bucket(6) === 'dawn' && bucket(12) === 'day' && bucket(19) === 'dusk' && bucket(23) === 'night' && bucket(3) === 'night', 'hero-07: time-of-day buckets');
+  const now = new Date(), mine = bucket(now.getHours());
+  const local = 'the sky follows your clock, ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const show = t => {
+    sky.dataset.sky = t;
+    line.textContent = line.dataset[t];
+    when.textContent = t === mine ? local : 'previewing ' + root.querySelector(`[data-t="${t}"]`).textContent;
+    btns.forEach(b => b.setAttribute('aria-pressed', b.dataset.t === t));
+  };
+  btns.forEach(b => b.addEventListener('click', () => show(b.dataset.t)));
+  show(mine);
+}
+// hero-08 Venn overlap
+{
+  const root = document.getElementById('hero-08');
+  const plot = root.querySelector('.h08-plot'), range = root.querySelector('.h08-range');
+  const lens = o => 2 - (1.18 - 0.5 * o); // width of the overlap on the centre line, in radii
+  console.assert(lens(0) > 0.8 && lens(1) > lens(0), 'hero-08: the lens is always wide enough for the headline');
+  const set = v => { range.value = Math.round(Math.min(100, Math.max(0, v))); plot.style.setProperty('--o', range.value / 100); };
+  range.addEventListener('input', () => set(+range.value));
+  root.querySelectorAll('.h08-c').forEach(c => c.addEventListener('pointerdown', e => {
+    const vertical = matchMedia('(max-width: 640px)').matches, axis = ev => vertical ? ev.clientY : ev.clientX;
+    const r = c.offsetWidth / 2, sign = c.classList.contains('h08-a') ? 1 : -1, from = axis(e), v0 = +range.value;
+    c.setPointerCapture(e.pointerId);
+    // Both circles move about the centre, so the pointer's travel changes their distance twice over.
+    const move = ev => set(v0 + sign * (axis(ev) - from) * 400 / r);
+    const end = () => { c.removeEventListener('pointermove', move); c.removeEventListener('pointerup', end); c.removeEventListener('pointercancel', end); };
+    c.addEventListener('pointermove', move);
+    c.addEventListener('pointerup', end);
+    c.addEventListener('pointercancel', end);
+  }));
+  set(+range.value);
+}
+// hero-09 Dictionary entry
+{
+  const root = document.getElementById('hero-09');
+  const say = root.querySelector('.h09-say');
+  say.hidden = !('speechSynthesis' in window);
+  say.addEventListener('click', () => {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance('hushery');
+    u.lang = 'en-GB';
+    u.rate = 0.85;
+    speechSynthesis.speak(u);
+  });
+}
+// hero-10 Sampler
+{
+  const root = document.getElementById('hero-10');
+  const stage = root.querySelector('.stage'), svg = root.querySelector('.h10-svg'), hl = root.querySelector('.h10-hl');
+  // 5 x 7 letters, read row by row; add a letter here before you stitch a motto that needs it.
+  const G = {
+    A: '01110100011000111111100011000110001', E: '11111100001000011110100001000011111', H: '10001100011000111111100011000110001',
+    I: '01110001000010000100001000010001110', K: '10001100101010011000101001001010001', L: '10000100001000010000100001000011111',
+    M: '10001110111010110101100011000110001', O: '01110100011000110001100011000101110', P: '11110100011000111110100001000010000',
+    R: '11110100011000111110101001001010001', T: '11111001000010000100001000010000100', U: '10001100011000110001100011000101110',
+    W: '10001100011000110101101011101110001', Y: '10001100010101000100001000010000100'
+  };
+  console.assert(Object.values(G).every(g => g.length === 35) && [...'HOMEKEPTWHILEYOUROAM'].every(c => G[c]), 'hero-10: every motto letter is a full 5 x 7 glyph');
+  const HOUSE = ['....r....', '...rrr...', '..rrrrr..', '.rrrrrrr.', 'rrrrrrrrr', '.iiiiiii.', '.i.iii.i.', '.iiigiii.', '.iiigiii.'];
+  const TREE = ['..s..', '.sss.', 'sssss', '.sss.', 'sssss', '..g..', '..g..'];
+  const THREAD = { i: ['#CDBFA8', '#F4EBDC'], r: ['#C4566D', '#EE8299'], g: ['#B98A2E', '#E6B851'], s: ['#6F9A76', '#A3CBA8'] }; // under, over
+  const build = narrow => {
+    const lines = narrow ? ['HOME KEPT', 'WHILE YOU', 'ROAM'] : ['HOME KEPT', 'WHILE YOU ROAM'];
+    const lineW = l => l.length * 6 - 1, CW = Math.max(27, ...lines.map(lineW)), W = CW + 10, H = lines.length * 10 + 19;
+    const d = {}, put = (x, y, c) => { d[c] ||= ['', '']; d[c][0] += `M${x + .18} ${y + .82}L${x + .82} ${y + .18}`; d[c][1] += `M${x + .18} ${y + .18}L${x + .82} ${y + .82}`; };
+    const stamp = (rows, x0, y0) => rows.forEach((row, y) => [...row].forEach((c, x) => c !== '.' && put(x0 + x, y0 + y, c)));
+    for (let x = 0; x < W; x++) { put(x, 0, 'r'); put(x, H - 1, 'r'); }
+    for (let y = 1; y < H - 1; y++) { put(0, y, 'r'); put(W - 1, y, 'r'); }
+    for (let x = 2; x < W - 2; x += 2) { put(x, 2, 'g'); put(x, H - 3, 'g'); }
+    for (let y = 4; y < H - 3; y += 2) { put(2, y, 'g'); put(W - 3, y, 'g'); }
+    lines.forEach((line, li) => {
+      const x0 = 5 + Math.floor((CW - lineW(line)) / 2);
+      [...line].forEach((ch, ci) => G[ch] && stamp(G[ch].match(/.{5}/g).map(r => r.replace(/0/g, '.').replace(/1/g, 'i')), x0 + ci * 6, 5 + li * 10));
+    });
+    const top = lines.length * 10 + 5, hx = 5 + Math.floor((CW - 9) / 2);
+    stamp(HOUSE, hx, top);
+    stamp(TREE, hx - 9, top + 2);
+    stamp(TREE, hx + 13, top + 2);
+    // Aida cloth: one square per stitch, a hole at every corner.
+    const holes = [[0, 0], [1, 0], [0, 1], [1, 1]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r=".13" fill="#2A1027"/>`).join('');
+    svg.setAttribute('viewBox', `-1 -1 ${W + 2} ${H + 2}`);
+    svg.innerHTML = `<defs><pattern id="h10-aida" width="1" height="1" patternUnits="userSpaceOnUse"><rect width="1" height="1" fill="#4D2548"/>${holes}</pattern></defs><rect x="-1" y="-1" width="${W + 2}" height="${H + 2}" fill="url(#h10-aida)"/><g fill="none" stroke-width=".3" stroke-linecap="round">` +
+      Object.entries(d).map(([c, [under, over]]) => `<path d="${under}" stroke="${THREAD[c][0]}"/><path d="${over}" stroke="${THREAD[c][1]}"/>`).join('') + '</g>';
+    hl.classList.add('h10-done');
+  };
+  let narrow;
+  // Build in the next frame: building changes the stage's height, which would re-trigger the observer.
+  new ResizeObserver(() => requestAnimationFrame(() => { const n = stage.clientWidth < 600; if (n !== narrow) build(narrow = n); })).observe(stage);
+}
+// hero-11 Sheet music
+{
+  const root = document.getElementById('hero-11');
+  const stage = root.querySelector('.stage'), svg = root.querySelector('.h11-svg'), hl = root.querySelector('.h11-hl'), play = root.querySelector('.h11-play');
+  // Each note: syllable, staff step above the bottom line (E4 = 0), beats, 1 if a hyphen joins it to the next.
+  const bars = [
+    [['Come', 2, 1], ['and', 3, 1], ['sing,', 5, 2]],
+    [['no', 5, 1], ['au', 6, .5, 1], ['di', 5, .5, 1], ['tion;', 3, 2]],
+    [['no', 2, 1], ['bo', 3, .5, 1], ['dy', 5, .5], ['a', 6, 2, 1]],
+    [['lone.', 5, 4]]
+  ];
+  console.assert(bars.every(b => b.reduce((s, n) => s + n[2], 0) === 4), 'hero-11: every bar holds four beats');
+  const MIDI = [64, 65, 67, 69, 71, 72, 74, 76, 77], UNIT = { .5: 62, 1: 74, 2: 112, 4: 170 }, g = 12, INK = '#1C1208';
+  const CLEF = 'M17 38C11 38 10 30 16 28C24 26 28 36 22 42C16 48 4 44 4 34C4 22 18 14 22 4C25-4 22-14 18-14C12-14 11-2 14 10L20 56C21 62 14 66 10 62';
+  const build = narrow => {
+    const systems = narrow ? [[0], [1], [2], [3]] : [[0, 1], [2, 3]], lyr = narrow ? 27 : 24;
+    let out = '', width = 0;
+    systems.forEach((sys, si) => {
+      const top = 30 + si * 150, bottom = top + 4 * g;
+      let x = 46, notes = '', hyFrom = null; // hyFrom: right edge of a syllable that a hyphen joins to the next
+      let head = `<path d="${CLEF}" transform="translate(6 ${top})" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/><circle cx="17" cy="${top + 61}" r="3.2" fill="${INK}"/>`;
+      if (si === 0) { head += [21, 45].map(y => `<text x="${x + 10}" y="${top + y}" font-size="27" font-weight="700" text-anchor="middle">4</text>`).join(''); x += 30; }
+      x += 10;
+      sys.forEach(bi => {
+        const placed = bars[bi].map(n => { const p = { n, cx: x + 14, cy: bottom - n[1] * g / 2 }; x += UNIT[n[2]]; return p; });
+        placed.forEach(({ n: [syl, , beats, hy], cx, cy }) => {
+          const hollow = beats >= 2, ly = bottom + 46, w = syl.length * lyr * .62 + 10;
+          if (hyFrom !== null) notes += `<path d="M${(hyFrom + cx - w / 2) / 2 - 5} ${ly - 8}h10" stroke="${INK}" stroke-width="1.6"/>`;
+          hyFrom = hy ? cx + w / 2 : null;
+          notes += `<g class="h11-n"><rect class="h11-bg" x="${cx - w / 2}" y="${ly - lyr}" width="${w}" height="${lyr * 1.35}" rx="3"/><ellipse class="h11-head" cx="${cx}" cy="${cy}" rx="7.4" ry="5.2" transform="rotate(-20 ${cx} ${cy})" fill="${hollow ? '#F4842D' : INK}" stroke="${INK}" stroke-width="${hollow ? 2.4 : 1}"/><text x="${cx}" y="${ly}" font-size="${lyr}" text-anchor="middle">${syl}</text></g>`;
+        });
+        for (let i = 0; i < placed.length; i++) {
+          const p = placed[i], q = placed[i + 1], step = p.n[1];
+          if (p.n[2] === 4) continue;
+          if (p.n[2] === .5 && q && q.n[2] === .5) { // two quavers share a beam
+            const down = (step + q.n[1]) / 2 >= 4, tip = down ? Math.max(p.cy, q.cy) + 36 : Math.min(p.cy, q.cy) - 36;
+            const s1 = p.cx + (down ? -6.6 : 6.6), s2 = q.cx + (down ? -6.6 : 6.6);
+            notes += `<path d="M${s1} ${p.cy}V${tip}M${s2} ${q.cy}V${tip}" stroke="${INK}" stroke-width="1.8"/><path d="M${s1 - .9} ${tip}H${s2 + .9}" stroke="${INK}" stroke-width="5.5"/>`;
+            i++;
+            continue;
+          }
+          const down = step >= 4;
+          notes += `<path d="M${p.cx + (down ? -6.6 : 6.6)} ${p.cy}V${p.cy + (down ? 38 : -38)}" stroke="${INK}" stroke-width="1.8"/>`;
+        }
+        x += 8;
+        notes += bi === 3 ? `<path d="M${x} ${top}V${bottom}" stroke="${INK}" stroke-width="1.4"/><path d="M${x + 6} ${top}V${bottom}" stroke="${INK}" stroke-width="4.5"/>` : `<path d="M${x} ${top}V${bottom}" stroke="${INK}" stroke-width="1.4"/>`;
+        x += bi === 3 ? 9 : 18;
+      });
+      if (hyFrom !== null) notes += `<path d="M${hyFrom + 6} ${bottom + 38}h10" stroke="${INK}" stroke-width="1.6"/>`; // word continues on the next line
+      const end = sys.at(-1) === 3 ? x - 1 : x - 18; // staff runs to the thick final bar
+      out += [0, 1, 2, 3, 4].map(l => `<path d="M6 ${top + l * g}H${end}" stroke="${INK}" stroke-width="1.2"/>`).join('') + head + notes;
+      width = Math.max(width, x + 4);
+    });
+    svg.setAttribute('viewBox', `0 0 ${width} ${systems.length * 150 + 10}`);
+    svg.innerHTML = out;
+    hl.classList.add('h11-done');
+  };
+  let narrow;
+  new ResizeObserver(() => requestAnimationFrame(() => { const n = stage.clientWidth < 640; if (n !== narrow) build(narrow = n); })).observe(stage);
+  // Sound: a plain triangle wave per note; the sounding note's syllable is marked as it plays.
+  const AC = window.AudioContext || window.webkitAudioContext;
+  let ctx, timers = [];
+  const stop = () => { timers.forEach(clearTimeout); timers = []; svg.querySelectorAll('.h11-on').forEach(n => n.classList.remove('h11-on')); play.setAttribute('aria-pressed', 'false'); play.textContent = 'Hear the line'; };
+  play.hidden = !AC;
+  play.addEventListener('click', () => {
+    if (timers.length) return stop();
+    ctx ||= new AC();
+    ctx.resume();
+    const q = 0.6, t0 = ctx.currentTime + 0.05, groups = svg.querySelectorAll('.h11-n');
+    let at = 0;
+    bars.flat().forEach(([, step, beats], i) => {
+      const o = ctx.createOscillator(), amp = ctx.createGain(), t = t0 + at, len = beats * q;
+      o.type = 'triangle';
+      o.frequency.value = 440 * 2 ** ((MIDI[step] - 69) / 12);
+      amp.gain.setValueAtTime(0.0001, t);
+      amp.gain.exponentialRampToValueAtTime(0.2, t + 0.03);
+      amp.gain.exponentialRampToValueAtTime(0.0001, t + len * 0.95);
+      o.connect(amp).connect(ctx.destination);
+      o.start(t);
+      o.stop(t + len);
+      timers.push(setTimeout(() => groups.forEach((gr, j) => gr.classList.toggle('h11-on', j === i)), (at + 0.05) * 1000));
+      at += len;
+    });
+    timers.push(setTimeout(stop, (at + 0.2) * 1000));
+    play.setAttribute('aria-pressed', 'true');
+    play.textContent = 'Stop';
+  });
+}
+// hero-12 Tide chart
+{
+  const root = document.getElementById('hero-12');
+  const cv = root.querySelector('.h12-map'), ctx = cv.getContext('2d'), summit = root.querySelector('.h12-summit'), spot = root.querySelector('.h12-spot');
+  const range = root.querySelector('.h12-range'), hOut = root.querySelector('.h12-h'), state = root.querySelector('.h12-state');
+  const CASES = ['', '32', '21', '31', '01', '30 21', '02', '30', '30', '02', '32 01', '01', '31', '21', '32', '']; // marching squares
+  const SOUNDINGS = [[.07, .12], [.16, .9], [.55, .07], [.6, .93], [.68, .5], [.93, .55], [.05, .62], [.5, .62], [.88, .93], [.97, .78]];
+  const S = 4; // grid step, px
+  let w, h, nx, ny, E, I, J, R1, R2, crest, t0, contours;
+  // Height in metres: a flat-topped island, a smaller islet and a low causeway between them, on a seabed at -6 m.
+  const field = (x, y) => {
+    const dx = x - I[0], dy = y - I[1], a = Math.atan2(dy, dx), ux = J[0] - I[0], uy = J[1] - I[1];
+    const wob = 1 + .06 * Math.sin(3 * a + 1) + .03 * Math.sin(5 * a + 2) + .015 * Math.sin(11 * a);
+    const t = Math.max(0, Math.min(1, (dx * ux + dy * uy) / (ux * ux + uy * uy))), dc = Math.hypot(dx - t * ux, dy - t * uy);
+    return -6 + .6 * Math.sin(x / R1 * 3.1) * Math.cos(y / R1 * 2.3) + 29 * Math.exp(-((Math.hypot(dx, dy) / (R1 * wob)) ** 4)) + 12 * Math.exp(-((Math.hypot(x - J[0], y - J[1]) / R2) ** 4)) + 8.5 * Math.exp(-((dc / (R1 * .07)) ** 2));
+  };
+  const trace = L => {
+    const p = new Path2D();
+    for (let j = 0; j < ny - 1; j++) for (let i = 0; i < nx - 1; i++) {
+      const a = E[j * nx + i], b = E[j * nx + i + 1], c = E[(j + 1) * nx + i + 1], d = E[(j + 1) * nx + i];
+      const k = (a > L) << 3 | (b > L) << 2 | (c > L) << 1 | (d > L);
+      if (!CASES[k]) continue;
+      const edge = e => {
+        const [v0, v1, x0, y0, x1, y1] = [[a, b, i, j, i + 1, j], [b, c, i + 1, j, i + 1, j + 1], [d, c, i, j + 1, i + 1, j + 1], [a, d, i, j, i, j + 1]][e], f = (L - v0) / (v1 - v0);
+        return [(x0 + (x1 - x0) * f) * S, (y0 + (y1 - y0) * f) * S];
+      };
+      for (const seg of CASES[k].split(' ')) { p.moveTo(...edge(+seg[0])); p.lineTo(...edge(+seg[1])); }
+    }
+    return p;
+  };
+  const layout = () => {
+    w = cv.clientWidth; h = cv.clientHeight;
+    const phone = w < 700;
+    I = phone ? [w * .42, h * .34] : [w * .33, h * .47];
+    J = phone ? [w * .74, h * .86] : [w * .8, h * .8];
+    R1 = phone ? Math.min(w * .46, 170) : Math.min(h * .42, w * .22);
+    R2 = R1 * .3;
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    nx = Math.ceil(w / S) + 1; ny = Math.ceil(h / S) + 1;
+    E = new Float32Array(nx * ny);
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) E[j * nx + i] = field(i * S, j * S);
+    // The causeway is dry while the tide is below its lowest point.
+    crest = Infinity; t0 = 0;
+    for (let k = 0; k <= 200; k++) {
+      const v = field(I[0] + k / 200 * (J[0] - I[0]), I[1] + k / 200 * (J[1] - I[1]));
+      crest = Math.min(crest, v);
+      if (!t0 && v < 8) t0 = k / 200;
+    }
+    console.assert(crest > 1 && crest < 5, 'hero-12: the causeway floods inside the slider range');
+    contours = [];
+    for (let L = -4; L <= 20; L += 2) contours.push([L, trace(L)]);
+    summit.style.left = I[0] + 'px';
+    summit.style.top = I[1] + 'px';
+    spot.textContent = `▲ ${Math.round(field(...I))} m (sample)`;
+  };
+  const draw = () => {
+    const tide = +range.value, img = ctx.createImageData(nx, ny);
+    for (let n = 0; n < nx * ny; n++) {
+      const e = E[n], depth = tide - e;
+      const col = e > 6 ? [244, 246, 242] : depth < 0 ? [221, 235, 210] : depth < 2 ? [196, 232, 227] : depth < 5 ? [160, 214, 212] : [126, 196, 201];
+      img.data.set(col, n * 4);
+      img.data[n * 4 + 3] = 255;
+    }
+    const off = Object.assign(document.createElement('canvas'), { width: nx, height: ny });
+    off.getContext('2d').putImageData(img, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(off, -S / 2, -S / 2, nx * S, ny * S);
+    for (const [L, p] of contours) { ctx.strokeStyle = L <= 0 ? 'rgba(22,71,77,.5)' : '#3F6B5E'; ctx.lineWidth = L % 10 === 0 ? 1.6 : .8; ctx.stroke(p); }
+    ctx.strokeStyle = '#0E3B40'; ctx.lineWidth = 2.2; ctx.stroke(trace(tide));
+    ctx.setLineDash([6, 5]); ctx.lineWidth = 1.8; ctx.strokeStyle = tide < crest ? '#0E3B40' : 'rgba(14,59,64,.35)';
+    ctx.beginPath(); ctx.moveTo(I[0] + t0 * (J[0] - I[0]), I[1] + t0 * (J[1] - I[1])); ctx.lineTo(...J); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = '#16474D'; ctx.font = '500 12px "Shippori Mincho", serif'; ctx.textAlign = 'center';
+    for (const [u, v] of SOUNDINGS) { // chart soundings: metres, with tenths as a subscript
+      const d = tide - field(u * w, v * h);
+      if (d > .5) ctx.fillText(Math.floor(d) + '₀₁₂₃₄₅₆₇₈₉'[Math.floor(d * 10) % 10], u * w, v * h);
+    }
+  };
+  const update = () => {
+    const tide = +range.value;
+    hOut.textContent = tide.toFixed(1) + ' m';
+    state.textContent = tide < crest ? `Causeway: dry and walkable until the tide reaches ${crest.toFixed(1)} m.` : `Causeway: under water. It shows again below ${crest.toFixed(1)} m.`;
+    draw();
+  };
+  range.addEventListener('input', update);
+  new ResizeObserver(() => { if (cv.clientWidth) { layout(); update(); } }).observe(cv);
+  document.fonts?.ready.then(() => E && draw());
+}
+// hero-13 Transit line
+{
+  const root = document.getElementById('hero-13');
+  const stops = [...root.querySelectorAll('.h13-stops li')], now = root.querySelector('.h13-now'), bag = root.querySelector('.h13-bag');
+  const mins = t => { const [hh, mm] = t.split(':').map(Number); return hh * 60 + mm; };
+  const times = stops.map(li => li.querySelector('.h13-time').textContent);
+  const doorToDoor = (mins(times.at(-1)) - mins(times[0])) / 60;
+  console.assert(doorToDoor === 9, 'hero-13: 09:00 to 18:00 is nine hours door to door');
+  root.querySelector('.h13-total').textContent = doorToDoor;
+  let timer;
+  const go = i => {
+    stops.forEach((li, j) => {
+      li.classList.toggle('h13-past', j < i);
+      const b = li.querySelector('button');
+      j === i ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current');
+    });
+    const b = stops[i].querySelector('button');
+    b.querySelector('.h13-dot').append(bag);
+    now.textContent = `Stop ${i + 1} of ${stops.length}, ${b.querySelector('.h13-name').textContent} at ${times[i]}. ${b.dataset.t}`;
+  };
+  const ride = () => {
+    clearInterval(timer);
+    let i = 0;
+    go(0);
+    timer = setInterval(() => (++i < stops.length ? go(i) : clearInterval(timer)), 900);
+  };
+  stops.forEach((li, i) => li.querySelector('button').addEventListener('click', () => { clearInterval(timer); go(i); }));
+  const replay = root.querySelector('.replay');
+  replay.hidden = false;
+  replay.addEventListener('click', ride);
+  if (!reduce) ride();
+}
+</script>
+</body>
+</html>

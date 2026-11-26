@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AntiDesign library: type</title>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Inline&family=Bungee+Outline&family=Bungee+Shade&family=Climate+Crisis:YEAR@1979..2050&family=Danfo:ELSH@0..100&family=Dela+Gothic+One&family=Doto:ROND,wght@0..100,100..900&family=Flow+Block&family=Handjet:ELGR,ELSH,wght@1..2,0..16,100..900&family=Honk:MORF,SHLN@0..45,0..100&family=IM+Fell+English:ital@0;1&family=Jacquard+24&family=Kablammo:MORF@0..60&family=Kalnia+Glaze:wdth,wght@100..125,100..700&family=Libre+Barcode+39+Text&family=Linefont:wdth,wght@25..200,4..1000&family=Ojuju:wght@200..800&family=Playwrite+DE+Grund:wght@100..400&family=Rubik+Microbe&family=Tilt+Prism:XROT,YROT@-45..45,-45..45&family=Wavefont:ROND,YELA,wght@0..100,-100..100,4..1000&family=Workbench:BLED,SCAN@0..100,-53..100&display=swap" rel="stylesheet">
+<style>
+/* Shell: the gallery around the specimens. Not part of any specimen; never copy it. */
+body{margin:0;background:#E8E8E3;color:#141414;font:16px/1.5 ui-sans-serif,system-ui,sans-serif}
+.shell{max-width:1240px;margin:0 auto;padding:32px 16px 96px}
+.shell>h1{margin:0;font-size:24px}
+.shell>p{margin:4px 0 0;max-width:70ch}
+.index{display:flex;flex-wrap:wrap;gap:6px 16px;margin:20px 0 36px;padding:0;list-style:none;font-size:14px}
+.index a{color:#141414}
+.spec{margin:0 0 40px;border:2px solid #141414;background:#FFFFFF;scroll-margin-top:16px}
+.spec>header{display:flex;flex-wrap:wrap;gap:4px 20px;align-items:baseline;padding:10px 14px;border-bottom:2px solid #141414;font-size:14px}
+.spec>header h2{margin:0;font-size:16px}
+.spec>header code{font:600 13px ui-monospace,monospace;background:#141414;color:#FFFFFF;padding:2px 6px}
+.spec>header p{margin:0;flex:1 1 320px}
+.stage{position:relative;min-height:360px;display:grid;place-items:center;padding:48px 20px;overflow:hidden;box-sizing:border-box}
+.replay{position:absolute;top:10px;right:10px;font:600 13px ui-sans-serif,system-ui,sans-serif;padding:8px 12px;min-height:40px;border:2px solid currentColor;background:transparent;color:inherit;cursor:pointer}
+.replay:focus-visible,.index a:focus-visible{outline:3px solid currentColor;outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* type-01 Melting year (Climate Crisis) */
+#type-01 .t01{width:100%;min-width:0;display:grid;justify-items:center;gap:18px;text-align:center}
+#type-01 .t01-word{margin:0;font-family:'Climate Crisis',system-ui,sans-serif;font-synthesis:none;font-size:clamp(40px,12vw,168px);line-height:.95;letter-spacing:.01em;overflow-wrap:anywhere}
+#type-01 label{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 12px;font:700 15px ui-monospace,monospace}
+#type-01 input{width:min(340px,62vw);height:32px;accent-color:#0B2E3F}
+#type-01 output{min-width:4ch;font-variant-numeric:tabular-nums}
+#type-01 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-01 :focus-visible{outline:3px solid #0B2E3F;outline-offset:3px}
+/* type-02 Chart in a sentence (Linefont) */
+#type-02 .t02{width:100%;min-width:0;box-sizing:border-box;padding:28px clamp(14px,3vw,36px);border:1px solid #9CC28E;background:linear-gradient(#D3E5CA 1px,transparent 1px) 0 0/24px 24px,linear-gradient(90deg,#D3E5CA 1px,transparent 1px) 0 0/24px 24px}
+#type-02 .t02-line{margin:0 0 8px;max-width:24ch;font:400 clamp(24px,4.4vw,50px)/1.4 Georgia,'Times New Roman',serif}
+#type-02 .t02-chart{display:inline-block;max-width:100%;overflow:hidden;white-space:nowrap;vertical-align:-.12em;font-family:Linefont,ui-monospace,monospace;font-size:1.3em;line-height:1;color:#13532D}
+#type-02 .t02-vals{margin:0 0 22px;font:13px/1.5 ui-monospace,monospace}
+#type-02 .t02-ctl{display:flex;flex-wrap:wrap;align-items:end;gap:12px 24px}
+#type-02 label{display:grid;gap:4px;max-width:100%;font:700 13px ui-monospace,monospace}
+#type-02 input[type=text]{box-sizing:border-box;width:100%;max-width:380px;padding:8px 10px;border:2px solid #13532D;background:#FFFFFF;color:#141414;font:16px ui-monospace,monospace}
+#type-02 input[type=range]{width:170px;height:32px;accent-color:#13532D}
+#type-02 small{display:block;margin-top:18px;font:12px/1.5 ui-monospace,monospace;max-width:72ch}
+#type-02 :focus-visible{outline:3px solid #13532D;outline-offset:3px}
+/* type-03 Waveform from typing (Wavefont) */
+#type-03 .t03{width:100%;min-width:0;display:grid;justify-items:center;gap:16px;text-align:center}
+#type-03 .t03-wave{margin:0;width:100%;overflow:hidden;white-space:nowrap;font:400 clamp(72px,13vw,150px)/1.6 Wavefont,ui-monospace,monospace;letter-spacing:.04em}
+#type-03 .t03-done{color:#FFFFFF}
+#type-03 .t03-rest{color:#5A1E00}
+#type-03 label{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;font:700 14px ui-monospace,monospace}
+#type-03 input[type=text]{box-sizing:border-box;width:min(420px,100%);padding:8px 10px;border:2px solid #141414;background:#FFFFFF;color:#141414;font:16px ui-monospace,monospace}
+#type-03 input[type=range]{width:170px;height:32px;accent-color:#141414}
+#type-03 small{font:12px/1.5 ui-monospace,monospace;max-width:70ch}
+#type-03 :focus-visible{outline:3px solid #141414;outline-offset:3px}
+/* type-04 Tilt with the pointer (Tilt Prism) */
+#type-04 .t04{width:100%;min-width:0;display:grid;justify-items:center;gap:16px;text-align:center}
+#type-04 .t04-word{margin:0;padding:.1em .2em;font:400 clamp(44px,12vw,170px)/1.05 'Tilt Prism',Rockwell,Georgia,serif;letter-spacing:.01em;touch-action:pan-y;cursor:move}
+#type-04 .t04-ctl{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 28px}
+#type-04 label{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;font:700 13px ui-monospace,monospace}
+#type-04 input{width:150px;height:32px;accent-color:#A3002D}
+#type-04 output{min-width:3ch}
+#type-04 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-04 :focus-visible{outline:3px solid #A3002D;outline-offset:3px}
+/* type-05 Inkjet element shapes (Handjet) */
+#type-05 .t05{width:100%;min-width:0;display:grid;justify-items:center;gap:16px;text-align:center}
+#type-05 .t05-panel{box-sizing:border-box;width:min(100%,780px);padding:26px 14px;border-radius:6px;background:repeating-linear-gradient(90deg,#868990 0 14px,#9A9DA2 14px 16px)}
+#type-05 .t05-big{margin:0;font:400 clamp(56px,17vw,210px)/.9 Handjet,ui-monospace,monospace;letter-spacing:.02em}
+#type-05 .t05-code{margin:12px 0 0;font:400 clamp(18px,3.4vw,34px)/1.2 Handjet,ui-monospace,monospace;letter-spacing:.08em}
+#type-05 .t05-print{animation:type-05-print 1.2s steps(24,end) both}
+@keyframes type-05-print{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
+#type-05 .t05-ctl{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 28px}
+#type-05 label{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;font:700 13px ui-monospace,monospace}
+#type-05 input{width:150px;height:32px;accent-color:#0D0D0D}
+#type-05 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-05 :focus-visible{outline:3px solid #0D0D0D;outline-offset:3px}
+@media (prefers-reduced-motion:reduce){#type-05 .t05-print{animation:none}}
+/* type-06 Scannable label (Libre Barcode 39 Text) */
+#type-06 .t06{width:100%;min-width:0;display:grid;justify-items:center;gap:18px;text-align:center}
+#type-06 .t06-label{box-sizing:border-box;width:min(calc(100% - 10px),560px);padding:16px 24px 12px;border:2px solid #111111;border-radius:4px;background:#FFFFFF;box-shadow:8px 8px 0 #111111}
+#type-06 .t06-head,#type-06 .t06-enc{margin:0;font:700 12px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-align:left}
+#type-06 .t06-bars{margin:4px 0;overflow:hidden;white-space:nowrap;font:400 clamp(44px,11vw,92px)/1.3 'Libre Barcode 39 Text',ui-monospace,monospace}
+#type-06 label{display:grid;gap:4px;font:700 13px ui-monospace,monospace}
+#type-06 input{box-sizing:border-box;width:min(300px,78vw);margin:0 auto;padding:8px 10px;border:2px solid #111111;background:#FFFFFF;color:#111111;font:16px ui-monospace,monospace;text-transform:uppercase}
+#type-06 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-06 :focus-visible{outline:3px solid #111111;outline-offset:3px}
+/* type-07 Pixel-snapped weave (Jacquard 24) */
+#type-07 .t07{--k:4;width:100%;min-width:0;display:grid;justify-items:center;gap:18px;text-align:center}
+#type-07 .t07-tag{box-sizing:border-box;max-width:100%;padding:.3em .6em;border:2px dashed #F3EDE4;background:repeating-linear-gradient(0deg,#6A1636 0 2px,#5C0F2A 2px 4px)}
+/* Whole multiples of 24px put every woven pixel on whole screen pixels; the first line is for browsers without round(). */
+#type-07 .t07-word{margin:0;font-family:'Jacquard 24',Georgia,serif;font-size:min(calc(var(--k) * 24px),15vw);font-size:min(calc(var(--k) * 24px),round(down,15vw,24px));line-height:1.1;font-weight:400}
+#type-07 label{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;font:700 13px ui-monospace,monospace}
+#type-07 input{width:170px;height:32px;accent-color:#F3EDE4}
+#type-07 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-07 :focus-visible{outline:3px solid #F3EDE4;outline-offset:3px}
+/* type-08 Microscope loupe (Rubik Microbe) */
+#type-08 .t08{width:100%;min-width:0;display:grid;justify-items:center;gap:16px;text-align:center}
+#type-08 .t08-slide{--x:30%;--y:30%;position:relative;box-sizing:border-box;width:min(100%,920px);padding:28px 8px;border:2px solid #4A1D7A;background:#F4EEFA;touch-action:pan-y;cursor:zoom-in}
+#type-08 .t08-text{margin:0;font:400 clamp(36px,9vw,104px)/1.05 'Rubik Microbe','Trebuchet MS',system-ui,sans-serif}
+/* The lens is a 3x copy scaled around the pointer; clip radius 26px x 3 = the 78px ring. */
+#type-08 .t08-lens{position:absolute;inset:0;padding:inherit;background:#FFFFFF;transform-origin:var(--x) var(--y);transform:scale(3);clip-path:circle(26px at var(--x) var(--y));pointer-events:none}
+#type-08 .t08-ring{position:absolute;left:var(--x);top:var(--y);box-sizing:border-box;width:156px;height:156px;margin:-78px 0 0 -78px;border:4px solid #4A1D7A;border-radius:50%;pointer-events:none}
+#type-08 label{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;font:700 13px ui-monospace,monospace}
+#type-08 input{width:200px;height:32px;accent-color:#4A1D7A}
+#type-08 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-08 :focus-visible{outline:3px solid #4A1D7A;outline-offset:3px}
+/* type-09 Bus vinyl cut by scroll (Danfo) */
+#type-09 .t09{width:100%;min-width:0;display:grid;justify-items:center;gap:16px;text-align:center}
+#type-09 .t09-side{box-sizing:border-box;width:100%;padding:26px 8px;border-block:14px solid #111111;box-shadow:inset 0 6px 0 #F7C600,inset 0 10px 0 #111111,inset 0 -6px 0 #F7C600,inset 0 -10px 0 #111111}
+#type-09 .t09-word{margin:0;font:400 clamp(44px,11vw,160px)/1 Danfo,Impact,'Franklin Gothic Medium',sans-serif;letter-spacing:.01em}
+#type-09 label{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;font:700 13px ui-monospace,monospace}
+#type-09 input{width:200px;height:32px;accent-color:#111111}
+#type-09 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-09 :focus-visible{outline:3px solid #111111;outline-offset:3px}
+/* type-10 Palette cycle (Honk) */
+@font-palette-values --type-10-p0{font-family:Honk;base-palette:0}
+@font-palette-values --type-10-p1{font-family:Honk;base-palette:1}
+@font-palette-values --type-10-p2{font-family:Honk;base-palette:2}
+@font-palette-values --type-10-p3{font-family:Honk;base-palette:3}
+@font-palette-values --type-10-p4{font-family:Honk;base-palette:4}
+@font-palette-values --type-10-p5{font-family:Honk;base-palette:5}
+@font-palette-values --type-10-p6{font-family:Honk;base-palette:6}
+@font-palette-values --type-10-p7{font-family:Honk;base-palette:7}
+#type-10 .t10{width:100%;min-width:0;display:grid;justify-items:center;gap:16px;text-align:center}
+#type-10 .t10-word{margin:0;font:400 clamp(44px,12vw,160px)/1.15 Honk,'Cooper Black',Georgia,serif;font-palette:--type-10-p0;color:#FFFFFF}
+#type-10 .t10-ctl{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 24px;font:700 13px ui-monospace,monospace}
+#type-10 button{min-height:44px;padding:10px 14px;border:2px solid #FFFFFF;background:#FFFFFF;color:#D62718;font:700 14px ui-monospace,monospace;cursor:pointer}
+#type-10 label{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px}
+#type-10 input{width:150px;height:32px;accent-color:#FFFFFF}
+#type-10 output{min-width:10ch;text-align:left}
+#type-10 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-10 :focus-visible{outline:3px solid #FFFFFF;outline-offset:3px}
+/* type-11 Keystroke burst (Kablammo) */
+#type-11 .t11{width:100%;min-width:0;display:grid;justify-items:center;gap:22px;text-align:center}
+#type-11 .t11-burst{position:relative;isolation:isolate;max-width:100%;padding:.35em .6em}
+#type-11 .t11-burst::before{content:'';position:absolute;inset:-14% -4%;z-index:-1;background:#FFFFFF;clip-path:polygon(50% 0,59% 14%,75% 6%,74% 23%,93% 25%,83% 39%,100% 50%,83% 61%,93% 75%,74% 77%,75% 94%,59% 86%,50% 100%,41% 86%,25% 94%,26% 77%,7% 75%,17% 61%,0 50%,17% 39%,7% 25%,26% 23%,25% 6%,41% 14%)}
+#type-11 .t11-word{margin:0;font:400 clamp(44px,13vw,150px)/1 Kablammo,Impact,sans-serif;overflow-wrap:anywhere}
+#type-11 label{display:grid;gap:4px;font:700 13px ui-monospace,monospace}
+#type-11 input{box-sizing:border-box;width:min(300px,78vw);margin:0 auto;padding:8px 10px;border:2px solid #111111;background:#FFFFFF;color:#111111;font:16px ui-monospace,monospace}
+#type-11 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-11 :focus-visible{outline:3px solid #111111;outline-offset:3px}
+/* type-12 Copy of a copy (Workbench) */
+#type-12 .t12{width:100%;min-width:0;display:grid;justify-items:center;gap:16px;text-align:center}
+#type-12 .t12-word{margin:0;font:400 clamp(34px,8.4vw,108px)/1.05 Workbench,'Courier New',ui-monospace,monospace}
+#type-12 label{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;font:700 13px ui-monospace,monospace}
+#type-12 input{width:200px;height:32px;accent-color:#111111}
+#type-12 .t12-out{margin:0;font:700 13px ui-monospace,monospace}
+#type-12 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-12 :focus-visible{outline:3px solid #111111;outline-offset:3px}
+/* type-13 Dot-matrix clock (Doto) */
+#type-13 .t13{width:100%;min-width:0;display:grid;justify-items:center;gap:16px;text-align:center}
+#type-13 .t13-board{box-sizing:border-box;max-width:100%;padding:20px clamp(12px,4vw,40px);border:3px solid #3A3A3A;background:radial-gradient(#242424 1px,transparent 1.6px) 0 0/8px 8px,#0E0E0E}
+#type-13 .t13-label{margin:0 0 10px;font:400 clamp(15px,2.6vw,26px)/1 Doto,ui-monospace,monospace;letter-spacing:.2em}
+#type-13 .t13-time{margin:0;font:400 clamp(40px,12.5vw,168px)/1 Doto,ui-monospace,monospace;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+#type-13 label{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;font:700 13px ui-monospace,monospace}
+#type-13 input{width:200px;height:32px;accent-color:#F2F2F2}
+#type-13 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-13 :focus-visible{outline:3px solid #F2F2F2;outline-offset:3px}
+/* type-14 Copybook ruling (Playwrite DE Grund) */
+#type-14 .t14{box-sizing:border-box;width:100%;max-width:860px;min-width:0;display:grid;gap:14px;padding-left:clamp(12px,3vw,28px);border-left:2px solid #D2232A;text-align:left}
+#type-14 .t14-line{position:relative;margin:0;overflow:hidden;white-space:nowrap;font:300 clamp(22px,5vw,60px)/2.2 'Playwrite DE Grund','Segoe Print','Bradley Hand',cursive}
+/* Guides use the font's own metrics: the strut is 1ex tall and sits on the baseline, so its edges are the baseline and x-height. */
+#type-14 .t14-g{position:relative;display:inline-block;width:0;height:1ex;vertical-align:baseline}
+#type-14 .t14-g::before,#type-14 .t14-g::after{content:'';position:absolute;left:0;width:300vw}
+#type-14 .t14-g::before{top:0;bottom:0;border-top:1px dashed #8FAAD8;border-bottom:2px solid #6C8FCF}
+#type-14 .t14-g::after{top:-.36em;top:calc(1ex - 1cap);bottom:-.34em;border-top:1px solid #B5C8E8;border-bottom:1px solid #B5C8E8}
+#type-14 .t14-trace span{color:transparent;-webkit-text-stroke:1.2px #5F7BBE}
+#type-14 .t14-ctl{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:end}
+#type-14 label{display:grid;gap:4px;font:700 13px ui-monospace,monospace}
+#type-14 input[type=text]{box-sizing:border-box;width:min(340px,72vw);padding:8px 10px;border:2px solid #1C3A8F;background:#FFFFFF;color:#1C3A8F;font:16px ui-monospace,monospace}
+#type-14 input[type=range]{width:170px;height:32px;accent-color:#1C3A8F}
+#type-14 small{font:12px/1.5 ui-monospace,monospace;max-width:70ch}
+#type-14 :focus-visible{outline:3px solid #1C3A8F;outline-offset:3px}
+/* type-15 Click to unredact (Flow Block) */
+#type-15 .t15{box-sizing:border-box;width:min(100% - 8px,660px);padding:clamp(20px,4vw,40px);background:#FFFFFF;box-shadow:8px 8px 0 #262A10;text-align:left}
+#type-15 .t15-head{margin:0 0 14px;font:700 12px/1.4 ui-monospace,monospace;letter-spacing:.14em}
+#type-15 .t15-body{margin:0 0 20px;font:clamp(19px,2.6vw,25px)/1.75 Georgia,'Times New Roman',serif}
+#type-15 .t15-r{margin:0;padding:0 .12em;border:0;background:none;color:#111111;font:inherit;font-family:'Flow Block',ui-monospace,monospace;line-height:inherit;cursor:pointer}
+#type-15 .t15-r[aria-pressed=true]{font-family:inherit;background:#E3E8C8;text-decoration:underline 2px #4B5320;text-underline-offset:3px}
+#type-15.t15-nofont .t15-r[aria-pressed=false]{background:#111111}
+#type-15 .t15-all{min-height:44px;padding:8px 14px;border:2px solid #111111;background:#FFFFFF;color:#111111;font:700 14px ui-monospace,monospace;cursor:pointer}
+#type-15 small{display:block;margin-top:16px;font:12px/1.5 ui-monospace,monospace}
+#type-15 :focus-visible{outline:3px solid #4B5320;outline-offset:3px}
+/* type-16 Set in 1640 (IM Fell English) */
+#type-16 .t16{box-sizing:border-box;width:min(100%,700px);min-width:0;display:grid;gap:14px}
+#type-16 .t16-title,#type-16 .t16-body{margin:0;font-family:'IM Fell English','Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;font-variant-ligatures:common-ligatures discretionary-ligatures historical-ligatures}
+#type-16 .t16-title{font-size:clamp(28px,5.6vw,58px);font-style:italic;line-height:1.1;text-align:center}
+#type-16 .t16-rule{width:100%;margin:2px 0;border:0;border-top:4px double #22190F}
+#type-16 .t16-body{font-size:clamp(19px,2.6vw,26px);line-height:1.45;text-align:justify;hyphens:auto}
+#type-16 .t16-body::first-letter{float:left;padding:.05em .08em 0 0;font-size:3.3em;line-height:.8;color:#A8102A}
+#type-16 label{display:grid;gap:4px;font:700 13px ui-monospace,monospace}
+#type-16 .t16-check{display:flex;align-items:center;gap:8px}
+#type-16 textarea{box-sizing:border-box;width:100%;padding:8px 10px;border:2px solid #22190F;background:#FFFFFF;color:#22190F;font:16px/1.4 Georgia,serif;resize:vertical}
+#type-16 input{width:20px;height:20px;accent-color:#A8102A}
+#type-16 small{font:12px/1.5 ui-monospace,monospace}
+#type-16 :focus-visible{outline:3px solid #A8102A;outline-offset:3px}
+/* type-17 Layered sign (Bungee family) */
+#type-17 .t17{width:100%;min-width:0;display:grid;justify-items:center;gap:18px;text-align:center}
+#type-17 .t17-sign{display:grid;width:100%;font-size:clamp(36px,10vw,112px);line-height:1.1}
+#type-17 .t17-l{grid-area:1/1;transition:transform .5s,opacity .3s}
+#type-17 .t17-shade{font-family:'Bungee Shade',Impact,sans-serif;color:#052B1F}
+#type-17 .t17-base{font-family:Bungee,Impact,sans-serif;color:#FF5C8A}
+#type-17 .t17-inline{font-family:'Bungee Inline',Impact,sans-serif;color:#FFF6E5}
+#type-17 .t17-outline{font-family:'Bungee Outline',Impact,sans-serif;color:#052B1F}
+#type-17 .t17-off{opacity:0}
+#type-17 .t17-apart .t17-shade{transform:translate(.24em,.24em)}
+#type-17 .t17-apart .t17-base{transform:translate(.08em,.08em)}
+#type-17 .t17-apart .t17-inline{transform:translate(-.08em,-.08em)}
+#type-17 .t17-apart .t17-outline{transform:translate(-.24em,-.24em)}
+#type-17.t17-nofont .t17-l:not(.t17-base){display:none}
+#type-17.t17-nofont .t17-base{color:#FFF6E5}
+#type-17 fieldset{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;margin:0;padding:8px 14px;border:2px solid #FFF6E5;font:700 13px ui-monospace,monospace}
+#type-17 legend{padding:0 6px}
+#type-17 fieldset label{display:flex;align-items:center;gap:6px}
+#type-17 input{width:20px;height:20px;accent-color:#FF5C8A}
+#type-17 .t17-pull{min-height:44px;padding:8px 14px;border:2px solid #FFF6E5;background:transparent;color:#FFF6E5;font:700 14px ui-monospace,monospace;cursor:pointer}
+#type-17 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-17 :focus-visible{outline:3px solid #FFF6E5;outline-offset:3px}
+@media (prefers-reduced-motion:reduce){#type-17 .t17-l{transition:none}}
+/* type-18 Light and dark glaze (Kalnia Glaze) */
+#type-18 .t18{width:100%;min-width:0;display:grid;justify-items:center;gap:16px;text-align:center}
+#type-18 .t18-word{margin:0;font:400 clamp(40px,10.5vw,132px)/1.1 'Kalnia Glaze',Didot,'Bodoni 72','Bodoni MT',Georgia,serif;font-palette:light}
+#type-18 .t18-ctl{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 24px;font:700 13px ui-monospace,monospace}
+#type-18 button{min-height:44px;padding:8px 14px;border:2px solid currentColor;background:transparent;color:inherit;font:700 14px ui-monospace,monospace;cursor:pointer}
+#type-18 label{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px}
+#type-18 input{width:150px;height:32px;accent-color:#C0392B}
+#type-18 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-18 :focus-visible{outline:3px solid currentColor;outline-offset:3px}
+/* type-19 Vertical shop sign (Dela Gothic One) */
+#type-19 .t19{width:100%;min-width:0;display:grid;justify-items:center;gap:16px;text-align:center}
+#type-19 .t19-sign{writing-mode:vertical-rl;height:5.5em;font-family:'Dela Gothic One','Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif;font-size:clamp(52px,14vw,96px);font-weight:800;font-synthesis:none;line-height:1.15;text-align:start}
+#type-19 .t19-sign p{margin:0 0 0 .3em}
+#type-19 .t19-small{font-size:.34em;line-height:1.5}
+#type-19 .t19-tcy{text-combine-upright:all;-webkit-text-combine:horizontal}
+#type-19 .t19-seal{text-align:end}
+#type-19 .t19-seal span{display:inline-block;padding:.25em;background:#C8321E;color:#FFFFFF;font-size:.34em;line-height:1}
+#type-19 .t19-h{writing-mode:horizontal-tb;height:auto;text-align:center}
+#type-19 .t19-h p{margin:0}
+#type-19 .t19-en{margin:0;font:700 14px ui-monospace,monospace}
+#type-19 button{min-height:44px;padding:8px 14px;border:2px solid #FFFFFF;background:transparent;color:#FFFFFF;font:700 14px ui-monospace,monospace;cursor:pointer}
+#type-19 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-19 :focus-visible{outline:3px solid #FFFFFF;outline-offset:3px}
+/* type-20 Text on a spiral (Ojuju) */
+#type-20 .t20{width:100%;min-width:0;display:grid;justify-items:center;gap:14px;text-align:center}
+#type-20 svg{display:block;width:min(100%,520px);height:auto}
+#type-20 .t20-guide{fill:none;stroke:#5A3A28;stroke-width:1}
+#type-20 text{font-family:Ojuju,'Trebuchet MS',system-ui,sans-serif;font-size:24px;letter-spacing:.02em;fill:#F2E8DA}
+#type-20 .t20-ctl{display:flex;flex-wrap:wrap;align-items:end;justify-content:center;gap:12px 24px}
+#type-20 label{display:grid;gap:4px;font:700 13px ui-monospace,monospace}
+#type-20 input[type=text]{box-sizing:border-box;width:min(360px,78vw);padding:8px 10px;border:2px solid #F2E8DA;background:#2B1A12;color:#F2E8DA;font:16px ui-monospace,monospace}
+#type-20 input[type=range]{width:160px;height:32px;accent-color:#F2E8DA}
+#type-20 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#type-20 :focus-visible{outline:3px solid #F2E8DA;outline-offset:3px}
+</style>
+</head>
+<body>
+<main class="shell">
+<h1>Type</h1>
+<p>Specimens to re-cut, never to ship as they are: change the copy, colours and setting to the product's own. Self-host the font for anything that ships. Roll for one with <code>python3 scripts/roll.py --library type</code>.</p>
+<ul class="index"><li><a href="#type-01">type-01 Melting year (Climate Crisis)</a></li><li><a href="#type-02">type-02 Chart in a sentence (Linefont)</a></li><li><a href="#type-03">type-03 Waveform from typing (Wavefont)</a></li><li><a href="#type-04">type-04 Tilt with the pointer (Tilt Prism)</a></li><li><a href="#type-05">type-05 Inkjet element shapes (Handjet)</a></li><li><a href="#type-06">type-06 Scannable label (Libre Barcode 39 Text)</a></li><li><a href="#type-07">type-07 Pixel-snapped weave (Jacquard 24)</a></li><li><a href="#type-08">type-08 Microscope loupe (Rubik Microbe)</a></li><li><a href="#type-09">type-09 Bus vinyl cut by scroll (Danfo)</a></li><li><a href="#type-10">type-10 Palette cycle (Honk)</a></li><li><a href="#type-11">type-11 Keystroke burst (Kablammo)</a></li><li><a href="#type-12">type-12 Copy of a copy (Workbench)</a></li><li><a href="#type-13">type-13 Dot-matrix clock (Doto)</a></li><li><a href="#type-14">type-14 Copybook ruling (Playwrite DE Grund)</a></li><li><a href="#type-15">type-15 Click to unredact (Flow Block)</a></li><li><a href="#type-16">type-16 Set in 1640 (IM Fell English)</a></li><li><a href="#type-17">type-17 Layered sign (Bungee family)</a></li><li><a href="#type-18">type-18 Light and dark glaze (Kalnia Glaze)</a></li><li><a href="#type-19">type-19 Vertical shop sign (Dela Gothic One)</a></li><li><a href="#type-20">type-20 Text on a spiral (Ojuju)</a></li></ul>
+
+<article class="spec" id="type-01" data-name="Melting year (Climate Crisis)">
+<header><h2><code>type-01</code> Melting year (Climate Crisis)</h2><p><b>Use it when:</b> a year or a trend is the story and the headline should wear it. <b>Change:</b> the word, the year span, and what drives it (a date, a data series, scroll).</p></header>
+<div class="stage" style="background:#E2F3F8;color:#0B2E3F">
+  <button class="replay" type="button">Play 1979–2050</button>
+  <div class="t01">
+    <p class="t01-word">SEA ICE</p>
+    <label>Year <input type="range" min="1979" max="2050" step="1" value="1979"> <output aria-hidden="true">1979</output></label>
+    <small>The YEAR axis follows the Arctic sea-ice data its designers used, from 1979, with a projection to 2050. Climate Crisis · YEAR 1979–2050 · OFL · fallback system-ui with its weight falling 900→100 by year: offline the letters thin out instead of melting.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-02" data-name="Chart in a sentence (Linefont)">
+<header><h2><code>type-02</code> Chart in a sentence (Linefont)</h2><p><b>Use it when:</b> a figure deserves a chart but the page is prose, so the chart sits inside the sentence. <b>Change:</b> the sentence, the values (real, or marked sample), wdth to suit the series length.</p></header>
+<div class="stage" style="background:#EEF5EA;color:#141414">
+  <div class="t02">
+    <p class="t02-line">Weekly sign-ups <span class="t02-chart" aria-hidden="true"></span> rose late in the week.</p>
+    <p class="t02-vals">Sample values: <span></span></p>
+    <div class="t02-ctl">
+      <label>Values 0–100, comma separated <input type="text" value="12, 18, 15, 30, 52, 47, 61, 58, 74, 70, 88" spellcheck="false"></label>
+      <label>Zoom (wdth) <input type="range" min="25" max="200" value="90"></label>
+      <label>Line (wght) <input type="range" min="4" max="1000" value="240"></label>
+    </div>
+    <small>Each value becomes one character from U+0100 (0) to U+017F (127); the font joins them into a line. Linefont · wdth 25–200, wght 4–1000 · OFL · fallback ui-monospace: offline the line turns into accented letters, which is why the values also print in text.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-03" data-name="Waveform from typing (Wavefont)">
+<header><h2><code>type-03</code> Waveform from typing (Wavefont)</h2><p><b>Use it when:</b> voice, audio or messaging, where a waveform says "sound" before any word does. <b>Change:</b> the mapping (real audio peaks beat letters), the colours, the starting line.</p></header>
+<div class="stage" style="background:#FF6B1A;color:#141414">
+  <button class="replay" type="button">Play</button>
+  <div class="t03">
+    <p class="t03-wave" aria-hidden="true"><span class="t03-done"></span><span class="t03-rest"></span></p>
+    <label>Type a line; each letter becomes a bar <input type="text" maxlength="40" value="Leave a message after the tone" spellcheck="false"></label>
+    <label>Bar ends, square to round (ROND) <input type="range" min="0" max="100" value="100"> <output aria-hidden="true">100</output></label>
+    <small>Vowels draw tall bars, consonants middle ones, spaces near silence; a drawing of the text, not real audio. Wavefont · ROND 0–100, YELA −100–100 (held at 0, centred), wght 4–1000 · OFL · fallback ui-monospace: offline the bars become accented letters, so the typed line stays in the field.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-04" data-name="Tilt with the pointer (Tilt Prism)">
+<header><h2><code>type-04</code> Tilt with the pointer (Tilt Prism)</h2><p><b>Use it when:</b> a shopfront, venue or opening-hours page wants lettering that turns to face the visitor. <b>Change:</b> the words, the colour, the axis limits (±20 reads calmer).</p></header>
+<div class="stage" style="background:#FFDCE5;color:#A3002D">
+  <div class="t04">
+    <p class="t04-word">Open Late</p>
+    <div class="t04-ctl">
+      <label>Up and down (XROT) <input type="range" min="-45" max="45" value="0"> <output aria-hidden="true">0</output></label>
+      <label>Left and right (YROT) <input type="range" min="-45" max="45" value="0"> <output aria-hidden="true">0</output></label>
+    </div>
+    <small>Move the pointer over the word, drag sideways on touch, or use the sliders. Tilt Prism · XROT −45–45, YROT −45–45 · OFL · fallback Rockwell, Georgia: offline the letters stay flat and lose the prism lines.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-05" data-name="Inkjet element shapes (Handjet)">
+<header><h2><code>type-05</code> Inkjet element shapes (Handjet)</h2><p><b>Use it when:</b> logistics, food packing, anything stamped on a box or crate. <b>Change:</b> the lot line (use the product's real code format), one ELSH shape, the crate colour.</p></header>
+<div class="stage" style="background:#8E9196;color:#0D0D0D">
+  <button class="replay" type="button">Print again</button>
+  <div class="t05">
+    <div class="t05-panel t05-print">
+      <p class="t05-big">KEEP DRY</p>
+      <p class="t05-code">LOT A0417 · PACKED 06:40 · SAMPLE CODE</p>
+    </div>
+    <div class="t05-ctl">
+      <label>Element shape (ELSH) <input type="range" min="0" max="16" step="1" value="2"> <output aria-hidden="true">2</output></label>
+      <label>Element grid (ELGR) <input type="range" min="1" max="2" step="0.1" value="1"> <output aria-hidden="true">1</output></label>
+    </div>
+    <small>Handjet · ELSH 0–16, ELGR 1–2, wght 100–900 · OFL · fallback ui-monospace: offline the dots of the print head are lost, the machine-code feel stays.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-06" data-name="Scannable label (Libre Barcode 39 Text)">
+<header><h2><code>type-06</code> Scannable label (Libre Barcode 39 Text)</h2><p><b>Use it when:</b> tickets, labels, inventory, returns: anything that should actually scan. <b>Change:</b> where the code comes from (an order or SKU), the label fields; test with a scanner before shipping.</p></header>
+<div class="stage" style="background:#C6F432;color:#111111">
+  <div class="t06">
+    <div class="t06-label">
+      <p class="t06-head">SHIP TO · BAY 3 · SAMPLE LABEL</p>
+      <p class="t06-bars" aria-hidden="true"></p>
+      <p class="t06-enc">Encoded: <code></code></p>
+    </div>
+    <label>Your code (A–Z, 0–9, space - . $ / + %) <input type="text" maxlength="10" value="AB-1027" spellcheck="false" autocapitalize="characters"></label>
+    <small>Code 39 needs a start and stop asterisk, so the script uppercases, drops other characters and wraps the code. Libre Barcode 39 Text · no axes · OFL · fallback ui-monospace: offline the bars vanish and the code prints as plain text.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-07" data-name="Pixel-snapped weave (Jacquard 24)">
+<header><h2><code>type-07</code> Pixel-snapped weave (Jacquard 24)</h2><p><b>Use it when:</b> textiles, crafts, heritage goods, where type should look made on a loom. <b>Change:</b> the words, the ground and thread colours, the range of multiples.</p></header>
+<div class="stage" style="background:#5C0F2A;color:#F3EDE4">
+  <div class="t07">
+    <div class="t07-tag"><p class="t07-word">Hand Loomed</p></div>
+    <label>Loom scale <input type="range" min="2" max="6" step="1" value="4"> <output></output></label>
+    <small>Sized only in whole multiples of the font's 24-pixel grid (CSS round()), so every woven pixel lands on whole screen pixels. Jacquard 24 · no axes · OFL · fallback Georgia: offline the pixels and the blackletter are lost.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-08" data-name="Microscope loupe (Rubik Microbe)">
+<header><h2><code>type-08</code> Microscope loupe (Rubik Microbe)</h2><p><b>Use it when:</b> biology, food science, labs, any page about looking closer. <b>Change:</b> the line, the stain colours, lens size and zoom (keep clip radius × zoom equal to the ring).</p></header>
+<div class="stage" style="background:#E9E0F5;color:#4A1D7A">
+  <div class="t08">
+    <div class="t08-slide">
+      <p class="t08-text">Cultured overnight</p>
+      <div class="t08-lens" aria-hidden="true"><p class="t08-text">Cultured overnight</p></div>
+      <div class="t08-ring" aria-hidden="true"></div>
+    </div>
+    <label>Move the lens along the line <input type="range" min="0" max="100" value="30"></label>
+    <small>Move the pointer over the slide, drag sideways on touch, or use the slider. Rubik Microbe · no axes · OFL · fallback Trebuchet MS: offline the microbes inside the letters are lost, the lens still magnifies.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-09" data-name="Bus vinyl cut by scroll (Danfo)">
+<header><h2><code>type-09</code> Bus vinyl cut by scroll (Danfo)</h2><p><b>Use it when:</b> transport, street culture, long pages whose type should change as the reader travels down. <b>Change:</b> the words, the stripe colours, the scroll range.</p></header>
+<div class="stage" style="background:#F7C600;color:#111111">
+  <div class="t09">
+    <div class="t09-side"><p class="t09-word">NEXT STOP</p></div>
+    <label>Sticker cut (ELSH) <input type="range" min="0" max="100" value="0"> <output aria-hidden="true">0</output></label>
+    <small>Scroll the page: the cut follows this panel's position in the window (off under reduced motion; the slider always works). Danfo · ELSH 0–100 · OFL · fallback Impact: offline the vinyl cut shapes are lost.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-10" data-name="Palette cycle (Honk)">
+<header><h2><code>type-10</code> Palette cycle (Honk)</h2><p><b>Use it when:</b> events, kids, festivals, where colour is the brand and can change per section. <b>Change:</b> the palettes kept, override-colors for the product's own colours, the MORF stop.</p></header>
+<div class="stage" style="background:#D62718;color:#FFFFFF">
+  <div class="t10">
+    <p class="t10-word">Street Fair</p>
+    <div class="t10-ctl">
+      <button type="button" class="t10-next">Next palette</button>
+      <span class="t10-pal" aria-live="polite">Palette 1 of 8</span>
+      <label>Shape (MORF) <input type="range" min="0" max="45" step="5" value="15"> <output aria-hidden="true">Regular</output></label>
+      <label>Shadow (SHLN) <input type="range" min="0" max="100" value="50"></label>
+    </div>
+    <small>A COLRv1 colour font with eight built-in palettes, picked with @font-palette-values base-palette; the MORF stops are named in the font. Honk · MORF 0–45, SHLN 0–100 · OFL · fallback Cooper Black, Georgia: offline, or where COLRv1 is unsupported, the word draws flat white.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-11" data-name="Keystroke burst (Kablammo)">
+<header><h2><code>type-11</code> Keystroke burst (Kablammo)</h2><p><b>Use it when:</b> a playful input (a search, a name, a message) should answer every key. <b>Change:</b> the burst colour, the decay speed, the starting word.</p></header>
+<div class="stage" style="background:#00AEEF;color:#111111">
+  <div class="t11">
+    <div class="t11-burst"><p class="t11-word">WHAM</p></div>
+    <label>Type fast: every key kicks the shape <input type="text" maxlength="12" value="WHAM" spellcheck="false"></label>
+    <small>Each key adds 15 to MORF and it settles back to 0; under reduced motion each key steps the shape instead. Kablammo · MORF 0–60 · OFL · fallback Impact: offline the wobbling shapes are lost.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-12" data-name="Copy of a copy (Workbench)">
+<header><h2><code>type-12</code> Copy of a copy (Workbench)</h2><p><b>Use it when:</b> archives, zines, music, any story about copies, leaks or reprints. <b>Change:</b> the words, the paper colour, how a generation maps to BLED and SCAN.</p></header>
+<div class="stage" style="background:#F03E9C;color:#111111">
+  <div class="t12">
+    <p class="t12-word">COPY OF A COPY</p>
+    <label>Generation <input type="range" min="1" max="8" step="1" value="1"></label>
+    <p class="t12-out"><output></output></p>
+    <small>One slider drives two axes: BLED rises evenly with each copy, SCAN climbs faster near the end. Workbench · BLED 0–100, SCAN −53–100 · OFL · fallback Courier New: offline the bleed and the scan lines are lost.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-13" data-name="Dot-matrix clock (Doto)">
+<header><h2><code>type-13</code> Dot-matrix clock (Doto)</h2><p><b>Use it when:</b> transit, live status, anything where "now" is the content. <b>Change:</b> the data (a departure, a count), what drives ROND, the board colours.</p></header>
+<div class="stage" style="background:#0E0E0E;color:#F2F2F2">
+  <div class="t13">
+    <div class="t13-board">
+      <p class="t13-label">LOCAL TIME · SAMPLE BOARD</p>
+      <p class="t13-time"><time>00:00:00</time></p>
+    </div>
+    <label>Dot roundness (ROND) <input type="range" min="0" max="100" value="0"> <output aria-hidden="true">follows the seconds</output></label>
+    <small>Your device's clock; the dots go from square to round across each minute until you move the slider (fixed under reduced motion). Doto · ROND 0–100, wght 100–900 · OFL · fallback ui-monospace: offline the dots are lost, the digits stay tabular.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-14" data-name="Copybook ruling (Playwrite DE Grund)">
+<header><h2><code>type-14</code> Copybook ruling (Playwrite DE Grund)</h2><p><b>Use it when:</b> education, kids, journaling, practice apps. <b>Change:</b> the line, the Playwrite country (each follows that country's school model), ink and rule colours.</p></header>
+<div class="stage" style="background:#FFFFFF;color:#1C3A8F">
+  <div class="t14">
+    <p class="t14-line"><span class="t14-g" aria-hidden="true"></span><span>Neat letters take time</span></p>
+    <p class="t14-line t14-trace" aria-hidden="true"><span class="t14-g"></span><span>Neat letters take time</span></p>
+    <p class="t14-line t14-trace" aria-hidden="true"><span class="t14-g"></span><span>Neat letters take time</span></p>
+    <div class="t14-ctl">
+      <label>Write your own line <input type="text" maxlength="22" value="Neat letters take time"></label>
+      <label>Pen weight (wght) <input type="range" min="100" max="400" value="300"></label>
+    </div>
+    <small>The rules are drawn from the font's own x-height (ex) and cap height (cap), so they land on the letters; the outlined lines are for tracing. Playwrite DE Grund · wght 100–400 · OFL · fallback Segoe Print, Bradley Hand, cursive: offline the school model is lost, the rules still fit.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-15" data-name="Click to unredact (Flow Block)">
+<header><h2><code>type-15</code> Click to unredact (Flow Block)</h2><p><b>Use it when:</b> investigations, legal, privacy, launches with hidden details. <b>Change:</b> the memo and which words hide; never hide anything a sighted reader needs to act.</p></header>
+<div class="stage" style="background:#4B5320;color:#111111">
+  <div class="t15">
+    <p class="t15-head">MEMO · SAMPLE COPY</p>
+    <p class="t15-body">The review moves to <button type="button" class="t15-r" aria-pressed="false">Thursday</button> in <button type="button" class="t15-r" aria-pressed="false">room four</button>. Bring <button type="button" class="t15-r" aria-pressed="false">the signed copy</button> and tell <button type="button" class="t15-r" aria-pressed="false">the night desk</button> before noon.</p>
+    <button type="button" class="t15-all">Reveal all</button>
+    <small>Each block is a real button holding the real word, so screen readers read it; press one to reveal it. Flow Block · no axes · OFL · fallback: when the font does not load, a solid CSS bar keeps the words hidden.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-16" data-name="Set in 1640 (IM Fell English)">
+<header><h2><code>type-16</code> Set in 1640 (IM Fell English)</h2><p><b>Use it when:</b> history, publishing, spirits, letterpress, anything older than the web. <b>Change:</b> the text and the rubric colour; keep the long-s rule rather than a blind find-and-replace.</p></header>
+<div class="stage" style="background:#E8E6E0;color:#22190F">
+  <div class="t16">
+    <p class="t16-title" aria-hidden="true"></p>
+    <hr class="t16-rule">
+    <p class="t16-body" aria-hidden="true"></p>
+    <p class="sr t16-sr"></p>
+    <label>Your text <textarea rows="3" maxlength="200">Of the setting of types, with diverse instructions most necessary for the press, and the first principles of the art.</textarea></label>
+    <label class="t16-check"><input type="checkbox" checked> Long s (ſ)</label>
+    <small>The script sets the long s by the old rule: never at a word's end, not before f, b or k, not after f. CSS asks for common, discretionary and historical ligatures; the font draws the ones it has. IM Fell English · roman and italic, no axes · OFL · fallback Iowan Old Style, Palatino, Georgia: offline keeps the long s and drop cap, loses the worn 1600s print.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-17" data-name="Layered sign (Bungee family)">
+<header><h2><code>type-17</code> Layered sign (Bungee family)</h2><p><b>Use it when:</b> signage, food, nightlife: one word built like a painted sign. <b>Change:</b> the word, the four layer colours, which layers show.</p></header>
+<div class="stage" style="background:#0B6E4F;color:#FFF6E5">
+  <div class="t17">
+    <div class="t17-sign">
+      <span class="t17-l t17-shade" aria-hidden="true">NIGHT MARKET</span>
+      <span class="t17-l t17-base">NIGHT MARKET</span>
+      <span class="t17-l t17-inline" aria-hidden="true">NIGHT MARKET</span>
+      <span class="t17-l t17-outline" aria-hidden="true">NIGHT MARKET</span>
+    </div>
+    <fieldset><legend>Layers, bottom to top</legend>
+      <label><input type="checkbox" value="shade" checked> Shade</label>
+      <label><input type="checkbox" value="base" checked> Bungee</label>
+      <label><input type="checkbox" value="inline" checked> Inline</label>
+      <label><input type="checkbox" value="outline" checked> Outline</label>
+    </fieldset>
+    <button type="button" class="t17-pull" aria-pressed="false">Pull the layers apart</button>
+    <small>Four fonts with identical metrics stacked in one grid cell, one colour each; the pink Bungee under the cream Inline shows through its groove. Bungee, Bungee Shade, Bungee Inline, Bungee Outline · no axes · OFL · fallback Impact: when the fonts fail, only the plain layer shows.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-18" data-name="Light and dark glaze (Kalnia Glaze)">
+<header><h2><code>type-18</code> Light and dark glaze (Kalnia Glaze)</h2><p><b>Use it when:</b> luxury, food and drink, theatre, a page with light and dark sections. <b>Change:</b> the line, the palette per section (or @font-palette-values for brand colours), wdth.</p></header>
+<div class="stage" style="background:#DCE3EA;color:#1B1F24">
+  <div class="t18">
+    <p class="t18-word">Glazed &amp; Gilded</p>
+    <div class="t18-ctl">
+      <button type="button" class="t18-mode" aria-pressed="false">Dark palette</button>
+      <label>Width (wdth) <input type="range" min="100" max="125" value="100"></label>
+      <label>Weight (wght) <input type="range" min="100" max="700" value="500"></label>
+    </div>
+    <small>A COLRv1 colour font that ships a light and a dark palette, picked with font-palette: light or dark. Kalnia Glaze · wdth 100–125, wght 100–700 · OFL · fallback Didot, Bodoni 72, Georgia: offline, or where COLRv1 is unsupported, the letters draw flat in the text colour.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-19" data-name="Vertical shop sign (Dela Gothic One)">
+<header><h2><code>type-19</code> Vertical shop sign (Dela Gothic One)</h2><p><b>Use it when:</b> Japanese copy, or any headline that should run top to bottom. <b>Change:</b> the copy, the real hours, the seal; keep two-digit numbers upright with tate-chu-yoko.</p></header>
+<div class="stage" style="background:#14213D;color:#FFFFFF">
+  <div class="t19">
+    <div class="t19-sign" lang="ja">
+      <p>本日営業中</p>
+      <p class="t19-small">朝<span class="t19-tcy">7</span>時から夜<span class="t19-tcy">10</span>時まで</p>
+      <p class="t19-seal" aria-hidden="true"><span>営</span></p>
+    </div>
+    <p class="t19-en">Open today · 7 am to 10 pm (sample hours)</p>
+    <button type="button" class="t19-dir">Set horizontally</button>
+    <small>writing-mode: vertical-rl stacks the lines right to left; text-combine-upright sets 10 upright in one cell. Dela Gothic One · no axes, Japanese and Latin · OFL · fallback Hiragino Sans, Yu Gothic, Noto Sans JP at weight 800: offline keeps the vertical setting, loses the ultra-black strokes.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="type-20" data-name="Text on a spiral (Ojuju)">
+<header><h2><code>type-20</code> Text on a spiral (Ojuju)</h2><p><b>Use it when:</b> a manifesto, a menu, a story that should be turned and read slowly. <b>Change:</b> the text, the number of turns, the offset range.</p></header>
+<div class="stage" style="background:#2B1A12;color:#F2E8DA">
+  <div class="t20">
+    <svg viewBox="0 0 400 400" aria-hidden="true">
+      <path class="t20-guide" id="t20-spiral" d="M200 20"/>
+      <text><textPath href="#t20-spiral" startOffset="0%">Round and round the story goes, and every line you read comes back around to where it started, a little closer to the middle.</textPath></text>
+    </svg>
+    <p class="sr t20-sr"></p>
+    <div class="t20-ctl">
+      <label>Your text <input type="text" maxlength="160" value="Round and round the story goes, and every line you read comes back around to where it started, a little closer to the middle."></label>
+      <label>Turn (start offset) <input type="range" min="0" max="60" value="0"></label>
+      <label>Weight (wght) <input type="range" min="200" max="800" value="500"></label>
+    </div>
+    <small>SVG textPath on an Archimedean spiral the script draws (4.5 turns). Ojuju · wght 200–800 · OFL · fallback Trebuchet MS, system-ui: offline keeps the spiral, loses the face.</small>
+  </div>
+</div>
+</article>
+</main>
+<script>
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// type-01 Melting year (Climate Crisis)
+{
+  const root = document.getElementById('type-01');
+  const word = root.querySelector('.t01-word'), range = root.querySelector('input'), out = root.querySelector('output');
+  const weight = y => Math.round(900 - (y - 1979) / 71 * 800);
+  console.assert(weight(1979) === 900 && weight(2050) === 100, 'type-01: year to fallback weight');
+  let raf = 0;
+  const set = y => {
+    range.value = out.textContent = y;
+    word.style.fontVariationSettings = `'YEAR' ${y}`;
+    word.style.fontWeight = weight(y); // only the fallback has weights; font-synthesis:none keeps Climate Crisis from faux bold
+  };
+  range.addEventListener('input', () => { cancelAnimationFrame(raf); set(+range.value); });
+  root.querySelector('.replay').addEventListener('click', () => {
+    cancelAnimationFrame(raf);
+    if (reduce) return set(2050);
+    const t0 = performance.now();
+    const step = now => { const k = Math.min((now - t0) / 6000, 1); set(Math.round(1979 + 71 * k)); if (k < 1) raf = requestAnimationFrame(step); };
+    raf = requestAnimationFrame(step);
+  });
+  set(1979);
+}
+// type-02 Chart in a sentence (Linefont)
+{
+  const root = document.getElementById('type-02');
+  const [vals, wdth, wght] = root.querySelectorAll('input');
+  const chart = root.querySelector('.t02-chart'), list = root.querySelector('.t02-vals span');
+  const nums = s => s.split(/[\s,;]+/).filter(Boolean).map(Number).filter(Number.isFinite).map(v => Math.max(0, Math.min(100, v)));
+  const enc = a => a.map(v => String.fromCharCode(0x100 + Math.round(v * 1.27))).join(''); // 0–100 onto the font's 0–127
+  console.assert(enc([0, 100]) === 'Āſ', 'type-02: encoding');
+  const draw = () => {
+    const a = nums(vals.value);
+    chart.textContent = enc(a);
+    list.textContent = a.join(', ') || 'none';
+    chart.style.fontVariationSettings = `'wdth' ${wdth.value}, 'wght' ${wght.value}`;
+  };
+  root.addEventListener('input', draw);
+  draw();
+}
+// type-03 Waveform from typing (Wavefont)
+{
+  const root = document.getElementById('type-03');
+  const wave = root.querySelector('.t03-wave'), done = root.querySelector('.t03-done'), rest = root.querySelector('.t03-rest');
+  const [text, rond] = root.querySelectorAll('input'), out = root.querySelector('output');
+  const bar = c => /[aeiouy]/i.test(c) ? 100 + c.charCodeAt(0) % 27 : /[a-z]/i.test(c) ? 45 + c.charCodeAt(0) % 35 : /\d/.test(c) ? 70 : c === ' ' ? 4 : 20;
+  console.assert(bar('a') > bar('t') && bar('t') > bar(' '), 'type-03: vowels > consonants > spaces');
+  let bars = '', raf = 0;
+  const split = k => { done.textContent = bars.slice(0, k); rest.textContent = bars.slice(k); };
+  const draw = () => {
+    cancelAnimationFrame(raf);
+    bars = [...text.value].map(c => String.fromCharCode(0x100 + bar(c))).join('');
+    out.textContent = rond.value;
+    wave.style.fontVariationSettings = `'YELA' 0, 'wght' 420, 'ROND' ${rond.value}`;
+    split(0);
+    wave.style.fontSize = '';
+    const k = wave.clientWidth / wave.scrollWidth; // shrink to fit long lines on a phone
+    if (k < 1) wave.style.fontSize = parseFloat(getComputedStyle(wave).fontSize) * k + 'px';
+  };
+  root.querySelector('.replay').addEventListener('click', () => {
+    cancelAnimationFrame(raf);
+    if (reduce) return split(bars.length);
+    const t0 = performance.now();
+    const step = now => { const k = Math.min((now - t0) / 2400, 1); split(Math.round(bars.length * k)); if (k < 1) raf = requestAnimationFrame(step); };
+    raf = requestAnimationFrame(step);
+  });
+  root.addEventListener('input', draw);
+  addEventListener('resize', draw);
+  document.fonts.ready.then(draw);
+  draw();
+}
+// type-04 Tilt with the pointer (Tilt Prism)
+{
+  const root = document.getElementById('type-04');
+  const word = root.querySelector('.t04-word'), [x, y] = root.querySelectorAll('input'), outs = root.querySelectorAll('output');
+  const deg = k => Math.round(-45 + 90 * Math.min(1, Math.max(0, k)));
+  console.assert(deg(0) === -45 && deg(.5) === 0 && deg(1) === 45, 'type-04: pointer to degrees');
+  const set = () => {
+    outs[0].textContent = x.value; outs[1].textContent = y.value;
+    word.style.fontVariationSettings = `'XROT' ${x.value}, 'YROT' ${y.value}`;
+  };
+  word.addEventListener('pointermove', e => {
+    const r = word.getBoundingClientRect();
+    y.value = deg((e.clientX - r.left) / r.width);
+    x.value = -deg((e.clientY - r.top) / r.height);
+    set();
+  });
+  root.addEventListener('input', set);
+  set();
+}
+// type-05 Inkjet element shapes (Handjet)
+{
+  const root = document.getElementById('type-05');
+  const panel = root.querySelector('.t05-panel'), [sh, gr] = root.querySelectorAll('input'), outs = root.querySelectorAll('output');
+  const set = () => {
+    outs[0].textContent = sh.value; outs[1].textContent = gr.value;
+    panel.style.fontVariationSettings = `'ELSH' ${sh.value}, 'ELGR' ${gr.value}`;
+  };
+  root.addEventListener('input', set);
+  root.querySelector('.replay').addEventListener('click', () => {
+    panel.classList.remove('t05-print'); void panel.offsetWidth; panel.classList.add('t05-print'); // restart the print sweep
+  });
+  set();
+}
+// type-06 Scannable label (Libre Barcode 39 Text)
+{
+  const root = document.getElementById('type-06');
+  const input = root.querySelector('input'), bars = root.querySelector('.t06-bars'), enc = root.querySelector('.t06-enc code');
+  const code39 = s => '*' + s.toUpperCase().replace(/[^A-Z0-9 .$\/+%-]/g, '') + '*';
+  console.assert(code39('ab-10*27!') === '*AB-1027*', 'type-06: Code 39 text');
+  const draw = () => {
+    bars.textContent = enc.textContent = code39(input.value);
+    bars.style.fontSize = '';
+    const k = bars.clientWidth / bars.scrollWidth; // a clipped barcode will not scan, so shrink instead
+    if (k < 1) bars.style.fontSize = parseFloat(getComputedStyle(bars).fontSize) * k * .98 + 'px';
+  };
+  input.addEventListener('input', draw);
+  addEventListener('resize', draw);
+  document.fonts.ready.then(draw);
+  draw();
+}
+// type-07 Pixel-snapped weave (Jacquard 24)
+{
+  const root = document.getElementById('type-07');
+  const wrap = root.querySelector('.t07'), word = root.querySelector('.t07-word'), range = root.querySelector('input'), out = root.querySelector('output');
+  const snaps = CSS.supports('width', 'round(down, 10px, 3px)');
+  const show = () => {
+    wrap.style.setProperty('--k', range.value);
+    const px = parseFloat(getComputedStyle(word).fontSize);
+    out.textContent = px % 24 === 0 ? `${px}px = ${px / 24} × 24px` : `${Math.round(px)}px (this browser lacks CSS round(), not snapped)`;
+    if (snaps) console.assert(px % 24 === 0, 'type-07: size is a whole multiple of 24px');
+  };
+  range.addEventListener('input', show);
+  new ResizeObserver(show).observe(root.querySelector('.stage'));
+}
+// type-08 Microscope loupe (Rubik Microbe)
+{
+  const root = document.getElementById('type-08');
+  const slide = root.querySelector('.t08-slide'), range = root.querySelector('input');
+  const put = (x, y) => { slide.style.setProperty('--x', x + '%'); slide.style.setProperty('--y', y + '%'); };
+  slide.addEventListener('pointermove', e => {
+    const r = slide.getBoundingClientRect();
+    put((e.clientX - r.left) / r.width * 100, (e.clientY - r.top) / r.height * 100);
+  });
+  range.addEventListener('input', () => put(range.value, 30));
+}
+// type-09 Bus vinyl cut by scroll (Danfo)
+{
+  const root = document.getElementById('type-09');
+  const word = root.querySelector('.t09-word'), range = root.querySelector('input'), out = root.querySelector('output');
+  const progress = (top, h, vh) => Math.min(1, Math.max(0, (vh - top) / (vh + h)));
+  console.assert(progress(1000, 100, 800) === 0 && progress(-200, 100, 800) === 1, 'type-09: scroll progress');
+  const set = v => { range.value = out.textContent = v; word.style.fontVariationSettings = `'ELSH' ${v}`; };
+  range.addEventListener('input', () => set(range.value));
+  let queued = false;
+  if (!reduce) addEventListener('scroll', () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      const r = root.getBoundingClientRect();
+      set(Math.round(100 * progress(r.top, r.height, innerHeight)));
+    });
+  }, { passive: true });
+  set(0);
+}
+// type-10 Palette cycle (Honk)
+{
+  const root = document.getElementById('type-10');
+  const word = root.querySelector('.t10-word'), [morf, shln] = root.querySelectorAll('input'), out = root.querySelector('output'), pal = root.querySelector('.t10-pal');
+  const NAMES = ['Brush', 'Ninja', 'Irregular', 'Regular', 'Compressed', 'Rounded', 'Softie', 'Balloon', 'Wood', 'Flower']; // the font's MORF stops, every 5
+  const name = v => NAMES[Math.round(v / 5)];
+  console.assert(name(0) === 'Brush' && name(15) === 'Regular' && name(45) === 'Flower', 'type-10: MORF names');
+  let p = 0;
+  root.querySelector('.t10-next').addEventListener('click', () => {
+    p = (p + 1) % 8;
+    word.style.fontPalette = `--type-10-p${p}`;
+    pal.textContent = `Palette ${p + 1} of 8`;
+  });
+  const set = () => { morf.setAttribute('aria-valuetext', out.textContent = name(morf.value)); word.style.fontVariationSettings = `'MORF' ${morf.value}, 'SHLN' ${shln.value}`; };
+  root.addEventListener('input', set);
+  set();
+}
+// type-11 Keystroke burst (Kablammo)
+{
+  const root = document.getElementById('type-11');
+  const word = root.querySelector('.t11-word'), input = root.querySelector('input');
+  const bump = m => Math.min(60, m + 15);
+  console.assert(bump(0) === 15 && bump(50) === 60, 'type-11: MORF kick');
+  let m = 0, raf = 0;
+  const show = () => { word.style.fontVariationSettings = `'MORF' ${m.toFixed(1)}`; };
+  const settle = () => { m = m * .9 < .5 ? 0 : m * .9; show(); raf = m ? requestAnimationFrame(settle) : 0; };
+  input.addEventListener('input', () => {
+    word.textContent = input.value || ' ';
+    if (reduce) { m = (m + 15) % 75; return show(); }
+    m = bump(m); show();
+    if (!raf) raf = requestAnimationFrame(settle);
+  });
+}
+// type-12 Copy of a copy (Workbench)
+{
+  const root = document.getElementById('type-12');
+  const word = root.querySelector('.t12-word'), range = root.querySelector('input'), out = root.querySelector('output');
+  const axes = g => ({ BLED: Math.round((g - 1) / 7 * 100), SCAN: Math.round(((g - 1) / 7) ** 2 * 100) });
+  console.assert(axes(1).BLED === 0 && axes(1).SCAN === 0 && axes(8).BLED === 100 && axes(8).SCAN === 100, 'type-12: generation to axes');
+  const set = () => {
+    const a = axes(+range.value);
+    word.style.fontVariationSettings = `'BLED' ${a.BLED}, 'SCAN' ${a.SCAN}`;
+    out.textContent = `Copy ${range.value} · BLED ${a.BLED} · SCAN ${a.SCAN}`;
+  };
+  range.addEventListener('input', set);
+  set();
+}
+// type-13 Dot-matrix clock (Doto)
+{
+  const root = document.getElementById('type-13');
+  const time = root.querySelector('time'), range = root.querySelector('input'), out = root.querySelector('output'), board = root.querySelectorAll('.t13-label,.t13-time');
+  const rond = s => Math.round(s / 59 * 100);
+  console.assert(rond(0) === 0 && rond(59) === 100, 'type-13: seconds to ROND');
+  let follow = !reduce;
+  const paint = v => board.forEach(el => { el.style.fontVariationSettings = `'ROND' ${v}, 'wght' 600`; });
+  range.addEventListener('input', () => { follow = false; out.textContent = range.value; paint(range.value); });
+  const tick = () => {
+    const d = new Date();
+    time.textContent = time.dateTime = d.toLocaleTimeString('en-GB', { hour12: false });
+    if (follow) paint(range.value = rond(d.getSeconds()));
+  };
+  if (reduce) { range.value = out.textContent = 60; paint(60); }
+  tick();
+  setInterval(tick, 1000);
+}
+// type-14 Copybook ruling (Playwrite DE Grund)
+{
+  const root = document.getElementById('type-14');
+  const [text, pen] = root.querySelectorAll('input'), lines = root.querySelectorAll('.t14-line > span:last-child');
+  const draw = () => lines.forEach(s => { s.textContent = text.value || ' '; s.style.fontWeight = pen.value; });
+  root.addEventListener('input', draw);
+  draw();
+}
+// type-15 Click to unredact (Flow Block)
+{
+  const root = document.getElementById('type-15');
+  const words = root.querySelectorAll('.t15-r');
+  const flip = (b, on) => b.setAttribute('aria-pressed', on);
+  words.forEach(b => b.addEventListener('click', () => flip(b, b.getAttribute('aria-pressed') !== 'true')));
+  root.querySelector('.t15-all').addEventListener('click', () => words.forEach(b => flip(b, true)));
+  const nofont = () => root.classList.add('t15-nofont'); // offline: a CSS bar keeps the words hidden
+  document.fonts.load('16px "Flow Block"').then(f => f.length || nofont(), nofont);
+}
+// type-16 Set in 1640 (IM Fell English)
+{
+  const root = document.getElementById('type-16');
+  const area = root.querySelector('textarea'), box = root.querySelector('input'), title = root.querySelector('.t16-title'), body = root.querySelector('.t16-body'), sr = root.querySelector('.t16-sr');
+  const longS = t => t.replace(/(?<!f)s(?=[ac-eg-jl-z])/g, 'ſ'); // long s inside a word, not before f, b, k, not after f
+  console.assert(longS('successes') === 'ſucceſſes' && longS('satisfaction press') === 'ſatisfaction preſs', 'type-16: long s');
+  const draw = () => {
+    const set = box.checked ? longS : t => t;
+    title.textContent = set('A Most Useful Treatise');
+    body.textContent = set(area.value);
+    sr.textContent = 'A Most Useful Treatise. ' + area.value;
+  };
+  root.addEventListener('input', draw);
+  draw();
+}
+// type-17 Layered sign (Bungee family)
+{
+  const root = document.getElementById('type-17');
+  const sign = root.querySelector('.t17-sign'), pull = root.querySelector('.t17-pull');
+  root.querySelectorAll('input').forEach(c => c.addEventListener('change', () => root.querySelector('.t17-' + c.value).classList.toggle('t17-off', !c.checked)));
+  pull.addEventListener('click', () => pull.setAttribute('aria-pressed', sign.classList.toggle('t17-apart')));
+  const nofont = () => root.classList.add('t17-nofont');
+  document.fonts.load('16px "Bungee Shade"').then(f => f.length || nofont(), nofont);
+}
+// type-18 Light and dark glaze (Kalnia Glaze)
+{
+  const root = document.getElementById('type-18');
+  const stage = root.querySelector('.stage'), word = root.querySelector('.t18-word'), mode = root.querySelector('.t18-mode'), [wdth, wght] = root.querySelectorAll('input');
+  mode.addEventListener('click', () => {
+    const dark = mode.getAttribute('aria-pressed') !== 'true';
+    mode.setAttribute('aria-pressed', dark);
+    word.style.fontPalette = dark ? 'dark' : 'light';
+    stage.style.background = dark ? '#2B2B2B' : '#DCE3EA';
+    stage.style.color = dark ? '#F1F3F5' : '#1B1F24';
+  });
+  const set = () => { word.style.fontVariationSettings = `'wdth' ${wdth.value}, 'wght' ${wght.value}`; };
+  root.addEventListener('input', set);
+  set();
+}
+// type-19 Vertical shop sign (Dela Gothic One)
+{
+  const root = document.getElementById('type-19');
+  const sign = root.querySelector('.t19-sign'), dir = root.querySelector('.t19-dir');
+  dir.addEventListener('click', () => {
+    dir.textContent = sign.classList.toggle('t19-h') ? 'Set vertically' : 'Set horizontally';
+  });
+}
+// type-20 Text on a spiral (Ojuju)
+{
+  const root = document.getElementById('type-20');
+  const path = root.querySelector('path'), tp = root.querySelector('textPath'), text = root.querySelector('text'), sr = root.querySelector('.t20-sr');
+  const [words, turn, wght] = root.querySelectorAll('input');
+  const pts = [];
+  for (let i = 0; i <= 360; i++) { // 4.5 turns, radius 180 down to about 30
+    const a = i / 360 * 9 * Math.PI, r = 180 - a * 5.3;
+    pts.push(`${(200 + r * Math.sin(a)).toFixed(1)} ${(200 - r * Math.cos(a)).toFixed(1)}`);
+  }
+  path.setAttribute('d', 'M' + pts.join('L'));
+  console.assert(path.getAttribute('d').split('L').length === 361, 'type-20: spiral points');
+  const set = () => {
+    tp.textContent = sr.textContent = words.value;
+    tp.setAttribute('startOffset', turn.value + '%');
+    text.style.fontWeight = wght.value;
+  };
+  root.addEventListener('input', set);
+  set();
+}
+</script>
+</body>
+</html>

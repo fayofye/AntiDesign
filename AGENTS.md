@@ -1,6 +1,6 @@
 # Guide for agents working on this repo
 
-AntiDesign (skill id `antidesign`) is an agent skill: `SKILL.md` is the prompt, `scripts/roll.py` rolls designs, `elements/` holds self-contained demo pages and `references/elements.md` says when to use them. There is no build step.
+AntiDesign (skill id `antidesign`) is an agent skill: `SKILL.md` is the prompt, `scripts/roll.py` rolls designs, `elements/` holds self-contained demo pages and `references/elements.md` says when to use them. `library/` holds smaller specimens (buttons, motion, heroes, type) listed in `references/library.md`. There is no build step.
 
 ## Keep it portable
 
@@ -16,13 +16,15 @@ The skill must work in any agent that reads `SKILL.md` (Claude Code, Codex, Grok
 - **Description:** the manifests and `agents/openai.yaml` use the first sentence of the `SKILL.md` description.
 - **Traits:** the ten traits in `SKILL.md`'s default table and in `scripts/roll.py` stay the same, in the same order.
 - **Elements:** every file in `elements/` has a row in `references/elements.md` and in the README.
+- **Library:** every specimen in `library/` has a row in `references/library.md`, and the README's specimen counts match. Keep each specimen's tag exactly `<article class="spec" id="btn-01" data-name="Name">`, with ids sequential per page: `roll.py --library` reads it.
 
 ## Before publishing
 
 ```bash
 python3 scripts/roll.py --count 2
 python3 scripts/roll.py --trait colour
+python3 scripts/roll.py --library buttons --count 3
 npx skills add . --list
 ```
 
-Open any element you changed in a browser at phone and desktop widths and check the console for errors.
+Open any element or library page you changed in a browser at phone and desktop widths and check the console for errors.

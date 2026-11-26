@@ -1,0 +1,1139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AntiDesign library: motion</title>
+<link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&family=Antonio:wght@600&family=Black+Han+Sans&family=Chakra+Petch:wght@600&family=Chonburi&family=Erica+One&family=Familjen+Grotesk:wght@500;700&family=Fredericka+the+Great&family=Gloock&family=Major+Mono+Display&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Poiret+One&family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&family=Shantell+Sans:wght@500;700&family=Sixtyfour:BLED,SCAN@0..100,-53..100&family=Syncopate:wght@700&family=Tenor+Sans&family=Ultra&family=Young+Serif&display=swap" rel="stylesheet">
+<style>
+/* Shell: the gallery around the specimens. Not part of any specimen; never copy it. */
+body{margin:0;background:#E8E8E3;color:#141414;font:16px/1.5 ui-sans-serif,system-ui,sans-serif}
+.shell{max-width:1240px;margin:0 auto;padding:32px 16px 96px}
+.shell>h1{margin:0;font-size:24px}
+.shell>p{margin:4px 0 0;max-width:70ch}
+.index{display:flex;flex-wrap:wrap;gap:6px 16px;margin:20px 0 36px;padding:0;list-style:none;font-size:14px}
+.index a{color:#141414}
+.spec{margin:0 0 40px;border:2px solid #141414;background:#FFFFFF;scroll-margin-top:16px}
+.spec>header{display:flex;flex-wrap:wrap;gap:4px 20px;align-items:baseline;padding:10px 14px;border-bottom:2px solid #141414;font-size:14px}
+.spec>header h2{margin:0;font-size:16px}
+.spec>header code{font:600 13px ui-monospace,monospace;background:#141414;color:#FFFFFF;padding:2px 6px}
+.spec>header p{margin:0;flex:1 1 320px}
+.stage{position:relative;min-height:360px;display:grid;place-items:center;padding:48px 20px;overflow:hidden;box-sizing:border-box}
+.replay{position:absolute;top:10px;right:10px;font:600 13px ui-sans-serif,system-ui,sans-serif;padding:8px 12px;min-height:40px;border:2px solid currentColor;background:transparent;color:inherit;cursor:pointer}
+.replay:focus-visible,.index a:focus-visible{outline:3px solid currentColor;outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* mo-01 Odometer */
+#mo-01 .defs{position:absolute;width:0;height:0}
+#mo-01 figure{margin:0;display:grid;gap:16px;justify-items:center;text-align:center}
+#mo-01 .odo{margin:0;display:flex;gap:4px;padding:9px;border-radius:12px;background:linear-gradient(#F4F6F2,#7E857B 52%,#DDE1D8);box-shadow:inset 0 1px 0 #FFFFFF,inset 0 -2px 3px #0005,0 14px 22px -14px #000A;font:600 clamp(44px,11vw,96px)/1 'Chakra Petch','DIN Condensed','Eurostile',ui-monospace,monospace}
+#mo-01 .plain{padding:.1em .2em;background:#121212;color:#FFFFFF;letter-spacing:.12em}
+#mo-01 .w{position:relative;width:.7em;height:1.2em;overflow:hidden;background:#121212;color:#FFFFFF;border-radius:3px;text-align:center}
+#mo-01 .w.tenth{margin-left:6px;background:#F4F4EE;color:#C8102E}
+#mo-01 .strip{display:block}
+#mo-01 .strip i{display:block;height:1.2em;line-height:1.2em;font-style:normal}
+#mo-01 .w::after{content:"";position:absolute;inset:0;background:linear-gradient(#000E,#0000 30%,#0000 70%,#000E)}
+#mo-01 .w.tenth::after{background:linear-gradient(#0007,#0000 30%,#0000 70%,#0007)}
+#mo-01 figcaption{font:600 15px/1.3 'Chakra Petch',ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase}
+/* mo-02 Split-flap headline */
+#mo-02 .stage{gap:18px;align-content:center}
+#mo-02 .board{margin:0;display:grid;gap:6px;padding:12px;background:#0A0B09;border-radius:6px;box-shadow:inset 0 0 0 2px #2F322D;font:600 clamp(22px,6.6vw,64px)/1 'Antonio','Avenir Next Condensed','Franklin Gothic Medium',ui-sans-serif,sans-serif}
+#mo-02 .plain{display:block;line-height:1.3;letter-spacing:.2em}
+#mo-02 .row{display:flex;gap:2px}
+#mo-02 .c{position:relative;width:.8em;height:1.3em;perspective:3em}
+#mo-02 .h{position:absolute;left:0;right:0;height:50%;overflow:hidden;background:linear-gradient(#30332F,#262825);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+#mo-02 .h i{position:absolute;left:0;right:0;top:0;height:200%;line-height:1.3em;text-align:center;font-style:normal}
+#mo-02 .top{top:0;border-radius:3px 3px 0 0}
+#mo-02 .bot{bottom:0;border-radius:0 0 3px 3px;background:linear-gradient(#232522,#1C1E1B)}
+#mo-02 .bot i,#mo-02 .bk i{top:-100%}
+#mo-02 .flap{position:absolute;left:0;right:0;top:0;height:50%;transform-origin:50% 100%;transform-style:preserve-3d;visibility:hidden}
+#mo-02 .flap .h{height:100%}
+#mo-02 .bk{top:0;transform:rotateX(180deg);border-radius:0 0 3px 3px;background:linear-gradient(#232522,#1C1E1B)}
+#mo-02 .c::after{content:"";position:absolute;left:0;right:0;top:calc(50% - 1px);height:2px;background:#0A0B09}
+#mo-02 .next{font:600 16px/1 'Antonio',ui-sans-serif,sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:12px 18px;min-height:44px;border:2px solid #F6C431;background:transparent;color:#F6C431;cursor:pointer}
+#mo-02 .next:hover{background:#F6C431;color:#121411}
+#mo-02 .next:focus-visible{outline:3px solid #FFFFFF;outline-offset:3px}
+#mo-02 .note{margin:0;font-size:13px}
+/* mo-03 Letterpress proof */
+#mo-03 .defs{position:absolute;width:0;height:0}
+#mo-03 .stage::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .25 0 0 0 0 .25 0 0 0 .3 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
+#mo-03 .sheet{position:relative;max-width:820px;text-align:center;filter:url(#mo03-ink)}
+#mo-03 .press{margin:0;font:400 clamp(38px,7.4vw,88px)/1.08 'Ultra','Rockwell Extra Bold','Clarendon',Georgia,serif;color:#191514}
+#mo-03 .wd{display:inline-block;--dx:2px;--dy:1px;text-shadow:var(--dx) var(--dy) 0 #0A6BBD;-webkit-text-stroke:.006em currentColor}
+#mo-03 .colo{margin:22px 0 0;font:400 15px/1.4 'Ultra',Georgia,serif;letter-spacing:.06em;color:#0656A0}
+#mo-03.armed .wd,#mo-03.armed .colo{opacity:0}
+/* mo-04 Gravity pile */
+#mo-04 .stage{min-height:440px;align-items:end;padding-bottom:0}
+#mo-04 .pile{position:relative;margin:0;max-width:760px;display:flex;flex-wrap:wrap;justify-content:center;gap:0 .1em;font:400 clamp(30px,6.6vw,72px)/1 'Erica One','Cooper Black','Rockwell Extra Bold',Georgia,serif}
+#mo-04 .pile span{display:block;padding:.16em .3em .2em;border-radius:.12em;background:#1F3CC6;color:#FFFFFF;box-shadow:inset 0 -.09em 0 #0003}
+#mo-04 .pile span:nth-child(3n+2){background:#6FD6A8;color:#151515}
+#mo-04 .pile span:nth-child(3n){background:#151515;color:#FFFFFF}
+/* mo-05 Pen plotter */
+#mo-05 .stage::before{content:"";position:absolute;inset:0;background:linear-gradient(#FFFFFF1A 1px,transparent 1px) 0 0/24px 24px,linear-gradient(90deg,#FFFFFF1A 1px,transparent 1px) 0 0/24px 24px}
+#mo-05 .stage{padding-top:64px}
+#mo-05 figure{position:relative;margin:0;width:min(100%,640px);display:grid;gap:14px}
+#mo-05 .plot{display:block;width:100%;height:auto;overflow:visible}
+#mo-05 .paper{fill:#FFFFFF}
+#mo-05 .ink path{fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+#mo-05 [data-pen="0"]{stroke:#111111}
+#mo-05 [data-pen="1"]{stroke:#DA2C38}
+#mo-05 .rails{fill:#9AA3A8}
+#mo-05 .rail{fill:#C9CED1;stroke:#5B6166;stroke-width:1;opacity:.92}
+#mo-05 .car rect{fill:#3A4045}
+#mo-05 .pen{fill:#111111;stroke:#FFFFFF;stroke-width:1.5}
+#mo-05 figcaption{font:400 15px/1.4 'Major Mono Display',ui-monospace,monospace;text-align:center}
+/* mo-06 Line boil */
+#mo-06 .defs{position:absolute;width:0;height:0}
+#mo-06 .card{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 28px;filter:url(#mo06-boil)}
+#mo-06 .mug{width:clamp(120px,24vw,200px);height:auto;fill:none;stroke:#141414;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+#mo-06 .mug .fill{fill:#FFFFFF}
+#mo-06 h3{margin:0;font:700 clamp(40px,7vw,80px)/1 'Shantell Sans','Chalkboard SE','Comic Sans MS',cursive}
+#mo-06 .card p{margin:8px 0 0;font:500 17px/1.3 'Shantell Sans','Chalkboard SE',cursive}
+/* mo-07 Axis wave */
+#mo-07 .stage{view-timeline:--mo07 block}
+#mo-07 .copy{max-width:1000px;text-align:center}
+#mo-07 .wave{margin:0;font:clamp(36px,7.6vw,100px)/1.05 'Recursive',ui-monospace,monospace;font-variation-settings:"MONO" 1,"CASL" 1,"wght" 760,"slnt" 0,"CRSV" 1}
+#mo-07 .wave i{font-style:normal}
+#mo-07 .copy p{margin:18px auto 0;max-width:46ch;font:16px/1.4 'Recursive',ui-monospace,monospace;font-variation-settings:"MONO" 0,"CASL" 0,"wght" 450}
+@supports (animation-timeline: view()){@media (prefers-reduced-motion:no-preference){
+#mo-07 .wave i{animation:mo07-wave linear both;animation-timeline:--mo07;animation-range:cover calc(18% + var(--i) * 1.2%) cover calc(42% + var(--i) * 1.2%)}
+}}
+@keyframes mo07-wave{0%{font-variation-settings:"MONO" 1,"CASL" 0,"wght" 300,"slnt" 0,"CRSV" 0}45%{font-variation-settings:"MONO" 1,"CASL" 1,"wght" 1000,"slnt" -15,"CRSV" 1}100%{font-variation-settings:"MONO" 1,"CASL" 1,"wght" 760,"slnt" 0,"CRSV" 1}}
+/* mo-08 Aperture iris */
+@property --mo08-open{syntax:'<number>';inherits:true;initial-value:1}
+#mo-08 .stage{view-timeline:--mo08 block}
+#mo-08 figure{margin:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:28px 48px;--mo08-open:1}
+#mo-08 .lens{position:relative;width:min(70vw,340px);aspect-ratio:1;border-radius:50%;background:#111315;box-shadow:0 0 0 10px #1C1F22,0 0 0 12px #5C646B,0 18px 30px -10px #0008}
+#mo-08 .lens::after{content:"";position:absolute;left:50%;top:-11px;margin-left:-5px;border:5px solid transparent;border-top-color:#E8ECEF}
+#mo-08 .ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(calc(var(--mo08-open) * -100deg));font:700 7px 'Syncopate',ui-sans-serif,sans-serif;fill:#E8ECEF;letter-spacing:.5px}
+#mo-08 .scene,#mo-08 .blades{position:absolute;inset:14px;border-radius:50%;overflow:hidden}
+#mo-08 .art{position:absolute;inset:0;background:radial-gradient(circle at 64% 40%,#FFFFFF 0 11%,transparent 11.5%),repeating-linear-gradient(#0000 0 6px,#FFFFFF40 6px 8px) 0 100%/100% 44% no-repeat,linear-gradient(#9AD9CC 0 56%,#0E5A60 56%);transform:scale(calc(1.2 - var(--mo08-open) * .2))}
+#mo-08 .bw{position:absolute;inset:0;transform:rotate(calc(var(--k) * 51.4286deg))}
+#mo-08 .bl{position:absolute;left:37.5%;width:62.5%;top:9%;height:41%;transform-origin:100% 100%;transform:rotate(calc(var(--mo08-open) * 88deg));background:linear-gradient(0deg,#5A6067 0 2px,#2F3236 3px,#23262A);box-shadow:0 2px 3px #000A}
+#mo-08 figcaption{max-width:340px}
+#mo-08 h3{margin:0;font:700 clamp(20px,3vw,30px)/1.25 'Syncopate','Eurostile',ui-sans-serif,sans-serif;letter-spacing:.04em}
+#mo-08 figcaption p{margin:10px 0 0}
+@supports (animation-timeline: view()){@media (prefers-reduced-motion:no-preference){
+#mo-08 figure{animation:mo08-open linear both;animation-timeline:--mo08;animation-range:entry 30% cover 55%}
+}}
+@keyframes mo08-open{from{--mo08-open:0}to{--mo08-open:1}}
+/* mo-09 Tri-vision billboard */
+#mo-09 .stage{gap:18px;align-content:center}
+#mo-09 .sign{position:relative;width:min(100%,720px);margin-bottom:40px;padding:10px;box-sizing:border-box;background:#3B3F45}
+#mo-09 .sign::before,#mo-09 .sign::after{content:"";position:absolute;top:100%;width:14px;height:46px;background:#3B3F45}
+#mo-09 .sign::before{left:22%}
+#mo-09 .sign::after{right:22%}
+#mo-09 .bb{position:relative;aspect-ratio:2.2;container-type:inline-size;perspective:1600px;overflow:hidden;background:#111111}
+#mo-09 .bb>.art+.art{display:none}
+#mo-09 .art{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:1.5cqw;font-family:'Black Han Sans','Franklin Gothic Heavy','Impact',sans-serif;text-align:center}
+#mo-09 .art b{font-weight:400;font-size:12cqw;line-height:.95}
+#mo-09 .art small{font-size:4.6cqw;letter-spacing:.12em}
+#mo-09 .a0{background:#E10A2A;color:#FFFFFF}
+#mo-09 .a1{background:#0D3B2E;color:#BFF3D8}
+#mo-09 .a2{background:#FFFFFF;color:#111111}
+#mo-09 .loaf{width:36cqw;height:15cqw;border-radius:9cqw 9cqw 2cqw 2cqw;background:repeating-linear-gradient(115deg,#BFF3D8 0 5cqw,#0D3B2E 5cqw 6.2cqw)}
+#mo-09 .pr{position:absolute;top:0;height:100%;width:10%;left:calc(var(--i) * 10%);transform-style:preserve-3d}
+#mo-09 .f{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(calc(var(--j) * 120deg)) translateZ(2.887cqw)}
+#mo-09 .f .art{right:auto;width:1000%;left:calc(var(--i) * -100%)}
+#mo-09 .f::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0002,#0000 10%,#0000 90%,#0003)}
+#mo-09 .next{font:400 17px/1 'Black Han Sans','Impact',sans-serif;letter-spacing:.06em;padding:12px 18px;min-height:44px;border:2px solid #0B2233;background:#FFFFFF;color:#0B2233;cursor:pointer}
+#mo-09 .next:focus-visible{outline:3px solid #0B2233;outline-offset:3px}
+/* mo-10 Thermal receipt */
+#mo-10 .stage{display:block;height:230vh;padding:0;overflow:clip;view-timeline:--mo10 block}
+#mo-10 .pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;box-sizing:border-box}
+#mo-10 .hint{margin:0 0 14px;font:400 15px/1.3 'Anonymous Pro',ui-monospace,monospace}
+#mo-10 .printer{position:relative;z-index:1;width:min(88vw,330px);height:64px;border-radius:14px 14px 6px 6px;background:linear-gradient(#3A3A40,#26262A 70%);box-shadow:0 6px 0 -2px #1A1A1D}
+#mo-10 .printer::after{content:"";position:absolute;left:12%;right:12%;bottom:6px;height:6px;border-radius:3px;background:#0B0B0C}
+#mo-10 .led{position:absolute;top:14px;right:18px;width:8px;height:8px;border-radius:50%;background:#7BE38F}
+#mo-10 .slot{position:relative;width:min(66vw,250px);margin-top:-6px;overflow:hidden}
+#mo-10 .slot::before{content:"";position:absolute;z-index:1;left:0;right:0;top:0;height:14px;background:linear-gradient(#0006,#0000)}
+#mo-10 .paper{padding:20px 16px 28px;background:#FBFBF8;color:#262626;font:400 14px/1.45 'Anonymous Pro','Menlo',ui-monospace,monospace;-webkit-mask:linear-gradient(#000 0 0) top/100% calc(100% - 8px) no-repeat,conic-gradient(from -45deg at 50% 100%,#000 90deg,#0000 0) bottom/14px 8px repeat-x;mask:linear-gradient(#000 0 0) top/100% calc(100% - 8px) no-repeat,conic-gradient(from -45deg at 50% 100%,#000 90deg,#0000 0) bottom/14px 8px repeat-x}
+#mo-10 .paper p{margin:0}
+#mo-10 .shop{text-align:center;padding-bottom:10px;border-bottom:1px dashed #262626}
+#mo-10 table{width:100%;margin:10px 0;border-collapse:collapse}
+#mo-10 td{padding:2px 0}
+#mo-10 td+td{text-align:right}
+#mo-10 .total{display:flex;justify-content:space-between;padding-top:8px;border-top:1px dashed #262626;font-weight:700}
+#mo-10 .foot{margin-top:14px!important;text-align:center}
+@supports (animation-timeline: view()){@media (prefers-reduced-motion:no-preference){
+#mo-10 .paper{animation:mo10-feed steps(36,end) both;animation-timeline:--mo10;animation-range:contain 5% contain 75%}
+}}
+@keyframes mo10-feed{from{transform:translateY(-100%)}to{transform:none}}
+/* mo-11 Flipbook */
+#mo-11 .stage{view-timeline:--mo11 block}
+#mo-11 figure{margin:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:28px 44px}
+#mo-11 .book{position:relative;width:220px;height:198px;overflow:hidden;border-radius:2px 6px 6px 2px;background:#FFFFFF;box-shadow:2px 2px 0 #F1F1EE,3px 3px 0 #9C8F80,5px 5px 0 #F1F1EE,6px 6px 0 #9C8F80,8px 8px 0 #F1F1EE,9px 9px 0 #9C8F80,0 16px 22px -8px #0007}
+#mo-11 .book::before{content:"";position:absolute;z-index:1;left:0;top:0;bottom:0;width:12px;background:#7A5A38}
+#mo-11 .strip{display:block;width:100%;transform:translateY(-93.75%)}
+#mo-11 figcaption{max-width:320px}
+#mo-11 h3{margin:0;font:400 clamp(32px,5vw,54px)/1.05 'Fredericka the Great','Chalkduster',cursive}
+#mo-11 figcaption p{margin:10px 0 0}
+@supports (animation-timeline: view()){@media (prefers-reduced-motion:no-preference){
+#mo-11 .strip{animation:mo11-riffle steps(16,jump-none) both;animation-timeline:--mo11;animation-range:cover 20% cover 75%}
+}}
+@keyframes mo11-riffle{from{transform:none}to{transform:translateY(-93.75%)}}
+/* mo-12 Word swap */
+#mo-12 .copy{max-width:900px;text-align:center}
+#mo-12 .kicker{margin:0 0 14px;font:400 18px/1.3 'Gloock',Georgia,serif;letter-spacing:.04em}
+#mo-12 .line{margin:0;font:400 clamp(34px,6.4vw,76px)/1.14 'Gloock','Didot',Georgia,serif}
+#mo-12 .line span{display:inline-block}
+#mo-12 .swap{margin-top:28px;font:400 18px/1 'Gloock',Georgia,serif;padding:12px 22px;min-height:46px;border:2px solid #FFFFFF;background:transparent;color:#FFFFFF;cursor:pointer}
+#mo-12 .swap:hover{background:#FFFFFF;color:#B0124F}
+#mo-12 .swap:focus-visible{outline:3px solid #FFFFFF;outline-offset:3px}
+/* mo-13 Ink bloom */
+#mo-13 .defs{position:absolute;width:0;height:0}
+#mo-13 .stage{min-height:420px}
+#mo-13 .stage.wet{background:#E7EAE8!important}
+#mo-13 .ink{position:absolute;left:-30px;top:-30px;width:calc(100% + 60px);height:calc(100% + 60px);filter:url(#mo13-wet);display:none}
+#mo-13 .wet .ink{display:block}
+#mo-13 .replay{color:#3B2314;background:#F6EEE6;border-color:#3B2314}
+#mo-13 .replay:focus-visible{outline:3px solid #F6EEE6;outline-offset:0;box-shadow:0 0 0 6px #3B2314}
+#mo-13 .copy{position:relative;max-width:620px}
+#mo-13 h3{margin:0;font:400 clamp(36px,6vw,68px)/1.05 'Young Serif','Iowan Old Style',Georgia,serif}
+#mo-13 .copy p{margin:16px 0 0;font:400 18px/1.5 'Young Serif','Iowan Old Style',Georgia,serif}
+/* mo-14 Dither dissolve */
+#mo-14 figure{width:100%;margin:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:24px 40px}
+#mo-14 .pic{display:block;width:min(100%,520px);height:auto;box-sizing:border-box;border:3px solid #F4F4F4;image-rendering:pixelated;background:linear-gradient(#FFFFFF 0 66%,#111111 66%)}
+#mo-14 figcaption{min-width:220px;font-family:'Familjen Grotesk',ui-sans-serif,sans-serif}
+#mo-14 h3{margin:0;font-weight:700;font-size:clamp(32px,4.6vw,52px);line-height:1}
+#mo-14 figcaption p{margin:10px 0 18px;font-size:17px;font-weight:500}
+#mo-14 .flip{font:700 16px/1 'Familjen Grotesk',ui-sans-serif,sans-serif;padding:12px 18px;min-height:44px;border:2px solid #F4F4F4;background:#F4F4F4;color:#161616;cursor:pointer}
+#mo-14 .flip:focus-visible{outline:3px solid #FF6A00;outline-offset:3px}
+/* mo-15 Tear-off calendar */
+#mo-15 .stage{display:block;height:240vh;padding:0;overflow:clip;view-timeline:--mo15 block}
+#mo-15 .pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;padding:24px 16px;box-sizing:border-box}
+#mo-15 .hint{margin:0;font:400 15px/1.3 'Chonburi',Georgia,serif}
+#mo-15 .pad{position:relative;width:min(76vw,280px);aspect-ratio:4/5}
+#mo-15 .binding{position:absolute;z-index:20;left:-4%;right:-4%;top:-22px;height:34px;border-radius:6px;background:linear-gradient(#B9BEC4,#7D848C);box-shadow:0 3px 0 #2228}
+#mo-15 .pg{position:absolute;inset:0;z-index:calc(10 - var(--k));display:grid;grid-template-rows:auto 1fr auto;justify-items:center;align-items:center;padding:22px 12px 18px;box-sizing:border-box;background:#FFFFFF;color:#111111;box-shadow:0 1px 0 #0002;font-family:'Chonburi',Georgia,serif;transform-origin:4% 0}
+#mo-15 .pg::before{content:"";position:absolute;top:12px;left:0;right:0;border-top:2px dotted #9AA0A6}
+#mo-15 .mon{font-weight:400;font-size:13px;letter-spacing:.12em;text-transform:uppercase;background:#3E4A12;color:#FFFFFF;padding:4px 10px}
+#mo-15 .num{font-size:clamp(96px,26vw,150px);line-height:1}
+#mo-15 .lbl{font-size:16px;text-align:center}
+#mo-15 .pg:not(:last-child){transform:translate(40%,130%) rotate(40deg);opacity:0}
+@supports (animation-timeline: view()){@media (prefers-reduced-motion:no-preference){
+#mo-15 .pg:not(:last-child){animation:mo15-tear linear both;animation-timeline:--mo15;animation-range:contain calc(4% + var(--k) * 15%) contain calc(19% + var(--k) * 15%)}
+}}
+@keyframes mo15-tear{0%{transform:none;opacity:1}28%{transform:rotate(5deg);opacity:1}46%{transform:translate(3%,4%) rotate(12deg);opacity:1}88%{transform:translate(32%,102%) rotate(34deg);opacity:1}100%{transform:translate(40%,130%) rotate(40deg);opacity:0}}
+/* mo-16 CRT power-on */
+#mo-16 .tv{position:relative;width:min(100%,600px);padding:22px 92px 22px 22px;box-sizing:border-box;border-radius:22px;background:linear-gradient(#CDC7BA,#A29C8F);box-shadow:inset 0 2px 0 #E4DFD4,inset 0 -3px 0 #8A8478,0 18px 26px -14px #0008}
+#mo-16 .knob{position:absolute;top:36px;right:30px;width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#6B665D,#2E2B27)}
+#mo-16 .knob+.knob{top:92px}
+#mo-16 .glass{position:relative;overflow:hidden;border-radius:9%/12%;background:#0A0B0A;aspect-ratio:4/3;display:grid;place-items:center}
+#mo-16 .glass::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(#0000 0 2px,#0004 2px 3px),radial-gradient(#0000 55%,#000A)}
+#mo-16 .pic{padding:6%;color:#E4F0E8;font-family:'Sixtyfour',ui-monospace,monospace;font-variation-settings:"BLED" 0,"SCAN" 0}
+#mo-16 h3{margin:0 0 .9em;font-weight:400;font-size:clamp(13px,3.1vw,22px)}
+#mo-16 ul{margin:0;padding:0;list-style:none;font-size:clamp(12px,2.9vw,18px);line-height:1.9}
+#mo-16 li b{font-weight:400;color:#9FE0B4}
+#mo-16 .pic p{margin:1.2em 0 0;font-size:clamp(10px,2vw,12px)}
+#mo-16.armed .pic{transform:scale(0)}
+#mo-16.on .pic{animation:mo16-on 1.5s cubic-bezier(.2,.7,.2,1) both}
+@keyframes mo16-on{0%{transform:scale(.02,.006);filter:brightness(2.2);font-variation-settings:"BLED" 100,"SCAN" 100}18%{transform:scale(1,.006);filter:brightness(2.2)}32%{transform:scale(1,.006)}58%{transform:scale(1,1.05);filter:brightness(1.4)}72%{transform:scale(1,.98)}100%{transform:none;filter:none;font-variation-settings:"BLED" 0,"SCAN" 0}}
+@media (max-width:560px){#mo-16 .tv{padding:14px 14px 58px}#mo-16 .knob{top:auto;bottom:12px;right:auto;left:22px}#mo-16 .knob+.knob{top:auto;left:70px}}
+/* mo-17 Clock wipe */
+#mo-17 .stage{gap:22px;align-content:center}
+#mo-17 .dial{position:relative;width:min(100%,560px);aspect-ratio:16/10;box-sizing:border-box;border:6px solid #FFFFFF;border-radius:18px;overflow:hidden;font-family:'Old Standard TT','Iowan Old Style',Georgia,serif}
+#mo-17 .face{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;padding:16px;text-align:center}
+#mo-17 .a{background:#FFFFFF;color:#0F4C5C}
+#mo-17 .b{background:#0A2E38;color:#FFFFFF}
+#mo-17 .face.top{z-index:1}
+#mo-17 .face:not(.top){visibility:hidden}
+#mo-17 .wiping .face{visibility:visible}
+#mo-17 .when{margin:0;font-size:14px;letter-spacing:.16em;text-transform:uppercase}
+#mo-17 h3{margin:.08em 0;font-weight:700;font-size:clamp(46px,9vw,96px);line-height:1}
+#mo-17 .dish{margin:0;max-width:32ch;font-size:16px;line-height:1.4}
+#mo-17 .hand{position:absolute;z-index:2;left:50%;top:4%;width:4px;height:46%;margin-left:-2px;border-radius:2px;background:#E23D28;transform-origin:50% 100%;opacity:0;transition:opacity .2s}
+#mo-17 .hand::after{content:"";position:absolute;left:50%;bottom:-9px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:#E23D28}
+#mo-17 .swap{font:700 17px/1 'Old Standard TT',Georgia,serif;padding:12px 20px;min-height:44px;border:2px solid #FFFFFF;background:#FFFFFF;color:#0F4C5C;cursor:pointer}
+#mo-17 .swap:focus-visible{outline:3px solid #FFFFFF;outline-offset:3px}
+/* mo-18 Darkroom print */
+#mo-18 figure{width:100%;margin:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:24px 44px}
+#mo-18 .tray{position:relative;width:min(100%,460px);padding:22px;box-sizing:border-box;border-radius:14px;background:#120202;box-shadow:inset 0 0 0 3px #4A0B08}
+#mo-18 .tray::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#FF4A3A;mix-blend-mode:multiply;pointer-events:none}
+#mo-18 .print{display:block;width:100%;height:auto;box-sizing:border-box;border:8px solid #FBFBFB}
+#mo-18 .wash{position:absolute;inset:22px;overflow:hidden;opacity:0;pointer-events:none}
+#mo-18 .wash::before{content:"";position:absolute;inset:0 -100%;background:linear-gradient(100deg,#0000 42%,#FFFFFF26 50%,#0000 58%)}
+#mo-18 .wash.on{opacity:1}
+#mo-18 .wash.on::before{animation:mo18-slosh 1.3s ease-in-out infinite alternate}
+@keyframes mo18-slosh{from{transform:translateX(-30%)}to{transform:translateX(30%)}}
+#mo-18 figcaption{max-width:320px}
+#mo-18 h3{margin:0;font:400 clamp(32px,4.4vw,48px)/1.1 'Poiret One','Futura','Avenir Next',sans-serif}
+#mo-18 figcaption p{margin:10px 0 0}
+/* mo-19 Fold-out leaflet */
+@property --mo19-f{syntax:'<number>';inherits:true;initial-value:0}
+#mo-19 .stage{gap:22px;align-content:center;view-timeline:--mo19 block}
+#mo-19 .leaf{--mo19-f:0;--ax:0,1,0;position:relative;width:min(100%,880px);height:260px;perspective:1800px;font-family:'Tenor Sans','Gill Sans',ui-sans-serif,sans-serif}
+#mo-19 .pn{position:absolute;top:0;left:100%;width:100%;height:100%;padding:20px 16px;box-sizing:border-box;background:#F4F4F4;color:#1A1A1A;transform-style:preserve-3d;transform-origin:0 50%;transform:rotate3d(var(--ax),calc(var(--s) * 2 * var(--mo19-f) * 70deg))}
+#mo-19 .leaf>.pn{position:relative;left:0;width:25%;translate:calc(var(--mo19-f) * 131%) 0;transform:rotate3d(var(--ax),calc(var(--s) * var(--mo19-f) * 70deg))}
+#mo-19 .pn::before{content:"";position:absolute;inset:0;background:#000000;opacity:calc(var(--mo19-f) * (.16 + var(--s) * .12));pointer-events:none}
+#mo-19 h3{margin:0 0 10px;font-weight:400;font-size:26px;line-height:1.1;color:#5B2A86}
+#mo-19 h4{margin:0 0 8px;font-weight:400;font-size:20px;color:#5B2A86}
+#mo-19 .pn p{margin:0;font-size:15px;line-height:1.45}
+#mo-19 .hint{margin:0}
+@media (max-width:620px){#mo-19 .leaf{--ax:1,0,0;height:528px}#mo-19 .leaf>.pn{width:100%;height:25%;translate:0 calc(var(--mo19-f) * 131%)}#mo-19 .pn{left:0;top:100%;padding:14px 16px;transform-origin:50% 0}#mo-19 .leaf>.pn{top:0}}
+@supports (animation-timeline: view()){@media (prefers-reduced-motion:no-preference){
+#mo-19 .leaf{animation:mo19-unfold linear both;animation-timeline:--mo19;animation-range:entry 40% cover 55%}
+}}
+@keyframes mo19-unfold{from{--mo19-f:1}to{--mo19-f:0}}
+</style>
+</head>
+<body>
+<main class="shell">
+<h1>Motion</h1>
+<p>Specimens to re-cut, never to ship as they are: change the copy, colours and type to the product's own. Roll for one with <code>python3 scripts/roll.py --library motion</code>.</p>
+<ul class="index"><li><a href="#mo-01">mo-01 Odometer</a></li><li><a href="#mo-02">mo-02 Split-flap headline</a></li><li><a href="#mo-03">mo-03 Letterpress proof</a></li><li><a href="#mo-04">mo-04 Gravity pile</a></li><li><a href="#mo-05">mo-05 Pen plotter</a></li><li><a href="#mo-06">mo-06 Line boil</a></li><li><a href="#mo-07">mo-07 Axis wave</a></li><li><a href="#mo-08">mo-08 Aperture iris</a></li><li><a href="#mo-09">mo-09 Tri-vision billboard</a></li><li><a href="#mo-10">mo-10 Thermal receipt</a></li><li><a href="#mo-11">mo-11 Flipbook</a></li><li><a href="#mo-12">mo-12 Word swap</a></li><li><a href="#mo-13">mo-13 Ink bloom</a></li><li><a href="#mo-14">mo-14 Dither dissolve</a></li><li><a href="#mo-15">mo-15 Tear-off calendar</a></li><li><a href="#mo-16">mo-16 CRT power-on</a></li><li><a href="#mo-17">mo-17 Clock wipe</a></li><li><a href="#mo-18">mo-18 Darkroom print</a></li><li><a href="#mo-19">mo-19 Fold-out leaflet</a></li></ul>
+
+<article class="spec" id="mo-01" data-name="Odometer">
+<header><h2><code>mo-01</code> Odometer</h2><p><b>Use it when:</b> a running total (distance, orders, members) should feel counted by a machine, not announced. <b>Change:</b> <code>FROM</code> and <code>TO</code> (in tenths), the unit line, the drum colours.</p></header>
+<div class="stage" style="background:#D9D9D6;color:#121212">
+<button class="replay" type="button">Replay</button>
+<svg class="defs" aria-hidden="true" focusable="false"><filter id="mo01-b0" x="0" y="-50%" width="100%" height="200%"><feGaussianBlur stdDeviation="0 0"/></filter><filter id="mo01-b1" x="0" y="-50%" width="100%" height="200%"><feGaussianBlur stdDeviation="0 0"/></filter></svg>
+<figure>
+<p class="odo" role="img" aria-label="Sample reading: 5,012.4 kilometres"><span class="plain">05012.4</span></p>
+<figcaption>Sample total · kilometres ridden this season</figcaption>
+</figure>
+</div>
+</article>
+
+<article class="spec" id="mo-02" data-name="Split-flap headline">
+<header><h2><code>mo-02</code> Split-flap headline</h2><p><b>Use it when:</b> a headline changes with the time or the season and the change is the news. <b>Change:</b> <code>LINES</code> (two rows of up to 12 characters from <code>SET</code>), the flap and letter colours.</p></header>
+<div class="stage" style="background:#121411;color:#F6C431">
+<button class="replay" type="button">Replay</button>
+<h3 class="board" aria-label="Spring timetable"><span class="plain">SPRING<br>TIMETABLE</span></h3>
+<p class="sr" aria-live="polite"></p>
+<button class="next" type="button">Next line</button>
+<p class="note">Sample copy</p>
+</div>
+</article>
+
+<article class="spec" id="mo-03" data-name="Letterpress proof">
+<header><h2><code>mo-03</code> Letterpress proof</h2><p><b>Use it when:</b> a short statement should look pressed into paper: a manifesto, an invitation, a colophon. <b>Change:</b> the words, the two inks, the paper colour; raise <code>scale</code> in <code>#mo03-ink</code> for rougher type.</p></header>
+<div class="stage" style="background:#F5D6CF;color:#191514">
+<svg class="defs" aria-hidden="true" focusable="false"><filter id="mo03-ink"><feTurbulence type="fractalNoise" baseFrequency=".55" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="2.5" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+<button class="replay" type="button">Replay</button>
+<div class="sheet">
+<h3 class="press">Set by hand, pulled one sheet at a time.</h3>
+<p class="colo">Sample copy · Two-colour proof, 1 of 40</p>
+</div>
+</div>
+</article>
+
+<article class="spec" id="mo-04" data-name="Gravity pile">
+<header><h2><code>mo-04</code> Gravity pile</h2><p><b>Use it when:</b> one sentence carries the page and should land with weight. <b>Change:</b> the words (5 to 10 read best), the block colours, <code>G</code> and <code>C</code> for heavier or bouncier blocks.</p></header>
+<div class="stage" style="background:#D6CCF5;color:#151515">
+<button class="replay" type="button">Replay</button>
+<h3 class="pile" aria-label="Plain words land hard and hold their place."><span aria-hidden="true">Plain</span> <span aria-hidden="true">words</span> <span aria-hidden="true">land</span> <span aria-hidden="true">hard</span> <span aria-hidden="true">and</span> <span aria-hidden="true">hold</span> <span aria-hidden="true">their</span> <span aria-hidden="true">place.</span></h3>
+</div>
+</article>
+
+<article class="spec" id="mo-05" data-name="Pen plotter">
+<header><h2><code>mo-05</code> Pen plotter</h2><p><b>Use it when:</b> the product makes, draws or prints, and the image should arrive the way it was made. <b>Change:</b> the paths (one stroke each, <code>data-pen</code> picks the ink), the ink colours, the pen speed in <code>add()</code>.</p></header>
+<div class="stage" style="background:#24503F;color:#FFFFFF">
+<button class="replay" type="button">Replay</button>
+<figure>
+<svg class="plot" viewBox="0 0 400 300" role="img" aria-label="Image stand-in: a line drawing of a potted plant beside the sun">
+<rect class="paper" width="400" height="300"/>
+<g class="ink">
+<path data-pen="0" d="M24 24H376V276H24Z"/>
+<path data-pen="0" d="M60 262H340"/>
+<path data-pen="0" d="M150 190H250V204H150Z"/>
+<path data-pen="0" d="M158 204L242 204L230 262L170 262Z"/>
+<path data-pen="1" d="M160 212H240"/>
+<path data-pen="1" d="M239 220H161"/>
+<path data-pen="1" d="M163 228H237"/>
+<path data-pen="1" d="M235 236H165"/>
+<path data-pen="1" d="M166 244H234"/>
+<path data-pen="1" d="M232 252H168"/>
+<path data-pen="0" d="M200 190C197 150 206 120 200 78"/>
+<path data-pen="1" d="M200 150C170 140 150 122 138 92C168 98 192 118 200 150Z"/>
+<path data-pen="1" d="M201 126C232 118 252 98 264 70C234 74 210 96 201 126Z"/>
+<path data-pen="1" d="M200 102C184 92 177 70 182 46C197 60 204 80 200 102Z"/>
+<path data-pen="0" d="M318 34A24 24 0 1 1 317.9 34Z"/>
+</g>
+<g aria-hidden="true">
+<rect class="rails" x="0" y="0" width="5" height="300"/><rect class="rails" x="395" y="0" width="5" height="300"/>
+<g class="gantry"><rect class="rail" x="-4" y="-5" width="408" height="10"/><g class="car"><g class="lift"><rect x="-12" y="-11" width="24" height="22" rx="3"/><circle class="pen" r="5"/></g></g></g>
+</g>
+</svg>
+<figcaption>sample plate · potted fig · two pens</figcaption>
+</figure>
+</div>
+</article>
+
+<article class="spec" id="mo-06" data-name="Line boil">
+<header><h2><code>mo-06</code> Line boil</h2><p><b>Use it when:</b> a menu, a kids' brand or a studio site wants hand-drawn warmth that never quite sits still. <b>Change:</b> the drawing and the line, <code>scale</code> on <code>#mo06-boil</code>, the three seeds.</p></header>
+<div class="stage" style="background:#FF9F45;color:#141414">
+<button class="replay" type="button">Pause</button>
+<svg class="defs" aria-hidden="true" focusable="false"><filter id="mo06-boil" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+<div class="card">
+<svg class="mug" viewBox="0 0 200 200" aria-hidden="true">
+<path class="fill" d="M52 72Q50 140 66 158Q100 174 134 158Q150 140 148 72Z"/>
+<path d="M148 92C182 88 184 140 142 140"/>
+<path d="M52 72Q100 88 148 72Q100 58 52 72Z"/>
+<path d="M84 52C72 40 96 30 84 14M106 54C94 40 120 30 108 10M128 52C118 42 138 34 130 22"/>
+<path d="M30 172Q100 192 170 172"/>
+<path d="M82 112l8 20M100 108v26M118 112l-8 20"/>
+</svg>
+<div><h3>Open late on Fridays</h3><p>Sample hours · until 23:00</p></div>
+</div>
+</div>
+</article>
+
+<article class="spec" id="mo-07" data-name="Axis wave">
+<header><h2><code>mo-07</code> Axis wave</h2><p><b>Use it when:</b> a headline should change character as the reader moves past it. <b>Change:</b> the line (keep <code>MONO</code> at 1 so nothing reflows), the axis values in <code>@keyframes mo07-wave</code> and in <code>K</code>.</p></header>
+<div class="stage" style="background:#D8F23A;color:#121212">
+<div class="copy">
+<h3 class="wave">Every letter takes its turn</h3>
+<p>Scroll: weight, slant and the casual axis travel through the line, then settle.</p>
+</div>
+</div>
+</article>
+
+<article class="spec" id="mo-08" data-name="Aperture iris">
+<header><h2><code>mo-08</code> Aperture iris</h2><p><b>Use it when:</b> a photo, a product shot or a portfolio piece should be revealed the way a camera takes it. <b>Change:</b> <code>.art</code> for the product's image, the blade count (step of <code>--k</code> is 360° / blades), the ring markings.</p></header>
+<div class="stage" style="background:#D2D9DF;color:#13181C">
+<figure>
+<div class="lens" aria-hidden="true">
+<svg class="ring" viewBox="0 0 200 200"><path id="mo08-arc" d="M100 6.5A93.5 93.5 0 1 1 99.9 6.5" fill="none"/><text><textPath href="#mo08-arc">16 · 11 · 8 · 5.6 · 4 · 2.8 · 2 · 1.4 · 16 · 11 · 8 · 5.6 · 4 · 2.8 · 2 · 1.4 ·</textPath></text></svg>
+<div class="scene"><div class="art"></div></div>
+<div class="blades"><span class="bw" style="--k:0"><span class="bl"></span></span><span class="bw" style="--k:1"><span class="bl"></span></span><span class="bw" style="--k:2"><span class="bl"></span></span><span class="bw" style="--k:3"><span class="bl"></span></span><span class="bw" style="--k:4"><span class="bl"></span></span><span class="bw" style="--k:5"><span class="bl"></span></span><span class="bw" style="--k:6"><span class="bl"></span></span></div>
+</div>
+<figcaption><h3>Open at golden hour</h3><p>Image stand-in. Scroll and the aperture opens on it; swap in the product's own photo.</p></figcaption>
+</figure>
+</div>
+</article>
+
+<article class="spec" id="mo-09" data-name="Tri-vision billboard">
+<header><h2><code>mo-09</code> Tri-vision billboard</h2><p><b>Use it when:</b> three short messages share one spot: an offer, a picture, the hours. <b>Change:</b> the three <code>.art</code> panels, <code>N</code> slats, the interval.</p></header>
+<div class="stage" style="background:#86C8EF;color:#0B2233">
+<button class="replay" type="button">Pause</button>
+<div class="sign">
+<div class="bb" aria-hidden="true">
+<div class="art a0"><b>FRESH BREAD</b><small>EVERY MORNING</small></div>
+<div class="art a1"><span class="loaf"></span><small>IMAGE STAND-IN</small></div>
+<div class="art a2"><b>OPEN 7–19</b><small>SAMPLE HOURS</small></div>
+</div>
+<p class="sr">Billboard with three rotating panels: Fresh bread every morning. A loaf of bread, image stand-in. Open 7 to 19, sample hours.</p>
+</div>
+<button class="next" type="button">Next panel</button>
+</div>
+</article>
+
+<article class="spec" id="mo-10" data-name="Thermal receipt">
+<header><h2><code>mo-10</code> Thermal receipt</h2><p><b>Use it when:</b> an order summary, an invoice or a price total is the proof. <b>Change:</b> the line items and their <code>data-amount</code> (the self-check sums them), the shop line, <code>steps(36)</code> for a smoother feed.</p></header>
+<div class="stage" style="background:#A3D9C7;color:#0F2A22">
+<div class="pin">
+<p class="hint">Scroll: the printer feeds the receipt.</p>
+<div class="printer" aria-hidden="true"><span class="led"></span></div>
+<div class="slot">
+<div class="paper">
+<p class="shop"><b>SAMPLE STORE</b><br>Receipt 0042 · sample</p>
+<table>
+<tr data-amount="9.00"><td>Notebook A5 ×2</td><td>9.00</td></tr>
+<tr data-amount="6.20"><td>Pencil set ×1</td><td>6.20</td></tr>
+<tr data-amount="2.40"><td>Eraser ×3</td><td>2.40</td></tr>
+</table>
+<p class="total">TOTAL <span>17.60</span></p>
+<p class="foot">Illustrative prices<br>Thank you</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+
+<article class="spec" id="mo-11" data-name="Flipbook">
+<header><h2><code>mo-11</code> Flipbook</h2><p><b>Use it when:</b> a process has stages (growth, assembly, onboarding) and scrolling should step through them. <b>Change:</b> the drawing in the frame loop, <code>N</code>, the pencil colour.</p></header>
+<div class="stage" style="background:#C49B6C;color:#1E1A16">
+<figure>
+<div class="book" aria-hidden="true"><canvas class="strip"></canvas></div>
+<figcaption><h3>Seed to bloom</h3><p>Sixteen hand-drawn frames. Scroll to riffle through them.</p></figcaption>
+</figure>
+</div>
+</article>
+
+<article class="spec" id="mo-12" data-name="Word swap">
+<header><h2><code>mo-12</code> Word swap</h2><p><b>Use it when:</b> two plans, two readings or a before and after can be said with the same words. <b>Change:</b> <code>SENTENCES</code> (the same words in both; the self-check compares them), the colours.</p></header>
+<div class="stage" style="background:#B0124F;color:#FFFFFF">
+<div class="copy">
+<p class="kicker">Same nine words, two plans</p>
+<h3 class="line">Ship the small thing first, then make it good.</h3>
+<button class="swap" type="button">Rearrange</button>
+<p class="sr" aria-live="polite"></p>
+</div>
+</div>
+</article>
+
+<article class="spec" id="mo-13" data-name="Ink bloom">
+<header><h2><code>mo-13</code> Ink bloom</h2><p><b>Use it when:</b> a section should open slowly and quietly: an essay, a studio note, a chapter start. <b>Change:</b> <code>DROPS</code>, the ink and paper colours, the copy.</p></header>
+<div class="stage" style="background:#3B2314;color:#F6EEE6">
+<svg class="defs" aria-hidden="true" focusable="false"><filter id="mo13-wet" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".022" numOctaves="3" seed="5"/><feDisplacementMap in="SourceGraphic" scale="26" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+<canvas class="ink" aria-hidden="true"></canvas>
+<button class="replay" type="button">Replay</button>
+<section class="copy">
+<h3>Field notes, issue four</h3>
+<p>Sample section. A drop of ink lands on wet paper and the block opens as it spreads. Swap in the product's own copy.</p>
+</section>
+</div>
+</article>
+
+<article class="spec" id="mo-14" data-name="Dither dissolve">
+<header><h2><code>mo-14</code> Dither dissolve</h2><p><b>Use it when:</b> a product shot has two states (day and night, before and after) and the switch should feel printed. <b>Change:</b> the drawings in <code>scene()</code> or real images, the two palettes, the captions in <code>TEXT</code>.</p></header>
+<div class="stage" style="background:#161616;color:#F4F4F4">
+<figure>
+<canvas class="pic" width="160" height="96" role="img" aria-label="Image stand-in: a house on a hill by day"></canvas>
+<figcaption><div aria-live="polite"><h3>Day rate</h3><p>Sample price · 40 an hour</p></div><button class="flip" type="button">Switch to night</button></figcaption>
+</figure>
+</div>
+</article>
+
+<article class="spec" id="mo-15" data-name="Tear-off calendar">
+<header><h2><code>mo-15</code> Tear-off calendar</h2><p><b>Use it when:</b> a launch, an event or a deadline counts down and each day is a step. <b>Change:</b> the pages (dates and lines), the colours, the scroll range per page.</p></header>
+<div class="stage" style="background:#33425B;color:#FFFFFF">
+<div class="pin">
+<p class="hint">Scroll: a page tears off for each day.</p>
+<div class="pad">
+<div class="binding" aria-hidden="true"></div>
+<div class="pg" style="--k:0"><b class="mon">Sample month</b><span class="num">12</span><span class="lbl">Monday · 5 days to launch</span></div>
+<div class="pg" style="--k:1"><b class="mon">Sample month</b><span class="num">13</span><span class="lbl">Tuesday · 4 days to launch</span></div>
+<div class="pg" style="--k:2"><b class="mon">Sample month</b><span class="num">14</span><span class="lbl">Wednesday · 3 days to launch</span></div>
+<div class="pg" style="--k:3"><b class="mon">Sample month</b><span class="num">15</span><span class="lbl">Thursday · 2 days to launch</span></div>
+<div class="pg" style="--k:4"><b class="mon">Sample month</b><span class="num">16</span><span class="lbl">Friday · 1 day to launch</span></div>
+<div class="pg" style="--k:5"><b class="mon">Sample month</b><span class="num">17</span><span class="lbl">Saturday · launch day</span></div>
+</div>
+</div>
+</div>
+</article>
+
+<article class="spec" id="mo-16" data-name="CRT power-on">
+<header><h2><code>mo-16</code> CRT power-on</h2><p><b>Use it when:</b> a section is a broadcast, a schedule or anything live that should switch on. <b>Change:</b> the screen copy, the phosphor colours, the <code>BLED</code> and <code>SCAN</code> axis values.</p></header>
+<div class="stage" style="background:#B5AFA2;color:#1B1A17">
+<button class="replay" type="button">Replay</button>
+<div class="tv">
+<div class="glass">
+<div class="pic">
+<h3>CH 03 TONIGHT</h3>
+<ul><li><b>19:00</b> NEWS</li><li><b>19:30</b> QUIZ</li><li><b>20:15</b> FILM</li></ul>
+<p>SAMPLE TIMES</p>
+</div>
+</div>
+<span class="knob" aria-hidden="true"></span><span class="knob" aria-hidden="true"></span>
+</div>
+</div>
+</article>
+
+<article class="spec" id="mo-17" data-name="Clock wipe">
+<header><h2><code>mo-17</code> Clock wipe</h2><p><b>Use it when:</b> a place or a service changes state at set times: lunch to dinner, open to closed. <b>Change:</b> the two faces, the tick count and angle in <code>tickAngle</code>, the hand colour.</p></header>
+<div class="stage" style="background:#0F4C5C;color:#FFFFFF">
+<div class="dial">
+<section class="face a top"><p class="when">From 12:00 · sample</p><h3>Lunch</h3><p class="dish">Sample menu: soup of the day, bread, pear tart</p></section>
+<section class="face b" aria-hidden="true"><p class="when">From 18:00 · sample</p><h3>Dinner</h3><p class="dish">Sample menu: grilled leeks, trout, plum cake</p></section>
+<span class="hand" aria-hidden="true"></span>
+</div>
+<button class="swap" type="button">Turn to dinner</button>
+<p class="sr" aria-live="polite"></p>
+</div>
+</article>
+
+<article class="spec" id="mo-18" data-name="Darkroom print">
+<header><h2><code>mo-18</code> Darkroom print</h2><p><b>Use it when:</b> photography, print or slow handmade work, where the image should develop rather than appear. <b>Change:</b> the image (drawn in grey tones), <code>D</code>, the safelight tint.</p></header>
+<div class="stage" style="background:#2A0605;color:#FF9C8F">
+<button class="replay" type="button">Replay</button>
+<figure>
+<div class="tray">
+<svg class="print" viewBox="0 0 300 200" role="img" aria-label="Image stand-in: a harbour at dusk with a sailing boat, developing in the tray">
+<defs>
+<filter id="mo18-dev" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="gamma" exponent="1"/><feFuncG type="gamma" exponent="1"/><feFuncB type="gamma" exponent="1"/></feComponentTransfer></filter>
+<linearGradient id="mo18-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8A8A8A"/><stop offset="1" stop-color="#E6E6E6"/></linearGradient>
+</defs>
+<g filter="url(#mo18-dev)">
+<rect width="300" height="200" fill="url(#mo18-sky)"/>
+<circle cx="210" cy="96" r="22" fill="#FBFBFB"/>
+<path d="M0 120L40 96L80 110L130 84L180 108L230 92L300 112V140H0Z" fill="#6B6B6B"/>
+<rect y="128" width="300" height="72" fill="#3A3A3A"/>
+<path d="M199 140h22M195 152h30M203 164h14" stroke="#CFCFCF" stroke-width="3"/>
+<path d="M30 200V150L36 146V200ZM58 200V138L64 134V200Z" fill="#0B0B0B"/>
+<path d="M70 150h70l-10 14H80Z" fill="#141414"/>
+<path d="M104 150V106" stroke="#141414" stroke-width="3"/>
+<path d="M106 110L132 146H106Z" fill="#2A2A2A"/>
+</g>
+</svg>
+<span class="wash" aria-hidden="true"></span>
+</div>
+<figcaption><h3>Harbour at dusk</h3><p>Image stand-in, developing under a safelight: the shadows come up first. Swap in the product's own photo.</p></figcaption>
+</figure>
+</div>
+</article>
+
+<article class="spec" id="mo-19" data-name="Fold-out leaflet">
+<header><h2><code>mo-19</code> Fold-out leaflet</h2><p><b>Use it when:</b> a guide, a menu or a route should unfold as the reader arrives, panel by panel. <b>Change:</b> the four panels, the fold angle (70deg), the panel size per breakpoint.</p></header>
+<div class="stage" style="background:#5B2A86;color:#FFFFFF">
+<div class="leaf">
+<section class="pn" style="--s:1"><h3>Walking tours</h3><p>A pocket guide, folded in four.</p>
+<section class="pn" style="--s:-1"><h4>Route A</h4><p>Old harbour loop. 40 min, sample time.</p>
+<section class="pn" style="--s:1"><h4>Route B</h4><p>Hill gardens and back. 65 min, sample time.</p>
+<section class="pn" style="--s:-1"><h4>Tickets</h4><p>At the kiosk by the ferry. Sample copy.</p></section>
+</section>
+</section>
+</section>
+</div>
+<p class="hint">Scroll: the leaflet unfolds.</p>
+</div>
+</article>
+</main>
+<script>
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// mo-01 Odometer
+{
+  const root = document.getElementById('mo-01');
+  const odo = root.querySelector('.odo'), FROM = 49870, TO = 50124, N = 6; // tenths of a kilometre
+  // Wheel i turns only while every wheel below it rolls from 9 to 0, as the carry pins do in a real counter.
+  const pos = v => Array.from({length: N}, (_, i) => { const u = 10 ** i; return Math.floor(v / u) % 10 + Math.max(0, v % u - (u - 1)); });
+  console.assert(pos(1999.5).slice(0, 4).join() === '9.5,9.5,9.5,1.5', 'mo-01 carry rolls every wheel above a 9');
+  odo.innerHTML = Array.from({length: N}, (_, i) => `<span class="w${i ? '' : ' tenth'}"><span class="strip">${[...'01234567890'].map(d => `<i>${d}</i>`).join('')}</span></span>`).reverse().join('');
+  const strips = [...odo.querySelectorAll('.strip')].reverse(), blur = [0, 1].map(i => root.querySelector(`#mo01-b${i} feGaussianBlur`));
+  const nudge = [0, .03, -.02, .04, -.03, .02]; // em: real drums never line up perfectly
+  const set = (v, speed = 0) => {
+    pos(v).forEach((p, i) => { strips[i].style.transform = `translateY(${(-1.2 * p + nudge[i]).toFixed(3)}em)`; });
+    [speed * 6, speed * .6].forEach((s, i) => { s = Math.min(s, 8); blur[i].setAttribute('stdDeviation', `0 ${s.toFixed(2)}`); strips[i].style.filter = s > .1 ? `url(#mo01-b${i})` : ''; });
+  };
+  let raf = 0;
+  const play = () => {
+    cancelAnimationFrame(raf);
+    if (reduce) return set(TO);
+    const t0 = performance.now(), D = 4200, ease = k => k < .5 ? 4 * k ** 3 : 1 - (2 - 2 * k) ** 3 / 2;
+    let last = FROM;
+    const tick = now => {
+      const k = Math.min((now - t0) / D, 1), v = FROM + (TO - FROM) * ease(k);
+      set(v, v - last); last = v;
+      if (k < 1) raf = requestAnimationFrame(tick); else set(TO);
+    };
+    raf = requestAnimationFrame(tick);
+  };
+  set(reduce ? TO : FROM);
+  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); play(); } }, {threshold: .4}).observe(odo);
+  root.querySelector('.replay').onclick = play;
+}
+// mo-02 Split-flap headline
+{
+  const root = document.getElementById('mo-02');
+  const board = root.querySelector('.board'), live = root.querySelector('.sr'), W = 12;
+  const LINES = [{rows: ['SPRING', 'TIMETABLE'], say: 'Spring timetable'}, {rows: ['NEW ROUTES', 'FROM MAY'], say: 'New routes from May'}, {rows: ['FIRST TRAIN', 'AT 05:40'], say: 'First train at 05:40'}];
+  const SET = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:.-';
+  console.assert(LINES.every(l => l.rows.every(s => s.length <= W && [...s].every(ch => SET.includes(ch)))), 'mo-02 every line fits the drums');
+  board.innerHTML = '<span class="row" aria-hidden="true"></span><span class="row" aria-hidden="true"></span>';
+  const cells = [...board.children].flatMap(row => Array.from({length: W}, () => {
+    const c = document.createElement('span');
+    c.className = 'c';
+    c.innerHTML = '<span class="h top"><i></i></span><span class="h bot"><i></i></span><span class="flap"><span class="h top"><i></i></span><span class="h bk"><i></i></span></span>';
+    row.append(c);
+    const [t, b, ft, fb] = c.querySelectorAll('i');
+    return {ch: ' ', t, b, ft, fb, flap: c.querySelector('.flap'), run: 0};
+  }));
+  const show = (cell, ch) => { cell.ch = ch; cell.t.textContent = cell.b.textContent = ch; };
+  // One flap falls: the next character's top half already waits behind it; the old bottom half stays until it lands.
+  const flip = (cell, to, run) => {
+    if (cell.run !== run || cell.ch === to) return;
+    const next = SET[(SET.indexOf(cell.ch) + 1) % SET.length];
+    cell.t.textContent = next; cell.ft.textContent = cell.ch; cell.fb.textContent = next;
+    cell.flap.style.visibility = 'visible';
+    cell.flap.animate([
+      {transform: 'rotateX(0deg)', easing: 'cubic-bezier(.45,0,.9,.55)'},
+      {transform: 'rotateX(-180deg)', offset: .8, easing: 'ease-out'},
+      {transform: 'rotateX(-166deg)', offset: .9, easing: 'ease-in'},
+      {transform: 'rotateX(-180deg)'}
+    ], {duration: 95}).onfinish = () => {
+      cell.flap.style.visibility = 'hidden';
+      if (cell.run !== run) return;
+      show(cell, next); flip(cell, to, run);
+    };
+  };
+  let line = 0, run = 0;
+  const go = (i, instant) => {
+    line = i; run++;
+    const text = LINES[i].rows.map(s => s.padEnd(W)).join('');
+    board.setAttribute('aria-label', LINES[i].say);
+    cells.forEach((c, k) => {
+      c.run = run;
+      if (instant) show(c, text[k]);
+      else { const r = run; setTimeout(() => flip(c, text[k], r), 100 + Math.random() * 320); }
+    });
+  };
+  const blank = () => { run++; cells.forEach(c => { c.run = run; show(c, ' '); }); };
+  if (reduce) go(0, true); else blank();
+  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); if (!reduce) go(0); } }, {threshold: .5}).observe(board);
+  root.querySelector('.replay').onclick = () => { if (reduce) return go(line, true); blank(); go(line); };
+  root.querySelector('.next').onclick = () => { go((line + 1) % LINES.length, reduce); live.textContent = LINES[line].say; };
+}
+// mo-03 Letterpress proof
+{
+  const root = document.getElementById('mo-03');
+  const press = root.querySelector('.press'), sheet = root.querySelector('.sheet'), colo = root.querySelector('.colo');
+  press.innerHTML = press.textContent.split(' ').map(w => `<span class="wd">${w}</span>`).join(' ');
+  const words = [...press.children, colo];
+  // Each pull lands the second plate a pixel or two off: the blue never sits exactly under the black.
+  words.forEach(w => { w.style.setProperty('--dx', `${(Math.random() * 4 - 2).toFixed(1)}px`); w.style.setProperty('--dy', `${(Math.random() * 3 - 1).toFixed(1)}px`); });
+  const STAMP = [
+    {opacity: 0, transform: 'translateY(-.18em) scale(1.14)', filter: 'blur(3px)', webkitTextStrokeWidth: '0em'},
+    {opacity: 1, transform: 'translateY(0) scale(.96)', filter: 'blur(0px)', webkitTextStrokeWidth: '.03em', offset: .55},
+    {opacity: 1, transform: 'translateY(0) scale(1.012)', filter: 'blur(0px)', webkitTextStrokeWidth: '.012em', offset: .75},
+    {opacity: 1, transform: 'translateY(0) scale(1)', filter: 'blur(0px)', webkitTextStrokeWidth: '.006em'}
+  ];
+  let anims = [];
+  const play = () => {
+    anims.forEach(a => a.cancel()); anims = [];
+    root.classList.remove('armed');
+    if (reduce) return;
+    words.forEach((w, i) => {
+      const delay = 150 + i * 280;
+      anims.push(w.animate(STAMP, {duration: 520, delay, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'backwards'}));
+      // The platen hits: the sheet gives a little under each impression.
+      anims.push(sheet.animate([{transform: 'none'}, {transform: 'translateY(2px) rotate(.12deg)'}, {transform: 'none'}], {duration: 200, delay: delay + 270, easing: 'ease-out'}));
+    });
+  };
+  if (!reduce) root.classList.add('armed');
+  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); play(); } }, {threshold: .4}).observe(sheet);
+  root.querySelector('.replay').onclick = play;
+}
+// mo-04 Gravity pile
+{
+  const root = document.getElementById('mo-04');
+  const pile = root.querySelector('.pile'), blocks = [...pile.children];
+  const G = 2600, K = 60000, C = 170, DT = 1 / 240; // gravity (px/s²), contact stiffness, contact damping
+  // Free fall in the air; pressed into what lies below, a stiff damped spring pushes back: a bounce, then rest.
+  const step = b => {
+    const touch = b.y > 0;
+    b.vy += (G - (touch ? K * b.y + C * b.vy : 0)) * DT; b.y += b.vy * DT;
+    if (touch) b.va += (-900 * b.a - 30 * b.va) * DT;
+    b.a += b.va * DT;
+  };
+  const test = {y: -300, vy: 0, a: 8, va: 0};
+  for (let i = 0; i < 960; i++) step(test);
+  console.assert(Math.abs(test.y) < .5 && Math.abs(test.a) < .5, 'mo-04 a dropped block comes to rest in its place');
+  let raf = 0, bodies = [];
+  const draw = () => bodies.forEach(b => { b.el.style.transform = `translateY(${b.y.toFixed(1)}px) rotate(${b.a.toFixed(2)}deg)`; });
+  const lift = () => {
+    const above = pile.offsetTop + 20;
+    // Bottom row first, so every word lands on the words already below it.
+    bodies = blocks.map(el => ({el, top: el.offsetTop, left: el.offsetLeft, w: el.offsetWidth, h: el.offsetHeight})).sort((p, q) => q.top - p.top || p.left - q.left);
+    bodies.forEach((b, i) => Object.assign(b, {y: -(above + b.top + b.h), vy: 0, a: (Math.random() - .5) * 18, va: (Math.random() - .5) * 60, at: i * .15, was: false}));
+    draw();
+  };
+  const play = () => {
+    cancelAnimationFrame(raf);
+    if (reduce) return;
+    lift();
+    let t = 0, acc = 0, last = performance.now();
+    const frame = now => {
+      acc += Math.min(now - last, 50) / 1000; last = now;
+      for (; acc >= DT; acc -= DT, t += DT) for (const b of bodies) {
+        if (t < b.at) continue;
+        step(b);
+        const hit = b.y > 0;
+        if (hit && !b.was && b.vy > 150) {
+          b.va += (Math.random() - .5) * b.vy * .1;
+          for (const o of bodies) if (Math.abs(o.top - (b.top + b.h)) < 2 && o.left < b.left + b.w && o.left + o.w > b.left) o.vy += b.vy * .18; // the blocks underneath take the hit
+        }
+        b.was = hit;
+      }
+      draw();
+      if (bodies.some(b => t < b.at || Math.abs(b.vy) > 2 || Math.abs(b.y) > .3 || Math.abs(b.a) > .2 || Math.abs(b.va) > 1)) raf = requestAnimationFrame(frame);
+      else blocks.forEach(el => { el.style.transform = ''; });
+    };
+    raf = requestAnimationFrame(frame);
+  };
+  if (!reduce) lift();
+  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); play(); } }, {threshold: .3}).observe(pile);
+  root.querySelector('.replay').onclick = play;
+}
+// mo-05 Pen plotter
+{
+  const root = document.getElementById('mo-05');
+  const svg = root.querySelector('.plot'), ink = root.querySelector('.ink'), gantry = root.querySelector('.gantry'), car = root.querySelector('.car'), lifter = root.querySelector('.lift'), pen = root.querySelector('.pen');
+  const INKS = ['#111111', '#DA2C38'], segs = [];
+  let T = 0, at = {x: 0, y: 0};
+  const add = s => { s.t0 = T; T += s.d; segs.push(s); return s; };
+  // Pen up, travel in a straight line, pen down, draw at a steady speed, pen up: the plotter's whole vocabulary.
+  [...ink.querySelectorAll('path')].forEach(p => {
+    const len = p.getTotalLength(), a = p.getPointAtLength(0), b = p.getPointAtLength(len), pi = +p.dataset.pen;
+    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    dot.setAttribute('cx', a.x); dot.setAttribute('cy', a.y); dot.setAttribute('r', 1.7); dot.setAttribute('fill', INKS[pi]);
+    ink.append(dot);
+    p.style.strokeDasharray = len;
+    add({kind: 'move', from: at, to: a, pen: pi, d: 100 + Math.hypot(a.x - at.x, a.y - at.y) * .8});
+    add({kind: 'down', at: a, pen: pi, d: 90});
+    add({kind: 'draw', p, len, dot, pen: pi, d: 120 + len});
+    add({kind: 'up', at: b, pen: pi, d: 70});
+    at = b;
+  });
+  add({kind: 'move', from: at, to: {x: 0, y: 0}, pen: 0, d: 600});
+  const segAt = tau => segs.findLast(s => s.t0 <= tau);
+  console.assert(segAt(0) === segs[0] && segAt(T) === segs.at(-1), 'mo-05 timeline covers 0..T');
+  const ease = k => k < .5 ? 2 * k * k : 1 - 2 * (1 - k) ** 2;
+  const render = tau => {
+    const s = segAt(tau), k = Math.min(1, Math.max(0, (tau - s.t0) / s.d));
+    for (const d of segs) if (d.kind === 'draw') {
+      const kk = Math.min(1, Math.max(0, (tau - d.t0) / d.d));
+      d.p.style.strokeDashoffset = d.len * (1 - ease(kk)); d.dot.style.opacity = tau >= d.t0 ? 1 : 0;
+    }
+    let pt, up;
+    if (s.kind === 'move') { const e = ease(k); pt = {x: s.from.x + (s.to.x - s.from.x) * e, y: s.from.y + (s.to.y - s.from.y) * e}; up = 1; }
+    else if (s.kind === 'draw') { pt = s.p.getPointAtLength(s.len * ease(k)); up = 0; }
+    else { pt = s.at; up = s.kind === 'down' ? 1 - k : k; }
+    gantry.setAttribute('transform', `translate(0 ${pt.y.toFixed(2)})`);
+    car.setAttribute('transform', `translate(${pt.x.toFixed(2)} 0)`);
+    lifter.setAttribute('transform', `scale(${(1 + .22 * up).toFixed(3)})`);
+    pen.style.fill = INKS[s.pen];
+  };
+  let tau = 0, raf = 0, last = 0, visible = false, started = false;
+  const loop = now => {
+    tau = Math.min(T, tau + Math.min(now - last, 50)); last = now;
+    render(tau);
+    if (tau < T && visible) raf = requestAnimationFrame(loop);
+  };
+  const run = () => { cancelAnimationFrame(raf); if (!reduce && visible && tau < T) { last = performance.now(); raf = requestAnimationFrame(loop); } };
+  const play = () => { tau = reduce ? T : 0; render(tau); run(); };
+  render(reduce ? T : 0);
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible && !started) { started = true; play(); } else run(); }, {threshold: .3}).observe(svg);
+  root.querySelector('.replay').onclick = play;
+}
+// mo-06 Line boil
+{
+  const root = document.getElementById('mo-06');
+  const turb = root.querySelector('feTurbulence'), btn = root.querySelector('.replay'), SEEDS = [3, 11, 27];
+  let timer = 0, frame = 0, visible = false, paused = reduce;
+  // Three redrawn versions of the same lines, 8 a second, as hand animators boil a held drawing: never a smooth wobble.
+  const tick = () => { frame = (frame + 1) % SEEDS.length; turb.setAttribute('seed', SEEDS[frame]); };
+  const sync = () => { clearInterval(timer); if (visible && !paused) timer = setInterval(tick, 125); };
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; sync(); }).observe(root.querySelector('.card'));
+  btn.textContent = paused ? 'Play' : 'Pause';
+  btn.onclick = () => { paused = !paused; btn.textContent = paused ? 'Play' : 'Pause'; sync(); };
+}
+// mo-07 Axis wave
+{
+  const root = document.getElementById('mo-07');
+  const h = root.querySelector('.wave'), stage = root.querySelector('.stage');
+  h.setAttribute('aria-label', h.textContent);
+  let n = 0;
+  h.innerHTML = h.textContent.replace(/\S/g, ch => `<i aria-hidden="true" style="--i:${n++}">${ch}</i>`);
+  const letters = [...h.children];
+  // Same stops as @keyframes mo07-wave: [offset, CASL, wght, slnt, CRSV].
+  const K = [[0, 0, 300, 0, 0], [.45, 1, 1000, -15, 1], [1, 1, 760, 0, 1]];
+  const at = k => { const j = k < .45 ? 0 : 1, [o0, ...a] = K[j], [o1, ...b] = K[j + 1], f = (k - o0) / (o1 - o0); return a.map((v, i) => v + (b[i] - v) * f); };
+  console.assert(at(0)[1] === 300 && at(1)[1] === 760, 'mo-07 fallback matches the keyframes');
+  if (!reduce && !CSS.supports('animation-timeline: view()')) {
+    let ticking = false;
+    const draw = () => {
+      ticking = false;
+      const r = stage.getBoundingClientRect(), p = (innerHeight - r.top) / (innerHeight + r.height);
+      letters.forEach((el, i) => {
+        const [c, w, s, cr] = at(Math.min(1, Math.max(0, (p - .18 - i * .012) / .24)));
+        el.style.fontVariationSettings = `"MONO" 1,"CASL" ${c.toFixed(2)},"wght" ${w.toFixed(0)},"slnt" ${s.toFixed(1)},"CRSV" ${cr.toFixed(2)}`;
+      });
+    };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }, {passive: true});
+    draw();
+  }
+}
+// mo-08 Aperture iris
+{
+  const root = document.getElementById('mo-08');
+  const stage = root.querySelector('.stage'), fig = root.querySelector('figure');
+  const openAt = (top, height, vh) => { const c = (vh - top) / (vh + height), c0 = .3 * height / (vh + height); return Math.min(1, Math.max(0, (c - c0) / (.55 - c0))); }; // entry 30% to cover 55%
+  console.assert(openAt(1000, 500, 800) === 0 && openAt(-400, 500, 800) === 1, 'mo-08 closed below the fold, open above it');
+  if (!reduce && !CSS.supports('animation-timeline: view()')) {
+    let ticking = false;
+    const draw = () => { ticking = false; const r = stage.getBoundingClientRect(); fig.style.setProperty('--mo08-open', openAt(r.top, r.height, innerHeight).toFixed(3)); };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }, {passive: true});
+    draw();
+  }
+}
+// mo-09 Tri-vision billboard
+{
+  const root = document.getElementById('mo-09');
+  const bb = root.querySelector('.bb'), pause = root.querySelector('.replay'), N = 10;
+  const arts = [...bb.children].map(a => a.outerHTML);
+  console.assert(arts.length === 3, 'mo-09 a triangular prism holds exactly three panels');
+  bb.innerHTML = Array.from({length: N}, (_, i) => `<div class="pr" style="--i:${i}">${arts.map((a, j) => `<div class="f" style="--j:${j}">${a}</div>`).join('')}</div>`).join('');
+  const prisms = [...bb.children], deg = n => `translateZ(-2.887cqw) rotateY(${n * -120}deg)`;
+  let step = 0, until = 0, timer = 0, visible = false, paused = reduce;
+  // The motor turns each prism a third, slat by slat from the left, slightly past its stop and back.
+  const turn = instant => prisms.forEach((p, i) => {
+    p.style.transform = deg(step);
+    if (!instant) p.animate([{transform: deg(step - 1)}, {transform: deg(step + .04), offset: .82}, {transform: deg(step)}], {duration: 900, delay: i * 70, easing: 'cubic-bezier(.6,0,.4,1)', fill: 'backwards'});
+  });
+  const next = () => { if (performance.now() < until) return; step++; until = performance.now() + (reduce ? 0 : 900 + N * 70); turn(reduce); };
+  const sync = () => { clearInterval(timer); if (visible && !paused) timer = setInterval(next, 4200); };
+  turn(true);
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; sync(); }).observe(bb);
+  root.querySelector('.next').onclick = () => { next(); sync(); };
+  pause.textContent = paused ? 'Play' : 'Pause';
+  pause.onclick = () => { paused = !paused; pause.textContent = paused ? 'Play' : 'Pause'; sync(); };
+}
+// mo-10 Thermal receipt
+{
+  const root = document.getElementById('mo-10');
+  const stage = root.querySelector('.stage'), paper = root.querySelector('.paper');
+  const cents = [...root.querySelectorAll('[data-amount]')].reduce((s, r) => s + Math.round(r.dataset.amount * 100), 0);
+  console.assert(cents === Math.round(root.querySelector('.total span').textContent * 100), 'mo-10 line items add up to the total');
+  if (!reduce && !CSS.supports('animation-timeline: view()')) {
+    let ticking = false;
+    const draw = () => {
+      ticking = false;
+      const r = stage.getBoundingClientRect(), p = -r.top / (r.height - innerHeight), k = Math.min(1, Math.max(0, (p - .05) / .7));
+      paper.style.transform = `translateY(${(Math.floor(k * 36) / 36 - 1) * 100}%)`; // a stepper motor: 36 discrete feeds
+    };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }, {passive: true});
+    draw();
+  }
+}
+// mo-11 Flipbook
+{
+  const root = document.getElementById('mo-11');
+  const cv = root.querySelector('.strip'), stage = root.querySelector('.stage'), N = 16, W = 220, H = 198, dpr = Math.min(devicePixelRatio || 1, 2);
+  cv.width = W * dpr; cv.height = H * N * dpr;
+  const g = cv.getContext('2d');
+  const paint = () => {
+    let seed = 7;
+    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647 - .5;
+    // A pencil line: every point nudged by hand, traced twice, so no two frames hold quite the same line.
+    const line = pts => { for (let pass = 0; pass < 2; pass++) { g.lineWidth = pass ? 1.2 : 2.4; g.beginPath(); pts.forEach(([x, y], i) => g[i ? 'lineTo' : 'moveTo'](x + rnd() * 1.6, y + rnd() * 1.6)); g.stroke(); } };
+    const ring = (cx, cy, rx, ry, n = 14) => Array.from({length: n + 1}, (_, i) => [cx + Math.cos(i / n * 6.283) * rx, cy + Math.sin(i / n * 6.283) * ry]);
+    const part = (t, a, b) => Math.min(1, Math.max(0, (t - a) / (b - a)));
+    g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H * N);
+    g.lineCap = g.lineJoin = 'round'; g.strokeStyle = g.fillStyle = '#2D5BD0'; g.font = '14px "Fredericka the Great", cursive';
+    for (let f = 0; f < N; f++) {
+      g.save(); g.translate(0, f * H);
+      const t = f / (N - 1), x0 = 118, y0 = 168, h = 112 * (1 - (1 - part(t, .1, .8)) ** 3), sway = Math.sin(t * 5) * 5 * (1 - t);
+      const sx = fr => x0 + Math.sin(fr * 2) * sway;
+      line([[26, y0], [70, y0 + 2], [130, y0 - 1], [204, y0 + 1]]);
+      if (t < .2) line(ring(x0, y0 - 5, 9, 5));
+      if (h > 0) line(Array.from({length: 8}, (_, i) => [sx(i / 7), y0 - h * i / 7]));
+      const leaf = part(t, .3, .7) * 38, lx = sx(.45), ly = y0 - h * .45;
+      if (leaf > 1) { line([[lx, ly], [lx - leaf * .5, ly - leaf * .55], [lx - leaf, ly - leaf * .2], [lx, ly]]); line([[lx, ly - 8], [lx + leaf * .5, ly - 8 - leaf * .55], [lx + leaf, ly - 8 - leaf * .2], [lx, ly - 8]]); }
+      const bloom = part(t, .7, 1) * 20, tx = sx(1), ty = y0 - h;
+      if (bloom > 1) for (let k = 0; k < 6; k++) { const a = k / 6 * 6.283 + t; line(ring(tx + Math.cos(a) * bloom * .8, ty + Math.sin(a) * bloom * .8, bloom * .55, bloom * .4, 10)); }
+      g.fillText(String(f + 1).padStart(2, '0'), W - 36, 26);
+      g.restore();
+    }
+  };
+  paint(); document.fonts.ready.then(paint);
+  const frameAt = p => Math.min(N - 1, Math.floor(Math.min(1, Math.max(0, p)) * N)); // same steps as steps(16, jump-none)
+  console.assert(frameAt(0) === 0 && frameAt(.5) === 8 && frameAt(1) === N - 1, 'mo-11 scroll maps to frames 0..15');
+  if (!reduce && !CSS.supports('animation-timeline: view()')) {
+    let ticking = false;
+    const draw = () => { ticking = false; const r = stage.getBoundingClientRect(), c = (innerHeight - r.top) / (innerHeight + r.height); cv.style.transform = `translateY(${-frameAt((c - .2) / .55) * 100 / N}%)`; };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }, {passive: true});
+    draw();
+  }
+}
+// mo-12 Word swap
+{
+  const root = document.getElementById('mo-12');
+  const line = root.querySelector('.line'), live = root.querySelector('.sr'), btn = root.querySelector('.swap');
+  const SENTENCES = ['Ship the small thing first, then make it good.', 'First make it good, then ship the small thing.'];
+  const tokens = s => s.match(/[\w’']+|[.,;:!?]/g), punct = w => /^[.,;:!?]$/.test(w);
+  const keys = list => { const seen = {}; return list.map(w => { const k = w.toLowerCase(); seen[k] = (seen[k] || 0) + 1; return k + seen[k]; }); };
+  const [A, B] = SENTENCES.map(tokens);
+  console.assert(keys(A).sort().join() === keys(B).sort().join(), 'mo-12 both sentences use exactly the same words');
+  const spans = {};
+  keys(A).forEach(k => { spans[k] = document.createElement('span'); });
+  const lay = list => { const kids = []; keys(list).forEach((k, i) => { if (i && !punct(list[i])) kids.push(' '); spans[k].textContent = list[i]; kids.push(spans[k]); }); line.replaceChildren(...kids); };
+  let state = 0;
+  lay(A);
+  btn.onclick = () => {
+    const before = new Map(Object.values(spans).map(s => [s, s.getBoundingClientRect()]));
+    state ^= 1; lay(state ? B : A); live.textContent = SENTENCES[state];
+    if (reduce) return;
+    Object.values(spans).forEach((s, i) => {
+      const a = before.get(s), b = s.getBoundingClientRect(), dx = a.left - b.left, dy = a.top - b.top;
+      if (!dx && !dy) return;
+      // FLIP: start where the word was. Words travelling right arc over, words travelling left dip under, so the line never collides with itself.
+      const lift = Math.sign(-dx) * Math.min(Math.abs(dx) * .3, 60);
+      s.animate([
+        {transform: `translate(${dx}px,${dy}px)`},
+        {transform: `translate(${dx * .5}px,${dy * .5 - lift}px) rotate(${Math.sign(dx) * 4}deg)`, offset: .45},
+        {transform: `translate(${-dx * .03}px,${-dy * .03}px)`, offset: .82},
+        {transform: 'none'}
+      ], {duration: 820, delay: i * 22, easing: 'cubic-bezier(.45,.05,.3,1)', fill: 'backwards'});
+    });
+  };
+}
+// mo-13 Ink bloom
+{
+  const root = document.getElementById('mo-13');
+  const stage = root.querySelector('.stage'), cv = root.querySelector('.ink'), g = cv.getContext('2d');
+  const DROPS = [[.22, .3, 0], [.7, .62, .35], [.42, .85, .7], [.88, .18, .95], [.08, .8, 1.2]]; // x, y as fractions; start in seconds
+  const T = 3.2; // seconds for one drop to spread: it lands as a dot, then runs faster once it reaches the wet paper
+  const coverage = 1.25 * (1 - .1 - .06 - .03);
+  console.assert(coverage > 1, 'mo-13 the ragged edge still reaches the far corner');
+  let raf = 0;
+  const play = () => {
+    cancelAnimationFrame(raf);
+    if (reduce) return stage.classList.remove('wet');
+    stage.classList.add('wet');
+    const w = cv.width = cv.offsetWidth, h = cv.height = cv.offsetHeight;
+    const drops = DROPS.map(([x, y, t0]) => ({x: x * w, y: y * h, t0, R: 1.25 * Math.hypot(Math.max(x, 1 - x) * w, Math.max(y, 1 - y) * h), ph: [0, 1, 2].map(() => Math.random() * 6.28)}));
+    const blob = (d, r) => { g.beginPath(); for (let i = 0; i <= 72; i++) { const a = i / 72 * 6.283, k = 1 + .1 * Math.sin(3 * a + d.ph[0]) + .06 * Math.sin(7 * a + d.ph[1]) + .03 * Math.sin(13 * a + d.ph[2]); g.lineTo(d.x + Math.cos(a) * r * k, d.y + Math.sin(a) * r * k); } g.fill(); };
+    const t0 = performance.now();
+    const frame = now => {
+      const t = (now - t0) / 1000;
+      let done = true;
+      g.clearRect(0, 0, w, h);
+      for (const d of drops) {
+        const k = Math.min(1, Math.max(0, (t - d.t0) / T));
+        if (k < 1) done = false;
+        if (!k) continue;
+        const r = d.R * k ** 1.4;
+        g.fillStyle = 'rgba(59,35,20,.28)'; blob(d, r * 1.08 + 6); // the water front runs ahead of the pigment
+        g.fillStyle = '#3B2314'; blob(d, r);
+      }
+      if (done) stage.classList.remove('wet'); else raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+  };
+  if (!reduce) stage.classList.add('wet');
+  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); play(); } }, {threshold: .3}).observe(stage);
+  root.querySelector('.replay').onclick = play;
+}
+// mo-14 Dither dissolve
+{
+  const root = document.getElementById('mo-14');
+  const cv = root.querySelector('.pic'), g = cv.getContext('2d', {willReadFrequently: true}), W = cv.width, H = cv.height, btn = root.querySelector('.flip');
+  // 8×8 ordered-dither (Bayer) matrix, built by recursion.
+  let M = [[0]];
+  while (M.length < 8) M = [...M.map(r => [...r.map(v => 4 * v), ...r.map(v => 4 * v + 2)]), ...M.map(r => [...r.map(v => 4 * v + 3), ...r.map(v => 4 * v + 1)])];
+  console.assert(M.flat().sort((a, b) => a - b).every((v, i) => v === i), 'mo-14 the Bayer matrix holds 0..63 once each');
+  const rgb = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+  // Each colour is drawn as its own mask and kept only where it covers half a pixel or more: hard 1-bit edges, no blended fringe.
+  const layer = (img, hex, path) => {
+    g.clearRect(0, 0, W, H); g.fillStyle = '#000'; g.beginPath(); path(); g.fill();
+    const m = g.getImageData(0, 0, W, H).data, c = rgb(hex), d = img.data;
+    for (let i = 0; i < m.length; i += 4) if (m[i + 3] > 127) { d[i] = c[0]; d[i + 1] = c[1]; d[i + 2] = c[2]; d[i + 3] = 255; }
+  };
+  const scene = (sky, sun, land, lit, stars) => {
+    const img = g.createImageData(W, H);
+    layer(img, sky, () => g.rect(0, 0, W, H));
+    layer(img, sun, () => { g.arc(118, 26, 13, 0, 7); if (stars) [[20, 12], [44, 24], [70, 9], [92, 30], [140, 14], [150, 40]].forEach(([x, y]) => g.rect(x, y, 1, 1)); });
+    layer(img, land, () => { g.moveTo(0, 70); g.quadraticCurveTo(50, 46, 96, 62); g.quadraticCurveTo(130, 74, 160, 58); g.lineTo(160, 96); g.lineTo(0, 96); g.closePath(); g.rect(34, 46, 26, 18); g.moveTo(30, 47); g.lineTo(47, 34); g.lineTo(64, 47); g.closePath(); });
+    layer(img, lit, () => { g.rect(39, 51, 6, 6); g.rect(49, 51, 6, 6); });
+    return img;
+  };
+  const DAY = scene('#FFFFFF', '#FF6A00', '#111111', '#FFFFFF', false), NIGHT = scene('#111111', '#FFFFFF', '#2B59FF', '#FFFFFF', true);
+  const TEXT = [['Day rate', 'Sample price · 40 an hour', 'Switch to night', 'a house on a hill by day'], ['Night rate', 'Sample price · 55 an hour', 'Switch to day', 'the same house at night, windows lit']];
+  const out = g.createImageData(W, H);
+  const mix = (from, to, level) => {
+    const a = from.data, b = to.data, o = out.data;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const i = (y * W + x) * 4, s = M[y & 7][x & 7] < level ? b : a; o[i] = s[i]; o[i + 1] = s[i + 1]; o[i + 2] = s[i + 2]; o[i + 3] = 255; }
+    g.putImageData(out, 0, 0);
+  };
+  let night = false, raf = 0;
+  mix(DAY, DAY, 0);
+  btn.onclick = () => {
+    night = !night; cancelAnimationFrame(raf);
+    const [from, to] = night ? [DAY, NIGHT] : [NIGHT, DAY], [head, line, label, alt] = TEXT[+night];
+    root.querySelector('h3').textContent = head; root.querySelector('figcaption p').textContent = line; btn.textContent = label;
+    cv.setAttribute('aria-label', 'Image stand-in: ' + alt);
+    if (reduce) return mix(from, to, 64);
+    const t0 = performance.now();
+    const frame = now => { const k = Math.min(1, (now - t0) / 1100); mix(from, to, Math.floor(k * k * (3 - 2 * k) * 64.99)); if (k < 1) raf = requestAnimationFrame(frame); };
+    raf = requestAnimationFrame(frame);
+  };
+}
+// mo-15 Tear-off calendar
+{
+  const root = document.getElementById('mo-15');
+  const stage = root.querySelector('.stage'), pages = [...root.querySelectorAll('.pg:not(:last-child)')];
+  // Same stops as @keyframes mo15-tear: [offset, x%, y%, deg, opacity].
+  const K = [[0, 0, 0, 0, 1], [.28, 0, 0, 5, 1], [.46, 3, 4, 12, 1], [.88, 32, 102, 34, 1], [1, 40, 130, 40, 0]];
+  const at = k => { const j = Math.max(0, K.findIndex(s => s[0] >= k) - 1), a = K[j], b = K[j + 1], f = (k - a[0]) / (b[0] - a[0]); return a.map((v, i) => v + (b[i] - v) * f); };
+  console.assert(at(0)[4] === 1 && at(1)[4] === 0 && at(.28)[3] === 5, 'mo-15 fallback matches the keyframes');
+  if (!reduce && !CSS.supports('animation-timeline: view()')) {
+    let ticking = false;
+    const draw = () => {
+      ticking = false;
+      const r = stage.getBoundingClientRect(), p = -r.top / (r.height - innerHeight);
+      pages.forEach((pg, k) => { const [, x, y, d, o] = at(Math.min(1, Math.max(0, (p - .04 - k * .15) / .15))); pg.style.transform = `translate(${x}%,${y}%) rotate(${d}deg)`; pg.style.opacity = o; });
+    };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }, {passive: true});
+    draw();
+  }
+}
+// mo-16 CRT power-on
+{
+  const root = document.getElementById('mo-16');
+  // The beam warms up: a dot, a line, then the raster opens; the font's BLED and SCAN axes settle as it focuses.
+  const play = () => { if (reduce) return; root.classList.remove('armed', 'on'); void root.offsetWidth; root.classList.add('on'); };
+  if (!reduce) root.classList.add('armed');
+  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); play(); } }, {threshold: .5}).observe(root.querySelector('.glass'));
+  root.querySelector('.replay').onclick = play;
+}
+// mo-17 Clock wipe
+{
+  const root = document.getElementById('mo-17');
+  const dial = root.querySelector('.dial'), [a, b] = root.querySelectorAll('.face'), hand = root.querySelector('.hand'), btn = root.querySelector('.swap'), live = root.querySelector('.sr');
+  // A quartz movement: 12 ticks of 30°, each springing past its mark and settling (200 ms per tick).
+  const tickAngle = ms => { const i = Math.floor(ms / 200), tau = Math.min(1, (ms - i * 200) / 140); return Math.min(360, 30 * i + 30 * (1 - Math.exp(-7 * tau) * Math.cos(12 * tau))); };
+  console.assert(tickAngle(0) === 0 && tickAngle(2400) === 360 && tickAngle(250) > 30, 'mo-17 ticks start at 0, overshoot, end at 360');
+  const mask = (el, deg) => { const m = deg >= 360 ? '' : `conic-gradient(#000 ${deg}deg, #0000 0)`; el.style.webkitMaskImage = m; el.style.maskImage = m; };
+  let showing = a, raf = 0;
+  btn.onclick = () => {
+    cancelAnimationFrame(raf);
+    const incoming = showing === a ? b : a, outgoing = showing;
+    showing = incoming;
+    mask(outgoing, 360); outgoing.classList.remove('top'); outgoing.setAttribute('aria-hidden', 'true');
+    incoming.classList.add('top'); incoming.removeAttribute('aria-hidden');
+    btn.textContent = incoming === b ? 'Turn to lunch' : 'Turn to dinner';
+    live.textContent = 'Now showing ' + incoming.querySelector('h3').textContent;
+    if (reduce) return mask(incoming, 360);
+    const t0 = performance.now();
+    hand.style.opacity = 1; dial.classList.add('wiping');
+    const frame = now => {
+      const ms = now - t0, deg = tickAngle(ms);
+      mask(incoming, deg); hand.style.transform = `rotate(${deg}deg)`;
+      if (ms < 2400) raf = requestAnimationFrame(frame); else { mask(incoming, 360); hand.style.opacity = 0; dial.classList.remove('wiping'); }
+    };
+    mask(incoming, 0);
+    raf = requestAnimationFrame(frame);
+  };
+}
+// mo-18 Darkroom print
+{
+  const root = document.getElementById('mo-18');
+  const funcs = root.querySelectorAll('feFuncR,feFuncG,feFuncB'), print = root.querySelector('.print'), wash = root.querySelector('.wash'), D = 5200;
+  // Developer reaches the densest silver first: a gamma far below 1 turns every tone but true black to paper white.
+  const gamma = k => .03 + .97 * k ** 1.6;
+  console.assert(gamma(0) > 0 && Math.abs(gamma(1) - 1) < 1e-9, 'mo-18 the print ends at its true tones');
+  const set = k => funcs.forEach(f => f.setAttribute('exponent', gamma(k).toFixed(3)));
+  let raf = 0;
+  const play = () => {
+    cancelAnimationFrame(raf);
+    if (reduce) return set(1);
+    const t0 = performance.now();
+    wash.classList.add('on');
+    const frame = now => {
+      const k = Math.min(1, (now - t0) / D), rock = 1 - k;
+      set(k);
+      print.style.transform = `translateX(${(Math.sin(k * 22) * 4 * rock).toFixed(2)}px) rotate(${(Math.sin(k * 22 + 1) * .4 * rock).toFixed(2)}deg)`; // rocking the tray
+      if (k < 1) raf = requestAnimationFrame(frame); else wash.classList.remove('on');
+    };
+    raf = requestAnimationFrame(frame);
+  };
+  if (!reduce) set(0);
+  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); play(); } }, {threshold: .4}).observe(root.querySelector('.tray'));
+  root.querySelector('.replay').onclick = play;
+}
+// mo-19 Fold-out leaflet
+{
+  const root = document.getElementById('mo-19');
+  const stage = root.querySelector('.stage'), leaf = root.querySelector('.leaf');
+  const foldAt = (top, height, vh) => { const c = (vh - top) / (vh + height), c0 = .4 * height / (vh + height); return 1 - Math.min(1, Math.max(0, (c - c0) / (.55 - c0))); }; // entry 40% to cover 55%
+  console.assert(foldAt(1000, 500, 800) === 1 && foldAt(-400, 500, 800) === 0, 'mo-19 folded below the fold, flat above it');
+  if (!reduce && !CSS.supports('animation-timeline: view()')) {
+    let ticking = false;
+    const draw = () => { ticking = false; const r = stage.getBoundingClientRect(); leaf.style.setProperty('--mo19-f', foldAt(r.top, r.height, innerHeight).toFixed(3)); };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }, {passive: true});
+    draw();
+  }
+}
+</script>
+</body>
+</html>

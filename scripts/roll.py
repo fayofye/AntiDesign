@@ -4,9 +4,16 @@
 The traits match the skill's default table, so every trait of a rolled design is decided.
 Each roll draws six random 10-digit numbers and picks one; each digit selects one option per trait.
 Build what it rolls; do not reroll for taste.
+With --library, it rolls specimens from one page of library/ instead.
 """
 import argparse
+import html
+import re
 import secrets
+from pathlib import Path
+
+LIBRARY = Path(__file__).resolve().parent.parent / "library"
+SPEC = re.compile(r'<article class="spec" id="([a-z]+-\d\d)" data-name="([^"]+)">')
 
 TRAITS = [
     ("Reading direction", ["Horizontal-only scroll", "One screen, no scroll; content swaps in place",
@@ -54,12 +61,28 @@ def roll():
     return drawn, picked, [(name, options[int(d)]) for (name, options), d in zip(TRAITS, picked)]
 
 
+def library(page):
+    """Return (id, name) for every specimen on library/<page>.html."""
+    specs = [(i, html.unescape(n)) for i, n in SPEC.findall((LIBRARY / f"{page}.html").read_text(encoding="utf-8"))]
+    assert len({i for i, _ in specs}) == len(specs), f"duplicate specimen id on library/{page}.html"
+    return specs
+
+
 def main():
     names = [name for name, _ in TRAITS]
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--count", type=int, default=1, help="how many designs to roll (default 1)")
+    parser.add_argument("--count", type=int, default=1, help="how many designs or specimens to roll (default 1)")
     parser.add_argument("--trait", help="roll one option for a single trait: " + ", ".join(names))
+    parser.add_argument("--library", choices=sorted(p.stem for p in LIBRARY.glob("*.html")),
+                        help="roll distinct specimens from one page of library/")
     args = parser.parse_args()
+    if args.library:
+        specs = library(args.library)
+        if not 1 <= args.count <= len(specs):
+            parser.error(f"--count must be 1 to {len(specs)} for library/{args.library}.html")
+        for sid, name in secrets.SystemRandom().sample(specs, args.count):
+            print(f"{sid} {name}  (library/{args.library}.html#{sid})")
+        return
     if args.trait:
         match = [t for t in TRAITS if t[0].lower().startswith(args.trait.lower())]
         if not match:

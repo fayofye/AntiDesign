@@ -1,9 +1,9 @@
 ---
 name: antidesign
-description: Design web pages that break the conventions an AI model reaches for by default. Use when someone asks for an unconventional, unexpected, experimental or "not AI-looking" website, landing page or UI; when they say designs look templated, safe or alike; or when they ask for designs you would not make on your own.
+description: Design web pages that break the conventions an AI model reaches for by default. Use when someone asks for an unconventional, unexpected, experimental or "not AI-looking" website, landing page or UI; when they say designs look templated, safe or alike; when they ask for designs you would not make on your own; or when they want buttons, animations, heroes or type that are not the usual.
 license: MIT
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 ---
 
 # AntiDesign
@@ -27,7 +27,7 @@ Before any new design, fill in this table for the product: the page you would ma
 | Voice | Calm product marketing |
 | Motion | None, or fade-ins on scroll |
 
-Where a line names two defaults ("or"), the design must avoid both. This skill's own demos (the README's `demo/` shots and the pages in `elements/`) count as default too: never rebuild them.
+Where a line names two defaults ("or"), the design must avoid both. This skill's own demos (the README's `demo/` shots and the pages in `elements/` and `library/`) count as default too: never rebuild them as they stand.
 
 ## 2. Four moves
 
@@ -40,9 +40,11 @@ Give each design its own move; combine them when it helps.
 
 In one batch, no choice appears in two designs, rolled or your own, and near-duplicates count (two typewriter faces, two yellows). If a roll repeats one, reroll that trait only.
 
-## 3. Ready-made elements
+## 3. Ready-made elements and the library
 
 `elements/` holds working, self-contained demos: a 3D liquid shader with 180 models, banknote security print, neon with a counting number, copy that flows along a data line, a commentary quiz, a slot machine and a money map. Read `references/elements.md` when a design needs one. Elements are optional, and most designs need none. When you use one: at most one per design, never the same one twice in a batch, and always re-cut to the product (its copy, numbers and colours).
+
+`library/` holds smaller parts as numbered specimens on four pages: buttons, motion, heroes and type; `references/library.md` lists them. Never pick a specimen by taste: run `python3 scripts/roll.py --library <page>` (`--count N` for a batch, which never repeats) and build what it rolls. Take at most one specimen from each page per design, and never ship one as it stands: change its copy, colours and type to the product's, so it reads as part of that page and not as a sticker on it.
 
 ## 4. The safe-table trap
 

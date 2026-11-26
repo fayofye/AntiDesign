@@ -64,6 +64,26 @@ Working, self-contained demos in `elements/`, for the agent to re-cut to each pr
 
 `references/elements.md` says when to use each one.
 
+## Library
+
+Smaller parts in `library/`: 69 numbered specimens on four pages, each a working mechanism with its own typeface and palette. None of them is a gradient pill, a fade-up on scroll or a centred headline with two buttons.
+
+| Page | Specimens | Examples |
+|---|---|---|
+| `buttons.html` | 17 | A rubber stamp that inks itself, a ticket stub that tears off, a fuse you hold to burn, a safety cover you lift before you publish |
+| `motion.html` | 19 | An odometer, a split-flap headline, words that fall and pile up, a pen plotter, an aperture iris, a thermal receipt fed by scroll |
+| `heroes.html` | 13 | A newspaper front page, a crossword, an exploded diagram, a tape measure, a tide chart, a transit line |
+| `type.html` | 20 | Letters that melt with the year, a chart inside a sentence, a scannable barcode, words redacted until clicked, text on a spiral |
+
+The agent doesn't pick from them by taste. It rolls for one and re-cuts it to the product:
+
+```bash
+python3 scripts/roll.py --library heroes
+python3 scripts/roll.py --library buttons --count 3
+```
+
+`references/library.md` lists every specimen with when to use it and what to change.
+
 ## Install
 
 The skill is plain Markdown plus a standard-library Python script, so it works in any agent that reads `SKILL.md` skills. Leave off `--global` in any `npx skills` command below to install it only in the current project.
@@ -109,7 +129,7 @@ Download this repository as a ZIP (**Code → Download ZIP**) and upload it as a
 
 ### Chat apps without skills (Grok, ChatGPT and others)
 
-Paste `SKILL.md` into the chat or the app's custom instructions. The chat can't run the roll script, so run `python3 scripts/roll.py` yourself and paste the output; the skill tells the agent never to invent a roll. Open the files in `elements/` in a browser and attach the ones you want it to adapt.
+Paste `SKILL.md` into the chat or the app's custom instructions. The chat can't run the roll script, so run `python3 scripts/roll.py` yourself and paste the output; the skill tells the agent never to invent a roll. Open the files in `elements/` and `library/` in a browser and attach the ones you want it to adapt.
 
 ## Use
 
