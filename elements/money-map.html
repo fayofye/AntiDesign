@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Element: money map (the layout is the data)</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,300..900&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#000000;font-family:Anybody,'Arial Narrow',sans-serif}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:12px 20px;color:#FFFFFF;font-size:16px}
+.map{display:flex;height:min(900px,88vh);min-height:560px}
+.col{display:flex;flex-direction:column;min-width:0}
+.blk{position:relative;overflow:hidden;min-width:64px;min-height:44px;box-sizing:border-box;padding:14px 20px;display:flex;flex-wrap:wrap;align-content:space-between;justify-content:space-between;gap:6px 16px}
+.lab{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.big{font-weight:900;line-height:.8;white-space:nowrap;letter-spacing:-.02em}
+input{font:800 20px Anybody,'Arial Narrow',sans-serif;width:6ch;background:transparent;color:inherit;border:0;border-bottom:3px solid currentColor;border-radius:0;padding:2px 0}
+input:focus-visible{outline:3px solid currentColor;outline-offset:3px}
+label{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700}
+@media (max-width:760px){.map{flex-direction:column;height:1400px}}
+</style>
+</head>
+<body>
+<header><label style="color:#FFFFFF">Total $<input id="total" type="number" min="0" value="3000"></label><span>Every block is sized by its dollars. Sample figures; change any number.</span></header>
+<section class="map" id="map" aria-label="One amount, divided into blocks sized by where the money goes"></section>
+<script>
+// The parts of one amount. "rest: true" is the remainder (total minus the others). Swap for the product's own.
+const PARTS = [
+  { key: 'kept', label: 'Yours to keep', rest: true, bg: '#D4FF3A', fg: '#000000' },
+  { key: 'share', label: 'The other side\'s share', value: 300, bg: '#2B2BFF', fg: '#FFFFFF' },
+  { key: 'tax', label: 'Tax set aside', value: 592, bg: '#FF4FA3', fg: '#000000' },
+  { key: 'costs', label: 'Costs', value: 297, bg: '#FF4A1C', fg: '#000000' },
+  { key: 'fees', label: 'Fees', value: 35, bg: '#000000', fg: '#FFFFFF' }
+];
+const money = v => (v < 0 ? '-$' : '$') + Math.round(Math.abs(v)).toLocaleString('en-US');
+const map = document.getElementById('map'), totalInput = document.getElementById('total');
+
+// The remainder block takes its own column; the others stack in the second column.
+const block = p => {
+  const b = document.createElement('div');
+  b.className = 'blk';
+  b.style.background = p.bg; b.style.color = p.fg;
+  b.innerHTML = `<div style="display:flex;flex-direction:column;gap:6px;min-width:0"><span class="lab">${p.label}</span><span class="big"></span></div>` +
+    (p.rest ? '' : `<label>$<input type="number" min="0" value="${p.value}" aria-label="${p.label} in dollars"></label>`);
+  if (!p.rest) b.querySelector('input').oninput = e => { p.value = Math.max(0, Number(e.target.value) || 0); draw(); };
+  p.el = b;
+  return b;
+};
+const rest = PARTS.find(p => p.rest), others = PARTS.filter(p => !p.rest);
+const col = Object.assign(document.createElement('div'), { className: 'col' });
+others.forEach(p => col.appendChild(block(p)));
+map.append(block(rest), col);
+
+function draw() {
+  const total = Math.max(0, Number(totalInput.value) || 0);
+  const spent = others.reduce((a, p) => a + p.value, 0);
+  rest.value = total - spent;
+  rest.el.style.flex = `${Math.max(rest.value, 0)} 1 0px`;
+  col.style.flex = `${spent} 1 0px`;
+  others.forEach(p => { p.el.style.flex = `${p.value} 1 0px`; });
+  // Size each figure to its block after layout: wide blocks get the widest cut of the font, tall ones the narrowest.
+  requestAnimationFrame(() => PARTS.forEach(p => {
+    const big = p.el.querySelector('.big'), r = p.el.getBoundingClientRect();
+    const text = money(p.value), wdth = Math.min(150, Math.max(50, 50 + 45 * r.width / Math.max(r.height, 1)));
+    const size = Math.min(r.height * (p.rest ? 0.36 : 0.55), (r.width - 160) / (text.length * 0.55 * wdth / 100));
+    big.textContent = text;
+    big.style.fontVariationSettings = `'wdth' ${Math.round(wdth)}`;
+    big.style.fontSize = Math.round(Math.min(Math.max(size, 16), 320)) + 'px';
+  }));
+}
+totalInput.oninput = draw;
+window.addEventListener('resize', draw);
+draw();
+</script>
+</body>
+</html>

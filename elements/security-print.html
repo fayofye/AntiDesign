@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Element: security print (guilloché, microtext, coupons)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+SC:wght@600&family=Xanh+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#E9EDF0;--ink:#18243A;--teal:#1F6E74;--maroon:#7B2D3B}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif}
+.wrap{max-width:1200px;margin:0 auto;padding:40px 32px;box-sizing:border-box;display:flex;flex-direction:column;gap:48px}
+.sc{font-family:'Cormorant SC',Georgia,serif;font-weight:600;letter-spacing:.16em}
+.serial{font-family:'Xanh Mono',monospace;color:var(--maroon);letter-spacing:.12em}
+.micro{font-family:'Cormorant SC',Georgia,serif;font-size:7px;line-height:9px;letter-spacing:.14em;white-space:nowrap;overflow:hidden}
+.lathe{background:repeating-radial-gradient(circle at 17% 50%,rgba(31,110,116,0) 0 5px,rgba(31,110,116,.15) 5px 6px),repeating-radial-gradient(circle at 85% 40%,rgba(123,45,59,0) 0 6px,rgba(123,45,59,.09) 6px 7px)}
+.note{position:relative;border:1px solid var(--ink);padding:12px}
+.note .micro{position:absolute;left:12px;right:12px}
+.inner{position:relative;border:3px double var(--ink);padding:44px 48px;display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:48px;align-items:center}
+.corner{position:absolute;font-weight:600;font-size:28px}
+.copy{display:flex;flex-direction:column;gap:20px;background:rgba(233,237,240,.9);padding:8px 0}
+.copy h1{margin:0;font-size:62px;font-weight:500;line-height:1.02}
+.copy p{margin:0;font-size:21px;line-height:1.5}
+.btn{align-self:flex-start;text-decoration:none;font-family:'Cormorant SC',Georgia,serif;font-weight:600;letter-spacing:.12em;font-size:17px;padding:13px 22px;border:1px solid var(--ink);color:var(--ink)}
+.btn.fill{background:var(--ink);color:var(--paper)}
+.coupons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--ink);outline:1px solid var(--ink);outline-offset:4px}
+.coupon{position:relative;padding:28px;display:flex;flex-direction:column;gap:12px}
+.coupon+.coupon{border-left:2px dashed var(--ink)}
+.coupon svg{position:absolute;top:14px;right:14px;width:96px;height:96px}
+.price{font-size:56px;font-weight:600;line-height:1}
+@media (max-width:860px){.inner{grid-template-columns:minmax(0,1fr);padding:36px 20px}.coupons{grid-template-columns:minmax(0,1fr)}.coupon+.coupon{border-left:0;border-top:2px dashed var(--ink)}.corner{display:none}.copy h1{font-size:42px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section class="note" aria-label="Statement">
+<div class="micro" aria-hidden="true" style="top:1px"></div>
+<div class="micro" aria-hidden="true" style="bottom:1px"></div>
+<div class="inner lathe">
+<span class="corner" aria-hidden="true" style="top:10px;left:16px">100</span>
+<span class="corner" aria-hidden="true" style="top:10px;right:16px">100</span>
+<span class="corner" aria-hidden="true" style="bottom:10px;left:16px">100</span>
+<span class="corner" aria-hidden="true" style="bottom:10px;right:16px">100</span>
+<figure style="margin:0;position:relative;aspect-ratio:1;width:100%">
+<svg id="rosette" viewBox="0 0 460 460" style="width:100%;height:100%;display:block" aria-hidden="true">
+<path data-ink="#1F6E74" fill="none" stroke-width=".6"></path>
+<path data-ink="#7B2D3B" fill="none" stroke-width=".55" opacity=".85"></path>
+<path data-ink="#18243A" fill="none" stroke-width=".5"></path>
+<circle cx="230" cy="230" r="66" fill="#E9EDF0" stroke="#18243A"></circle>
+</svg>
+<figcaption style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+<span class="sc" style="font-size:10px">Sample value</span>
+<span style="font-size:40px;font-weight:600;line-height:1">$100</span>
+</figcaption>
+</figure>
+<div class="copy">
+<span class="sc" style="font-size:15px">Statement of net value <span class="serial">Nº 0000 0001</span></span>
+<h1>Pay to the order of you: <em style="font-weight:400">the part you keep.</em></h1>
+<p>Replace this with the product's own promise. The rosette, the lathe-work, the microtext border and the corner values are what make the panel read as money.</p>
+<a class="btn fill" href="#coupons">Open an account</a>
+</div>
+</div>
+</section>
+
+<svg id="band" viewBox="0 0 1200 64" preserveAspectRatio="none" style="width:100%;height:64px;display:block" aria-hidden="true"><path fill="none" stroke="#1F6E74" stroke-width=".6"></path></svg>
+
+<section id="coupons" aria-label="Plans as coupons" style="display:flex;flex-direction:column;gap:20px">
+<h2 class="sc" style="margin:0;font-size:28px">Coupons</h2>
+<div class="coupons">
+<div class="coupon"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="coin" fill="none" stroke="#1F6E74" stroke-width=".6"></path></svg><span class="sc" style="font-size:15px">Coupon I</span><span class="price">[PRICE]</span><span style="font-size:19px;line-height:1.5">What this plan includes, in one sentence.</span><a class="btn fill" href="#">Redeem</a><span class="serial" style="font-size:13px">CPN · I</span></div>
+<div class="coupon"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="coin" fill="none" stroke="#7B2D3B" stroke-width=".6"></path></svg><span class="sc" style="font-size:15px">Coupon II</span><span class="price">[PRICE]</span><span style="font-size:19px;line-height:1.5">What this plan includes, in one sentence.</span><a class="btn" href="#">Redeem</a><span class="serial" style="font-size:13px">CPN · II</span></div>
+<div class="coupon"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="coin" fill="none" stroke="#18243A" stroke-width=".6"></path></svg><span class="sc" style="font-size:15px">Coupon III</span><span class="price">[PRICE]</span><span style="font-size:19px;line-height:1.5">What this plan includes, in one sentence.</span><a class="btn" href="#">Redeem</a><span class="serial" style="font-size:13px">CPN · III</span></div>
+</div>
+</section>
+</main>
+<script>
+// Guilloché: rings whose radius wobbles on two sine waves; each ring is shifted in phase.
+function ring(c, R, A, n, B, m, ph, steps) {
+  let d = '';
+  for (let s = 0; s <= steps; s++) {
+    const th = s / steps * Math.PI * 2;
+    const rr = R + A * Math.sin(n * th + ph) + B * Math.sin(m * th - 2 * ph);
+    d += (s ? ' ' : 'M') + (c + rr * Math.cos(th)).toFixed(1) + ',' + (c + rr * Math.sin(th)).toFixed(1);
+  }
+  return d;
+}
+// One path for a band of k phase-shifted rings around centre c.
+function rosette(c, { R, A, n, B, m, k, steps }) {
+  let d = '';
+  for (let i = 0; i < k; i++) d += ring(c, R, A, n, B, m, i * 2 * Math.PI / (n * k), steps) + ' ';
+  return d;
+}
+// Horizontal guilloché band: phase-shifted waves across a strip w by h.
+function band(w, h, lines) {
+  let d = '';
+  for (let i = 0; i < lines; i++) {
+    const ph = i * 2 * Math.PI / lines;
+    for (let x = 0; x <= w; x += 6) {
+      const y = h / 2 + h * 0.32 * Math.sin(x / 38 + ph) + h * 0.12 * Math.sin(x / 13 - 2 * ph);
+      d += (x ? ' ' : 'M') + x + ',' + y.toFixed(1);
+    }
+    d += ' ';
+  }
+  return d;
+}
+
+const bands = [
+  { R: 196, A: 20, n: 24, B: 6, m: 7, k: 12, steps: 300 },
+  { R: 140, A: 26, n: 12, B: 8, m: 5, k: 14, steps: 240 },
+  { R: 94, A: 14, n: 9, B: 4, m: 3, k: 10, steps: 180 }
+];
+document.querySelectorAll('#rosette path').forEach((p, i) => { p.setAttribute('d', rosette(230, bands[i])); p.setAttribute('stroke', p.dataset.ink); });
+document.querySelector('#band path').setAttribute('d', band(1200, 64, 10));
+const coin = rosette(60, { R: 44, A: 8, n: 10, B: 3, m: 4, k: 10, steps: 160 }) + rosette(60, { R: 24, A: 5, n: 7, B: 2, m: 3, k: 6, steps: 110 });
+document.querySelectorAll('.coin').forEach(p => p.setAttribute('d', coin));
+document.querySelectorAll('.micro').forEach(el => { el.textContent = 'STATEMENT OF NET VALUE · SAMPLE · '.repeat(40); });
+</script>
+</body>
+</html>

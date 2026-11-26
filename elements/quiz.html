@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Element: commentary quiz with a scoreboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Six+Caps&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#808080;color:#111111;font-family:'Six Caps','Arial Narrow',sans-serif}
+main{max-width:1100px;margin:0 auto;padding:40px 24px 64px;display:flex;flex-direction:column;gap:28px}
+.white{color:#FFFFFF}
+/* Glitch: two grey ghost copies of the text behind it, sliced and shifted. */
+.gl{position:relative;display:inline-block;isolation:isolate}
+.gl::before,.gl::after{content:attr(data-text);position:absolute;inset:0;z-index:-1;pointer-events:none}
+.gl::before{color:#C4C4C4;transform:translate(-5px,3px);animation:g1 2.6s steps(1) infinite}
+.gl::after{color:#2E2E2E;transform:translate(5px,-3px);animation:g2 3.3s steps(1) infinite}
+@keyframes g1{0%{clip-path:inset(0 0 60% 0)}25%{clip-path:inset(35% 0 35% 0);transform:translate(-9px,2px)}50%{clip-path:inset(75% 0 4% 0)}75%{clip-path:inset(12% 0 78% 0)}}
+@keyframes g2{0%{clip-path:inset(62% 0 0 0)}30%{clip-path:inset(8% 0 70% 0);transform:translate(8px,-1px)}60%{clip-path:inset(44% 0 30% 0)}85%{clip-path:inset(85% 0 2% 0)}}
+.say{margin:0;font-size:clamp(32px,4.4vw,52px);line-height:1.05;letter-spacing:.02em}
+.opts{display:flex;flex-wrap:wrap;gap:12px}
+.opt{font:44px/1 'Six Caps','Arial Narrow',sans-serif;letter-spacing:.04em;background:#111111;color:#DADADA;border:0;border-radius:0;padding:16px 28px;min-height:64px;cursor:pointer}
+.opt:hover:not(:disabled){background:#000000;color:#FFFFFF}
+.opt:disabled{cursor:default;background:#5E5E5E;color:#111111}
+.opt:focus-visible{outline:4px solid #FFFFFF;outline-offset:4px}
+.hit{animation:hit .12s steps(2) 4}
+@keyframes hit{0%{transform:translateX(8px)}50%{transform:translateX(-8px)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.gl::before,.gl::after,.hit{animation:none}}
+</style>
+</head>
+<body>
+<main>
+<h1 class="gl white" data-text="LIVE: THE BIG QUESTION" style="margin:0;font-weight:400;font-size:clamp(96px,16vw,220px);line-height:.86">LIVE: THE BIG QUESTION</h1>
+<div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 28px;border:4px solid #111111;padding:14px 20px">
+<span id="minute" style="font-size:30px;letter-spacing:.1em"></span>
+<span id="score" class="gl white" data-text="" style="font-size:88px;line-height:1"></span>
+<span style="font-size:30px;letter-spacing:.1em">YOU · THE DEFAULT ANSWER</span>
+</div>
+<section aria-labelledby="qhead" style="display:flex;flex-direction:column;gap:20px">
+<h2 id="qhead" style="margin:0;font-weight:400;font-size:32px;letter-spacing:.1em"></h2>
+<p id="question" class="say white"></p>
+<div id="opts" class="opts" role="group" aria-label="Answers"></div>
+<p id="call" class="say" aria-live="assertive"></p>
+<div><button type="button" id="next" class="opt" style="background:#E2E2E2;color:#111111" hidden></button></div>
+</section>
+</main>
+<script>
+// Swap these for the product's own facts. Sample questions.
+const QUIZ = [
+  { q: 'A $6,700 payout at a 90% split. How much stays with the other side?', options: ['$670', '$1,340', '$0'], right: 0,
+    yes: 'SIX HUNDRED AND SEVENTY! TEN PERCENT, STRAIGHT DOWN THE MIDDLE!', no: 'NO! TEN PERCENT OF $6,700 IS $670.' },
+  { q: 'Which is bigger: 25% of $4,000, or $900?', options: ['25% OF $4,000', '$900'], right: 0,
+    yes: 'A THOUSAND BEATS NINE HUNDRED! WHAT A READ!', no: 'SO CLOSE. 25% OF $4,000 IS $1,000, A HUNDRED MORE.' },
+  { q: 'Last one. A $3,000 payout, $332 in costs. What is left?', options: ['$2,668', '$3,332', '$2,700'], right: 0,
+    yes: 'TWO THOUSAND SIX HUNDRED AND SIXTY-EIGHT! FULL MARKS!', no: 'NO! TAKE THE $332 AWAY: $2,668.' }
+];
+const MINUTES = ['30\'', '60\'', '90\''];
+let s = { q: 0, picked: null, you: 0, them: 0 };
+const $ = id => document.getElementById(id);
+
+function render() {
+  const done = s.q >= QUIZ.length, item = QUIZ[Math.min(s.q, QUIZ.length - 1)];
+  $('minute').textContent = done ? 'FULL TIME' : 'MINUTE ' + MINUTES[s.q];
+  $('score').textContent = `${s.you} – ${s.them}`;
+  $('score').dataset.text = $('score').textContent;
+  $('qhead').textContent = done ? 'FINAL WHISTLE' : `QUESTION ${s.q + 1} OF ${QUIZ.length}`;
+  $('question').textContent = done ? (s.you > s.them ? `YOU WIN IT, ${s.you} TO ${s.them}.` : `THE DEFAULT ANSWER HOLDS ON, ${s.them} TO ${s.you}. REMATCH?`) : item.q;
+  $('opts').replaceChildren(...(done ? [] : item.options.map((label, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'opt'; b.disabled = s.picked !== null;
+    b.textContent = label + (s.picked === null ? '' : i === item.right ? ' ✓' : i === s.picked ? ' ✗' : '');
+    b.onclick = () => { s = { ...s, picked: i, you: s.you + (i === item.right), them: s.them + (i !== item.right) }; render(); };
+    return b;
+  })));
+  const call = $('call');
+  call.textContent = done ? '' : s.picked === null ? 'THE BALL IS WITH YOU. PICK ONE.' : s.picked === item.right ? item.yes : item.no;
+  call.classList.toggle('hit', s.picked !== null);
+  const next = $('next');
+  next.hidden = !done && s.picked === null;
+  next.textContent = done ? 'PLAY AGAIN' : s.q < QUIZ.length - 1 ? 'NEXT QUESTION →' : 'FINAL WHISTLE →';
+}
+$('next').onclick = () => { s = s.q >= QUIZ.length ? { q: 0, picked: null, you: 0, them: 0 } : { ...s, q: s.q + 1, picked: null }; render(); };
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Element: 3D liquid, 180 models</title>
+<style>
+html,body{margin:0;background:#050507;color:#FFFFFF;font:15px/1.5 system-ui,sans-serif}
+.stage{position:relative;height:100vh;min-height:560px;overflow:hidden;background:radial-gradient(60% 60% at 65% 40%,#3A3D4F,#050507)}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ui{position:absolute;left:20px;right:20px;bottom:20px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 14px;background:rgba(10,10,16,.62);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.16);border-radius:14px;max-width:760px}
+.ui button,.ui input{font:inherit;color:#FFFFFF;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.28);border-radius:8px;padding:10px 14px;min-height:44px}
+.ui button:focus-visible,.ui input:focus-visible{outline:2px solid #FFFFFF;outline-offset:2px}
+.ui input{width:5.5em}
+.ui label{display:flex;align-items:center;gap:8px}
+#fallback{display:none;position:absolute;top:20px;left:20px;margin:0}
+</style>
+</head>
+<body>
+<main class="stage" id="stage">
+<canvas id="liquid" aria-hidden="true"></canvas>
+<p id="fallback">WebGL is off in this browser, so the gradient behind stands in for the liquid.</p>
+<div class="ui" role="group" aria-label="Choose a liquid model">
+<button type="button" id="prev">Previous</button>
+<label>Model <input id="num" type="number" min="0" max="179" value="0"></label>
+<button type="button" id="next">Next</button>
+<button type="button" id="rand">Random</button>
+<span id="name" aria-live="polite"></span>
+</div>
+</main>
+<script>
+// 180 models = 6 forms x 6 materials x 5 palettes, all from one parametric shader.
+// Model n: form = n % 6, material = floor(n / 6) % 6, palette = floor(n / 36).
+const FORMS = ['Sheet', 'Ripples', 'Blobs', 'Satin', 'Droplets', 'Vortex'];
+const MATERIALS = ['Chrome', 'Glass', 'Oil slick', 'Ink', 'Gel', 'Mercury'];
+const PALETTES = [
+  ['Silver', [0.02, 0.02, 0.03], [0.75, 0.77, 0.82], [0.55, 0.60, 0.75]],
+  ['Ultraviolet', [0.03, 0.01, 0.08], [0.45, 0.30, 0.95], [0.95, 0.40, 0.80]],
+  ['Aqua', [0.00, 0.04, 0.06], [0.20, 0.75, 0.85], [0.55, 0.95, 0.80]],
+  ['Ember', [0.06, 0.02, 0.00], [0.95, 0.55, 0.20], [1.00, 0.85, 0.50]],
+  ['Rose', [0.06, 0.01, 0.03], [0.95, 0.45, 0.60], [1.00, 0.75, 0.55]]
+];
+const MODEL_COUNT = FORMS.length * MATERIALS.length * PALETTES.length;
+
+function describe(n) {
+  n = ((Math.round(n) % MODEL_COUNT) + MODEL_COUNT) % MODEL_COUNT;
+  const form = n % 6, mat = Math.floor(n / 6) % 6, pal = Math.floor(n / 36);
+  return { n, form, mat, pal, name: `Model ${String(n).padStart(3, '0')}: ${FORMS[form]}, ${MATERIALS[mat]}, ${PALETTES[pal][0]}` };
+}
+
+const FRAG = `
+precision highp float;
+uniform vec2 r; uniform float t; uniform vec2 m;
+uniform int form; uniform int mat;
+uniform vec3 c1; uniform vec3 c2; uniform vec3 c3;
+vec2 hs(vec2 p){p=vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3)));return -1.+2.*fract(sin(p)*43758.5453);}
+vec2 h2(vec2 p){return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);}
+float ns(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);
+  return mix(mix(dot(hs(i),f),dot(hs(i+vec2(1.,0.)),f-vec2(1.,0.)),u.x),mix(dot(hs(i+vec2(0.,1.)),f-vec2(0.,1.)),dot(hs(i+vec2(1.,1.)),f-vec2(1.,1.)),u.x),u.y);}
+float fb(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*ns(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}
+float field(vec2 p){
+  if(form==0){vec2 q=vec2(fb(p+.06*t),fb(p+vec2(5.2,1.3)-.05*t));return fb(p+1.9*q+.03*t);}
+  if(form==1){float h=0.;for(int i=0;i<3;i++){float fi=float(i);vec2 c=.6*vec2(sin(t*.3+fi*2.1),cos(t*.25+fi*1.7));float d=length(p-c);h+=.22*sin(d*14.-t*2.)/(1.+d*5.);}return h+.12*fb(p*.8+.05*t);}
+  if(form==2){float f=0.;for(int i=0;i<5;i++){float fi=float(i);vec2 c=.75*vec2(sin(t*.31*(1.+.2*fi)+fi*1.3),cos(t*.27*(1.+.15*fi)+fi*2.));vec2 d=p-c;f+=.02/dot(d,d);}return .3*sqrt(clamp(f-.35,0.,6.))+.02*fb(p*3.);}
+  if(form==3){float w=fb(p*.7+.03*t);return .3*sin((p.y+p.x*.4)*5.+w*6.+t*.5);}
+  if(form==4){vec2 q=p*2.6;vec2 i=floor(q),f=fract(q);float h=0.;
+    for(int y=-1;y<=1;y++)for(int x=-1;x<=1;x++){vec2 g=vec2(float(x),float(y));vec2 o=.5+.35*sin(t*.5+6.2831*h2(i+g));float d=length(g+o-f);h=max(h,sqrt(max(0.,.16-d*d)));}
+    return h*.9;}
+  float a=atan(p.y,p.x),rr=length(p);float s=a+2.2/(rr+.35)+t*.15;return 1.1*fb(vec2(cos(s),sin(s))*rr*1.6+.04*t);
+}
+void main(){
+  vec2 uv=(gl_FragCoord.xy-.5*r)/r.y;
+  vec2 p=uv*1.35+(m-.5)*.25;
+  float e=1.5/r.y;
+  float K=form==0?1.4:form==1?1.:form==2?1.:form==3?.8:1.2;
+  float h=field(p),hx=field(p+vec2(e,0.)),hy=field(p+vec2(0.,e));
+  vec3 n=normalize(vec3((h-hx)*K,(h-hy)*K,e));
+  vec3 v=vec3(0.,0.,1.),L=normalize(vec3(-.5,.6,.8));
+  vec3 rd=reflect(-v,n);
+  float y=.5+.5*rd.y;
+  vec3 env=mix(c1,c2,smoothstep(.25,.95,y))+vec3(pow(max(dot(rd,L),0.),24.)*.9)+c3*pow(max(dot(rd,normalize(vec3(.7,-.2,.6))),0.),12.)*.5;
+  float fr=pow(1.-clamp(n.z,0.,1.),2.);
+  float dif=max(dot(n,L),0.);
+  float sp=pow(max(dot(reflect(-L,n),v),0.),60.);
+  vec3 col;
+  if(mat==0){col=mix(env,env*c3*1.6,fr*.6);}
+  else if(mat==1){vec3 refr=c1+c2*.35*(.5+fb(p*2.+n.xy*.8));col=mix(refr,env,.2+.8*fr)+vec3(sp);}
+  else if(mat==2){vec3 ir=.5+.5*cos(6.2831*(vec3(0.,.33,.67)+h*2.5+rd.x*.6+.02*t));col=env*.5+ir*(.25+.6*fr)*c2*1.3;}
+  else if(mat==3){col=c1*1.5+c2*.3*dif*dif+vec3(sp*.9)+c3*fr*.45;}
+  else if(mat==4){col=c2*(.3+.7*dif)*(1.-.35*fr)+c3*fr*.6+vec3(sp*.7);}
+  else{float g=dot(env,vec3(.333));col=vec3(mix(g,g*g*1.4,.5)*1.15)+c3*.08;}
+  col*=smoothstep(1.7,.3,length(uv));
+  gl_FragColor=vec4(pow(clamp(col,0.,1.),vec3(.9)),1.);
+}`;
+
+// Mounts the liquid on a canvas. Returns { set(n), stop() }, or null without WebGL.
+function mountLiquid(canvas, start = 0, scale = 0.6) {
+  const gl = canvas.getContext('webgl', { antialias: false });
+  if (!gl) return null;
+  const shader = (type, src) => {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+    return s;
+  };
+  const prog = gl.createProgram();
+  gl.attachShader(prog, shader(gl.VERTEX_SHADER, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'));
+  gl.attachShader(prog, shader(gl.FRAGMENT_SHADER, FRAG));
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { console.error(gl.getProgramInfoLog(prog)); return null; }
+  gl.useProgram(prog);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(prog, 'p');
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const u = name => gl.getUniformLocation(prog, name);
+  const U = { r: u('r'), t: u('t'), m: u('m'), form: u('form'), mat: u('mat'), c1: u('c1'), c2: u('c2'), c3: u('c3') };
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let mouse = [0.5, 0.5], smooth = [0.5, 0.5], raf = 0;
+  const t0 = performance.now();
+  canvas.parentElement.addEventListener('pointermove', e => {
+    const b = canvas.getBoundingClientRect();
+    mouse = [(e.clientX - b.left) / b.width, 1 - (e.clientY - b.top) / b.height];
+  });
+  const draw = now => {
+    const w = Math.max(1, Math.round(canvas.clientWidth * scale)), h = Math.max(1, Math.round(canvas.clientHeight * scale));
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+    smooth = smooth.map((s, i) => s + (mouse[i] - s) * 0.04);
+    gl.viewport(0, 0, w, h);
+    gl.uniform2f(U.r, w, h);
+    gl.uniform1f(U.t, still ? 20 : 20 + (now - t0) / 1000);
+    gl.uniform2f(U.m, smooth[0], smooth[1]);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    if (!still) raf = requestAnimationFrame(draw);
+  };
+  const set = n => {
+    const d = describe(n), pal = PALETTES[d.pal];
+    gl.uniform1i(U.form, d.form);
+    gl.uniform1i(U.mat, d.mat);
+    gl.uniform3fv(U.c1, pal[1]); gl.uniform3fv(U.c2, pal[2]); gl.uniform3fv(U.c3, pal[3]);
+    if (still) draw(performance.now());
+    return d;
+  };
+  set(start);
+  raf = requestAnimationFrame(draw);
+  return { set, stop: () => cancelAnimationFrame(raf) };
+}
+
+// Demo wiring: #n in the URL picks the model.
+const num = document.getElementById('num'), label = document.getElementById('name');
+const liquid = mountLiquid(document.getElementById('liquid'), Number(location.hash.slice(1)) || 0);
+if (!liquid) document.getElementById('fallback').style.display = 'block';
+const show = n => {
+  const d = describe(n);
+  num.value = d.n;
+  label.textContent = d.name;
+  history.replaceState(null, '', '#' + d.n);
+  if (liquid) liquid.set(d.n);
+};
+document.getElementById('prev').onclick = () => show(Number(num.value) - 1);
+document.getElementById('next').onclick = () => show(Number(num.value) + 1);
+document.getElementById('rand').onclick = () => show(Math.floor(Math.random() * MODEL_COUNT));
+num.onchange = () => show(Number(num.value));
+show(Number(location.hash.slice(1)) || 0);
+</script>
+</body>
+</html>

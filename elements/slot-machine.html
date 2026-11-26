@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Element: slot machine</title>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@900&family=Big+Shoulders+Stencil+Text:wght@500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FF71CE;color:#000000;font:20px/1.35 'Big Shoulders Stencil Text','Arial Narrow',sans-serif}
+main{max-width:640px;margin:0 auto;padding:48px 24px}
+.disp{font-family:'Big Shoulders Stencil Display','Arial Black',sans-serif;font-weight:900;text-transform:uppercase;line-height:.9}
+.machine{background:#01CDFE;border:4px solid #000000;box-shadow:12px 12px 0 #000000;padding:28px;display:flex;flex-direction:column;gap:18px}
+.reels{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:12px}
+.win{height:72px;overflow:hidden;background:#FFFFFF;border:4px solid #000000}
+.strip>div{height:72px;display:flex;align-items:center;justify-content:center;font:900 34px 'Big Shoulders Stencil Display','Arial Black',sans-serif}
+.strip{transition:transform .45s cubic-bezier(.2,1.6,.4,1)}
+.strip.rolling{animation:roll .16s linear infinite;transition:none}
+@keyframes roll{from{transform:translateY(0)}to{transform:translateY(var(--loop))}}
+.lever{font:900 30px 'Big Shoulders Stencil Display','Arial Black',sans-serif;text-transform:uppercase;background:#FFFB96;border:4px solid #000000;box-shadow:6px 6px 0 #000000;padding:12px;min-height:56px;cursor:pointer}
+.lever:active{transform:translate(6px,6px);box-shadow:none}
+.lever:focus-visible{outline:4px solid #FFFFFF;outline-offset:4px}
+.result{background:#05FFA1;border:4px solid #000000;padding:16px 18px}
+@media (prefers-reduced-motion:reduce){.strip,.strip.rolling{animation:none;transition:none}}
+</style>
+</head>
+<body>
+<main>
+<div class="machine">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><span class="disp" style="font-size:34px">Plan picker</span><span style="font-size:15px;font-weight:700">SAMPLE</span></div>
+<div class="reels" id="reels" aria-hidden="true"></div>
+<button type="button" class="lever" id="pull">Pull the lever</button>
+<div class="result" role="status"><span style="font-size:15px;font-weight:700">RESULT</span><div class="disp" id="head" style="font-size:42px"></div><div id="body"></div></div>
+</div>
+</main>
+<script>
+// Each reel: a label and its values. result(values) writes the outcome. Swap both for the product's own.
+const REELS = [
+  { label: 'ACCOUNTS', values: [1, 3, 20] },
+  { label: 'SIZE', values: ['25K', '50K', '100K'] },
+  { label: 'PLAN', values: ['FREE', 'CORE', 'ELITE'] }
+];
+const result = ([accounts, size, plan]) => ({
+  head: `${accounts} × ${size} on ${plan}`,
+  body: 'Sample outcome. Replace result() with the product\'s own rule, and keep every figure true or labelled.'
+});
+
+const H = 72, ROLL_MS = [700, 1100, 1500];
+const reels = document.getElementById('reels');
+reels.style.setProperty('--n', REELS.length);
+// Each strip lists its values twice so the rolling loop is seamless.
+const strips = REELS.map(r => {
+  const col = document.createElement('div');
+  col.innerHTML = `<span style="font-size:15px;font-weight:700">${r.label}</span><div class="win"><div class="strip"></div></div>`;
+  const strip = col.querySelector('.strip');
+  for (const v of [...r.values, ...r.values]) strip.appendChild(Object.assign(document.createElement('div'), { textContent: v }));
+  strip.style.setProperty('--loop', `-${r.values.length * H}px`);
+  reels.appendChild(col);
+  return strip;
+});
+let picks = REELS.map(() => 0), busy = false;
+const show = () => {
+  if (busy) { head.textContent = 'Spinning…'; body.textContent = ''; return; }
+  const out = result(picks.map((p, i) => REELS[i].values[p]));
+  head.textContent = out.head; body.textContent = out.body;
+};
+const head = document.getElementById('head'), body = document.getElementById('body');
+document.getElementById('pull').onclick = () => {
+  if (busy) return;
+  busy = true; show();
+  picks = REELS.map(r => Math.floor(Math.random() * r.values.length));
+  strips.forEach((strip, i) => {
+    strip.classList.add('rolling');
+    setTimeout(() => {
+      strip.classList.remove('rolling');
+      strip.style.transform = `translateY(-${picks[i] * H}px)`;
+      if (i === strips.length - 1) { busy = false; show(); }
+    }, ROLL_MS[i % ROLL_MS.length]);
+  });
+};
+show();
+</script>
+</body>
+</html>

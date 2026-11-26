@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Element: neon tubes, a counting number, halftone sunset</title>
+<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Azeret+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;color:#FFFFFF;font-family:'Azeret Mono',ui-monospace,monospace;background:#1A0533}
+.sky{position:relative;min-height:100vh;box-sizing:border-box;padding:64px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;overflow:hidden;background:linear-gradient(180deg,#1A0533 0%,#4A1166 50%,#C2479F 84%,#FF71CE 100%)}
+/* Halftone: a dot grid faded by a mask, so the dots seem to grow toward the horizon. */
+.dots{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle,rgba(1,205,254,.6) 1.6px,transparent 2.1px) 0 0/14px 14px;-webkit-mask-image:linear-gradient(to top,#000,rgba(0,0,0,.5) 35%,transparent 70%);mask-image:linear-gradient(to top,#000,rgba(0,0,0,.5) 35%,transparent 70%)}
+.dots.big{background:radial-gradient(circle,rgba(255,113,206,.55) 3px,transparent 3.6px) 7px 7px/28px 28px;-webkit-mask-image:linear-gradient(to bottom,#000,transparent 40%);mask-image:linear-gradient(to bottom,#000,transparent 40%)}
+/* A neon tube: the glyph in the tube colour plus three widening glows. */
+.neon{position:relative;font-family:Monoton,'Arial Black',sans-serif;font-weight:400;margin:0;color:#FF71CE;text-shadow:0 0 6px rgba(255,113,206,.9),0 0 22px rgba(255,113,206,.6),0 0 52px rgba(185,103,255,.5)}
+.neon.cyan{color:#01CDFE;text-shadow:0 0 6px rgba(1,205,254,.9),0 0 24px rgba(1,205,254,.55),0 0 52px rgba(1,205,254,.35)}
+.flicker{animation:flicker 4s steps(1) infinite}
+@keyframes flicker{0%,100%{opacity:1}41%{opacity:.35}42%{opacity:1}44%{opacity:.5}45%{opacity:1}}
+.count{font-size:clamp(64px,15vw,200px);line-height:1;font-variant-numeric:tabular-nums}
+button{font:600 15px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#01CDFE;background:transparent;border:2px solid #01CDFE;border-radius:999px;padding:16px 24px;min-height:48px;cursor:pointer}
+button:hover{background:#01CDFE;color:#1A0533}
+button:focus-visible{outline:3px solid #FFFFFF;outline-offset:4px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.flicker{animation:none}}
+</style>
+</head>
+<body>
+<main class="sky">
+<div class="dots" aria-hidden="true"></div>
+<div class="dots big" aria-hidden="true"></div>
+<h1 class="neon cyan" style="font-size:clamp(28px,5vw,56px);letter-spacing:.06em">TONIGHT'S T<span class="flicker">A</span>KE</h1>
+<p class="neon count" aria-hidden="true" data-count-to="3681" data-prefix="$">$0</p>
+<p class="sr">Sample figure: $3,681.</p>
+<p style="position:relative;margin:0;font-size:13px;letter-spacing:.2em;color:#FFFFFF">SAMPLE FIGURE · REPLACE WITH THE PRODUCT'S OWN</p>
+<button type="button" id="again">COUNT AGAIN</button>
+</main>
+<script>
+// Counts an element up to data-count-to with an ease-out; jumps straight there under reduced motion.
+function countUp(el, ms = 2600) {
+  const to = Number(el.dataset.countTo), prefix = el.dataset.prefix || '';
+  const show = v => { el.textContent = prefix + Math.round(v).toLocaleString('en-US'); };
+  cancelAnimationFrame(el._raf);
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return show(to);
+  const t0 = performance.now();
+  const step = now => {
+    const k = Math.min((now - t0) / ms, 1);
+    show(to * (1 - Math.pow(1 - k, 3)));
+    if (k < 1) el._raf = requestAnimationFrame(step);
+  };
+  el._raf = requestAnimationFrame(step);
+}
+const counter = document.querySelector('[data-count-to]');
+countUp(counter);
+document.getElementById('again').onclick = () => countUp(counter);
+</script>
+</body>
+</html>
