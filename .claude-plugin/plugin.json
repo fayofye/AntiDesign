@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "anti-default-design",
   "description": "Design web pages that break the conventions an AI model reaches for by default, while staying true, usable and accessible.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": {
     "name": "Marcell Lőrinczi",
     "url": "https://github.com/fayofye"

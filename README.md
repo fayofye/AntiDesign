@@ -66,7 +66,9 @@ Working, self-contained demos in `elements/`, for the agent to re-cut to each pr
 
 ## Install
 
-As a Claude Code plugin:
+The skill is plain Markdown plus a standard-library Python script, so it works in any agent that reads `SKILL.md` skills. Leave off `--global` in any `npx skills` command below to install it only in the current project.
+
+### Claude Code
 
 ```
 /plugin marketplace add fayofye/anti-default-design
@@ -78,6 +80,36 @@ Or as a personal skill, available in every project:
 ```bash
 git clone https://github.com/fayofye/anti-default-design ~/.claude/skills/anti-default-design
 ```
+
+### Codex
+
+```bash
+npx skills add fayofye/anti-default-design --global --agent codex
+```
+
+Then ask for it by name: `$anti-default-design`.
+
+### Grok Build
+
+```bash
+npx skills add fayofye/anti-default-design --global --agent grok
+```
+
+### Cursor, Gemini CLI, GitHub Copilot and other agents
+
+```bash
+npx skills add fayofye/anti-default-design --global --agent '*'
+```
+
+This installs it for every agent the [Skills CLI](https://github.com/vercel-labs/skills) supports. For an agent it does not know, copy this folder into that agent's skills folder.
+
+### Claude.ai and Claude Desktop
+
+Download this repository as a ZIP (**Code → Download ZIP**) and upload it as a skill in Settings.
+
+### Chat apps without skills (Grok, ChatGPT and others)
+
+Paste `SKILL.md` into the chat or the app's custom instructions. The chat can't run the roll script, so run `python3 scripts/roll.py` yourself and paste the output; the skill tells the agent never to invent a roll. Open the files in `elements/` in a browser and attach the ones you want it to adapt.
 
 ## Use
 

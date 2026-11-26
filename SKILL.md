@@ -1,6 +1,9 @@
 ---
 name: anti-default-design
 description: Design web pages that break the conventions an AI model reaches for by default. Use when someone asks for an unconventional, unexpected, experimental or "not AI-looking" website, landing page or UI; when they say designs look templated, safe or alike; or when they ask for designs you would not make on your own.
+license: MIT
+metadata:
+  version: "1.2.0"
 ---
 
 # Anti-default design
@@ -33,7 +36,7 @@ Give each design its own move; combine them when it helps.
 1. **Invert.** Write your own opposite for every line. The first opposite that comes to mind is the next default, so take the second or third. Stuck on a line: `python3 scripts/roll.py --trait <trait>` gives one unusual option for it.
 2. **Let the data draw.** Make the layout the product's own numbers: blocks sized by value, copy riding a chart line, a hero that is the calculation. Inputs that reshape the page beat static figures.
 3. **Become a domain artifact.** Ask which physical object the product's world already trusts (banknote, bond coupon, ledger, ticket, receipt, field guide, scoreboard) and make the page that object, down to its craft details: guilloché, microtext, perforations, serial numbers.
-4. **Roll.** Run `python3 scripts/roll.py --count N` from this skill's folder. It rolls all ten traits, ten billion combinations. Build exactly what it rolls. When two rolled options clash (a terminal in a handwriting font), keep both and settle it toward the stranger reading, never toward the default. Never reroll for taste.
+4. **Roll.** Run `python3 scripts/roll.py --count N` from this skill's folder. It rolls all ten traits, ten billion combinations. Build exactly what it rolls. If you cannot run commands, ask the user to run it and paste the output; never invent a roll. When two rolled options clash (a terminal in a handwriting font), keep both and settle it toward the stranger reading, never toward the default. Never reroll for taste.
 
 In one batch, no option appears in two designs. If a roll repeats one, reroll that trait only.
 
