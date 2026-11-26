@@ -1,6 +1,6 @@
 # Guide for agents working on this repo
 
-`anti-default-design` is an agent skill: `SKILL.md` is the prompt, `scripts/roll.py` rolls designs, `elements/` holds self-contained demo pages and `references/elements.md` says when to use them. There is no build step.
+AntiDesign (skill id `antidesign`) is an agent skill: `SKILL.md` is the prompt, `scripts/roll.py` rolls designs, `elements/` holds self-contained demo pages and `references/elements.md` says when to use them. There is no build step.
 
 ## Keep it portable
 

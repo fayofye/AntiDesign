@@ -1,4 +1,4 @@
 interface:
-  display_name: "Anti-default design"
+  display_name: "AntiDesign"
   short_description: "Design web pages a model would never make by default"
-  default_prompt: "Use $anti-default-design to design three unconventional landing pages for this product."
+  default_prompt: "Use $antidesign to design three unconventional landing pages for this product."

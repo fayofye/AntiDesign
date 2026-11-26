@@ -1,12 +1,12 @@
 {
-  "name": "anti-default-design",
+  "name": "antidesign",
   "description": "Design web pages that break the conventions an AI model reaches for by default.",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": {
     "name": "Marcell Lőrinczi"
   },
-  "homepage": "https://github.com/fayofye/anti-default-design",
-  "repository": "https://github.com/fayofye/anti-default-design",
+  "homepage": "https://github.com/fayofye/AntiDesign",
+  "repository": "https://github.com/fayofye/AntiDesign",
   "license": "MIT",
   "keywords": ["design", "web design", "landing page", "ui", "creative"]
 }

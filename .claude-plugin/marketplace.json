@@ -1,14 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
-  "name": "anti-default-design",
+  "name": "antidesign",
   "owner": {
     "name": "Marcell Lőrinczi",
     "url": "https://github.com/fayofye"
   },
-  "description": "Install anti-default-design as a Claude Code plugin.",
+  "description": "Install AntiDesign as a Claude Code plugin.",
   "plugins": [
     {
-      "name": "anti-default-design",
+      "name": "antidesign",
       "source": "./",
       "description": "Design web pages that break the conventions an AI model reaches for by default.",
       "license": "MIT",

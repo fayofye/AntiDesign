@@ -1,4 +1,4 @@
-# anti-default-design
+# AntiDesign
 
 A skill for Claude Code (and other agents that read `SKILL.md` skills) that designs web pages the model would never make on its own.
 
@@ -9,7 +9,7 @@ A model's first design is its most probable one: a centred hero, a gradient, thr
 3. **Become a domain artifact**: the page is an object the product's world already trusts, such as a banknote, a bond coupon, a ledger, a boarding pass or a field guide.
 4. **Roll** ten traits from a table of ten billion unusual combinations and build exactly what comes out.
 
-Every design ends with a table of the ten traits marked kept or broken; fewer than eight broken means it isn't done. Four things stay fixed: real facts (sample figures are labelled and add up), accessibility, pages that work on phones, and no copying of real brands.
+Every design ends with a table of the ten traits marked kept or broken; fewer than eight broken means it isn't done, and every design gets a desktop and phone screenshot pass. Four things stay fixed: real facts (sample figures are labelled and add up), accessibility, pages that work on phones, and no copying of real brands.
 
 ## Demo
 
@@ -18,7 +18,7 @@ One product, Propel Audit (a payout desk and trading journal for prop-firm trade
 <table>
 <tr>
 <th width="33%">Without the skill</th>
-<th colspan="2">With anti-default-design</th>
+<th colspan="2">With AntiDesign</th>
 </tr>
 <tr>
 <td rowspan="2" valign="top" width="33%">
@@ -71,34 +71,34 @@ The skill is plain Markdown plus a standard-library Python script, so it works i
 ### Claude Code
 
 ```
-/plugin marketplace add fayofye/anti-default-design
-/plugin install anti-default-design@anti-default-design
+/plugin marketplace add fayofye/AntiDesign
+/plugin install antidesign@antidesign
 ```
 
 Or as a personal skill, available in every project:
 
 ```bash
-git clone https://github.com/fayofye/anti-default-design ~/.claude/skills/anti-default-design
+git clone https://github.com/fayofye/AntiDesign ~/.claude/skills/antidesign
 ```
 
 ### Codex
 
 ```bash
-npx skills add fayofye/anti-default-design --global --agent codex
+npx skills add fayofye/AntiDesign --global --agent codex
 ```
 
-Then ask for it by name: `$anti-default-design`.
+Then ask for it by name: `$antidesign`.
 
 ### Grok Build
 
 ```bash
-npx skills add fayofye/anti-default-design --global --agent grok
+npx skills add fayofye/AntiDesign --global --agent grok
 ```
 
 ### Cursor, Gemini CLI, GitHub Copilot and other agents
 
 ```bash
-npx skills add fayofye/anti-default-design --global --agent '*'
+npx skills add fayofye/AntiDesign --global --agent '*'
 ```
 
 This installs it for every agent the [Skills CLI](https://github.com/vercel-labs/skills) supports. For an agent it does not know, copy this folder into that agent's skills folder.
