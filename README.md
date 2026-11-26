@@ -11,6 +11,43 @@ A model's first design is its most probable one: a centred hero, a gradient, thr
 
 Every design ends with a table of the ten traits marked kept or broken; fewer than eight broken means it isn't done. Four things stay fixed: real facts (sample figures are labelled and add up), accessibility, pages that work on phones, and no copying of real brands.
 
+## Demo
+
+One product, Propel Audit (a payout desk and trading journal for prop-firm traders), designed both ways. Sample figures in the shots are illustrative.
+
+<table>
+<tr>
+<th width="33%">Without the skill</th>
+<th colspan="2">With anti-default-design</th>
+</tr>
+<tr>
+<td rowspan="2" valign="top" width="33%">
+<img src="demo/1-generic-default.jpg" width="270" alt="The default: a dark page with a violet gradient headline, two buttons, a dashboard mockup and a grid of feature cards"><br>
+<sub>The default the model makes unprompted</sub><br><br>
+<img src="demo/2-generic-bento.jpg" width="270" alt="A bento grid of cream and forest-green tiles with a big kept figure, feature tiles and pricing tiles"><br>
+<sub>Rolled from a table of safe options: still generic</sub>
+</td>
+<td valign="top" width="33%">
+<img src="demo/3-fintech-liquid.jpg" width="270" alt="A black page with an iridescent 3D liquid-chrome hero, thin headline and a frosted-glass payout statement"><br>
+<sub>Fintech: 3D liquid chrome hero</sub>
+</td>
+<td valign="top" width="33%">
+<img src="demo/4-bank-security-print.jpg" width="270" alt="A banknote-style page with guilloché rosettes, microtext borders, numbered terms and tear-off coupons for pricing"><br>
+<sub>Bank: banknote security print</sub>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="demo/5-colour-blocks.jpg" width="270" alt="A payout split into clashing yellow, blue, pink and orange blocks, each sized by its dollar amount"><br>
+<sub>The layout is the money</sub>
+</td>
+<td valign="top">
+<img src="demo/6-field-guide.jpg" width="270" alt="A pink field guide page in stencil type with a slot machine, a stack of species cards and expedition kits"><br>
+<sub>Field guide with a slot machine</sub>
+</td>
+</tr>
+</table>
+
 ## Elements
 
 Working, self-contained demos in `elements/`, for the agent to re-cut to each product:
