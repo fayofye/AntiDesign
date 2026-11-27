@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AntiDesign library: textures</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400..700&family=Azeret+Mono:wght@400;700&family=Cutive+Mono&family=Lilita+One&family=Marcellus+SC&family=Patrick+Hand&family=Pixelify+Sans:wght@400..700&family=Rozha+One&family=Source+Serif+4:opsz,wght@8..60,400..700&family=Teko:wght@500..700&family=VT323&display=swap" rel="stylesheet">
+<style>
+/* Shell: the gallery around the specimens. Not part of any specimen; never copy it. */
+body{margin:0;background:#E8E8E3;color:#141414;font:16px/1.5 ui-sans-serif,system-ui,sans-serif}
+.shell{max-width:1240px;margin:0 auto;padding:32px 16px 96px}
+.shell>h1{margin:0;font-size:24px}
+.shell>p{margin:4px 0 0;max-width:70ch}
+.index{display:flex;flex-wrap:wrap;gap:6px 16px;margin:20px 0 36px;padding:0;list-style:none;font-size:14px}
+.index a{color:#141414}
+.spec{margin:0 0 40px;border:2px solid #141414;background:#FFFFFF;scroll-margin-top:16px}
+.spec>header{display:flex;flex-wrap:wrap;gap:4px 20px;align-items:baseline;padding:10px 14px;border-bottom:2px solid #141414;font-size:14px}
+.spec>header h2{margin:0;font-size:16px}
+.spec>header code{font:600 13px ui-monospace,monospace;background:#141414;color:#FFFFFF;padding:2px 6px}
+.spec>header p{margin:0;flex:1 1 320px}
+.stage{position:relative;min-height:360px;display:grid;place-items:center;padding:48px 20px;overflow:hidden;box-sizing:border-box}
+.replay{position:absolute;top:10px;right:10px;font:600 13px ui-sans-serif,system-ui,sans-serif;padding:8px 12px;min-height:40px;border:2px solid currentColor;background:transparent;color:inherit;cursor:pointer}
+.replay:focus-visible,.index a:focus-visible{outline:3px solid currentColor;outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* tex-01 Halftone (Lilita One) */
+#tex-01 .stage{--d:12px;--ink:#E0218A}
+#tex-01 .t01{width:100%;max-width:880px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px 36px;align-items:center}
+#tex-01 .t01-ink{position:relative;isolation:isolate;mix-blend-mode:multiply;aspect-ratio:4/3;border:3px solid #3B0A24}
+#tex-01 .t01-dots{position:absolute;inset:0;background:radial-gradient(closest-side,#888,#fff) 0 0/var(--d) var(--d),linear-gradient(transparent 70%,#8F8F8F 70%,#C4C4C4),radial-gradient(circle at 50% 66%,#fff 0 17%,#000 17.4%),linear-gradient(#7A7A7A,#CFCFCF 70%);background-blend-mode:multiply,normal,lighten,normal;filter:contrast(24)}
+#tex-01 .t01-ink::after{content:'';position:absolute;inset:0;background:var(--ink);mix-blend-mode:screen}
+#tex-01 .t01-copy{display:grid;gap:14px}
+#tex-01 .t01-brand{margin:0;font:400 clamp(44px,7vw,84px)/.95 'Lilita One',system-ui,sans-serif}
+#tex-01 .t01-line{margin:0;font:600 18px/1.4 ui-sans-serif,system-ui,sans-serif}
+#tex-01 label{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font:700 14px ui-sans-serif,system-ui,sans-serif}
+#tex-01 input[type=range]{flex:1 1 140px;accent-color:#3B0A24}
+#tex-01 input[type=color]{width:48px;height:36px;border:2px solid #3B0A24;padding:0;background:none}
+#tex-01 small{font:12px/1.5 ui-monospace,monospace}
+#tex-01 :focus-visible{outline:3px solid #3B0A24;outline-offset:3px}
+@media (max-width:640px){#tex-01 .t01{grid-template-columns:1fr}}
+/* tex-02 Scanlines (VT323) */
+#tex-02 .stage{--ph:#7CFF9B;--gap:3px}
+#tex-02 .t02{width:100%;max-width:760px;display:grid;gap:16px}
+#tex-02 .t02-screen{position:relative;overflow:hidden;padding:clamp(16px,4vw,36px);border-radius:18px;background:radial-gradient(ellipse at 50% 45%,#0F2414,#020502 85%);box-shadow:inset 0 0 0 2px #2A3A2C;color:var(--ph);font:clamp(20px,3.6vw,32px)/1.25 VT323,ui-monospace,monospace;text-shadow:0 0 .3em var(--ph)}
+#tex-02 .t02-screen::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(transparent 0 calc(var(--gap) - 1px),rgba(0,0,0,.45) calc(var(--gap) - 1px) var(--gap)),radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,.6))}
+#tex-02 .t02-screen p{margin:0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:0 16px}
+#tex-02 .t02-ctl{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;font:700 14px ui-sans-serif,system-ui,sans-serif}
+#tex-02 label{display:flex;align-items:center;gap:8px}
+#tex-02 select{font:inherit;min-height:36px;padding:4px 8px;background:#0D110D;color:#E6EDE6;border:2px solid #E6EDE6}
+#tex-02 input{accent-color:#7CFF9B}
+#tex-02 small{font:12px/1.5 ui-monospace,monospace}
+#tex-02 :focus-visible{outline:3px solid #E6EDE6;outline-offset:3px}
+@media (prefers-reduced-motion:no-preference){#tex-02 .t02-screen{animation:t02-flicker 5s steps(1) infinite}}
+@keyframes t02-flicker{0%,100%{opacity:1}47%{opacity:.92}48%{opacity:1}83%{opacity:.96}84%{opacity:1}}
+/* tex-03 Paper and torn edge (Cutive Mono) */
+#tex-03 .stage{--paper:#D9C3A0;--grain:.6}
+#tex-03 .t03{width:100%;max-width:640px;display:grid;gap:14px}
+#tex-03 .t03-clip{overflow:hidden;padding-bottom:28px}
+#tex-03 .t03-sheet{position:relative;isolation:isolate;padding:clamp(20px,5vw,44px);color:#2A1E12;font:17px/1.6 'Cutive Mono',ui-monospace,monospace}
+#tex-03 .t03-sheet p{margin:0 0 12px}
+#tex-03 .t03-kicker{font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+#tex-03 .t03-paper{position:absolute;inset:-30px -30px 0 -30px;z-index:-1;background:var(--paper)}
+#tex-03 .t03-paper::after{content:'';position:absolute;inset:0;opacity:var(--grain);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .16 0 0 0 0 .11 0 0 0 0 .06 1.3 0 0 0 -.5'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E") 0 0/220px 220px}
+#tex-03 .t03-torn .t03-paper{filter:url(#tex-03-tear)}
+#tex-03 .t03-ctl{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;font:700 14px ui-sans-serif,system-ui,sans-serif}
+#tex-03 label{display:flex;align-items:center;gap:8px}
+#tex-03 input[type=range]{accent-color:#2A1E12}
+#tex-03 input[type=color]{width:48px;height:36px;border:2px solid #2A1E12;padding:0;background:none}
+#tex-03 button{font:inherit;min-height:40px;padding:8px 14px;border:2px solid #2A1E12;background:transparent;color:inherit;cursor:pointer}
+#tex-03 button[aria-pressed=true]{background:#2A1E12;color:#F4EAD8}
+#tex-03 small{font:12px/1.5 ui-monospace,monospace}
+#tex-03 :focus-visible{outline:3px solid #2A1E12;outline-offset:3px}
+/* tex-04 RGB split (Teko) */
+#tex-04 .stage{--off:4px;--a:#FF2A4F;--b:#1EE3FF}
+#tex-04 .t04{width:100%;max-width:900px;display:grid;gap:18px;justify-items:center;text-align:center}
+#tex-04 .t04-word{position:relative;margin:0;max-width:100%;font:600 clamp(56px,15vw,176px)/.9 Teko,'Arial Narrow',sans-serif;letter-spacing:.02em;color:#fff;overflow-wrap:anywhere}
+#tex-04 .t04-ch{position:absolute;inset:0;mix-blend-mode:screen;pointer-events:none}
+#tex-04 .t04-a{color:var(--a);transform:translateX(calc(var(--off) * -1))}
+#tex-04 .t04-b{color:var(--b);transform:translateX(var(--off))}
+#tex-04 .t04-ctl{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 24px;font:700 14px ui-sans-serif,system-ui,sans-serif}
+#tex-04 label{display:flex;align-items:center;gap:8px}
+#tex-04 input[type=text]{font:inherit;width:12em;max-width:60vw;min-height:36px;padding:4px 8px;background:#15151F;color:#fff;border:2px solid #fff}
+#tex-04 input[type=range]{accent-color:#1EE3FF}
+#tex-04 small{font:12px/1.5 ui-monospace,monospace;max-width:66ch}
+#tex-04 :focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media (prefers-reduced-motion:no-preference){
+#tex-04 .t04-a{animation:t04-jit 3.4s steps(1) infinite}
+#tex-04 .t04-b{animation:t04-jit 3.4s steps(1) infinite -1.3s}
+}
+@keyframes t04-jit{0%,84%,100%{clip-path:inset(0);translate:0 0}86%{clip-path:inset(18% 0 58% 0);translate:-8px 0}89%{clip-path:inset(62% 0 12% 0);translate:7px 0}92%{clip-path:inset(38% 0 40% 0);translate:-4px 0}}
+/* tex-05 Hand-drawn border (Patrick Hand) */
+#tex-05 .stage{--w:3px;--line:#1F3B8C}
+#tex-05 .t05{width:100%;max-width:680px;display:grid;gap:22px;justify-items:start;font:20px/1.45 'Patrick Hand','Comic Sans MS',cursive}
+#tex-05 .t05-box{position:relative;padding:22px 26px}
+#tex-05 .t05-box p{margin:0}
+#tex-05 .t05-line{position:absolute;inset:0;border:var(--w) solid var(--line);border-radius:16px 6px 14px 5px;filter:url(#tex-05-wob);pointer-events:none}
+#tex-05 .t05-redraw{position:relative;min-height:48px;padding:10px 22px;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer}
+#tex-05 .t05-ctl{display:flex;flex-wrap:wrap;gap:10px 24px;font:700 14px ui-sans-serif,system-ui,sans-serif}
+#tex-05 label{display:flex;align-items:center;gap:8px}
+#tex-05 input{accent-color:#1F3B8C}
+#tex-05 small{font:12px/1.5 ui-monospace,monospace}
+#tex-05 :focus-visible{outline:3px solid #1F3B8C;outline-offset:4px}
+/* tex-06 Dither (Pixelify Sans) */
+#tex-06 .t06{width:100%;max-width:820px;display:grid;gap:14px}
+#tex-06 .t06-name{margin:0;font:700 clamp(36px,6vw,64px)/1 'Pixelify Sans',ui-monospace,monospace}
+#tex-06 canvas{display:block;width:100%;height:260px;image-rendering:pixelated;border:3px solid #FFD35C}
+#tex-06 .t06-ctl{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;font:700 14px ui-sans-serif,system-ui,sans-serif}
+#tex-06 label{display:flex;align-items:center;gap:8px}
+#tex-06 input[type=range]{accent-color:#FFD35C}
+#tex-06 input[type=color]{width:48px;height:36px;border:2px solid #EAF2F8;padding:0;background:none}
+#tex-06 small{font:12px/1.5 ui-monospace,monospace}
+#tex-06 :focus-visible{outline:3px solid #FFD35C;outline-offset:3px}
+/* tex-07 Engraved hatching (Rozha One) */
+#tex-07 .stage{--ang:35deg;--s:7px;--ink:#18452F}
+#tex-07 .t07{width:100%;max-width:860px;display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:24px 40px;align-items:center}
+#tex-07 .t07-ink{position:relative;isolation:isolate;mix-blend-mode:multiply;aspect-ratio:1;clip-path:circle(50%)}
+#tex-07 .t07-lines{position:absolute;inset:0;background:repeating-linear-gradient(var(--ang),#fff 0,#888 calc(var(--s) / 2),#fff var(--s)),radial-gradient(circle at 34% 30%,#fff 0 6%,#9A9A9A 42%,#3C3C3C 76%,#262626);background-blend-mode:multiply;filter:contrast(22)}
+#tex-07 .t07-ink::after{content:'';position:absolute;inset:0;background:var(--ink);mix-blend-mode:screen}
+#tex-07 .t07-copy{display:grid;gap:14px}
+#tex-07 .t07-name{margin:0;font:400 clamp(34px,6vw,64px)/1 'Rozha One',Georgia,serif}
+#tex-07 label{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font:700 14px ui-sans-serif,system-ui,sans-serif}
+#tex-07 input{flex:1 1 140px;accent-color:#18452F}
+#tex-07 small{font:12px/1.5 ui-monospace,monospace}
+#tex-07 :focus-visible{outline:3px solid #18452F;outline-offset:3px}
+@media (max-width:640px){#tex-07 .t07{grid-template-columns:minmax(0,260px);justify-content:center}}
+/* tex-08 Crop marks (Azeret Mono) */
+#tex-08 .stage{--bleed:12px;--gap:6px;--len:20px}
+#tex-08 .t08{width:100%;max-width:620px;display:grid;gap:14px}
+#tex-08 .t08-sheet{position:relative;padding:calc(var(--bleed) + var(--gap) + var(--len) + 8px);background:#fff;color:#141414;font:14px/1.5 'Azeret Mono',ui-monospace,monospace}
+#tex-08 .t08-trim{position:relative;min-height:220px;padding:24px;color:#fff}
+#tex-08 .t08-bleed{position:absolute;inset:calc(var(--bleed) * -1);overflow:hidden;background:#1B2A6B}
+#tex-08 .t08-moon{position:absolute;right:-60px;bottom:-50px;width:180px;aspect-ratio:1;border-radius:50%;background:#F2C94C}
+#tex-08 .t08-art{position:relative}
+#tex-08 .t08-art p{margin:0 0 8px}
+#tex-08 .t08-title{font-size:clamp(24px,5vw,36px);font-weight:700;line-height:1.1}
+#tex-08 .t08-c{position:absolute;width:0;height:0}
+#tex-08 .t08-tl{top:0;left:0}
+#tex-08 .t08-tr{top:0;right:0}
+#tex-08 .t08-bl{bottom:0;left:0}
+#tex-08 .t08-br{bottom:0;right:0}
+#tex-08 .t08-c::before,#tex-08 .t08-c::after{content:'';position:absolute;background:#000}
+#tex-08 .t08-c::before{width:var(--len);height:1px;top:-.5px}
+#tex-08 .t08-c::after{width:1px;height:var(--len);left:-.5px}
+#tex-08 .t08-tl::before,#tex-08 .t08-bl::before{right:calc(var(--bleed) + var(--gap))}
+#tex-08 .t08-tr::before,#tex-08 .t08-br::before{left:calc(var(--bleed) + var(--gap))}
+#tex-08 .t08-tl::after,#tex-08 .t08-tr::after{bottom:calc(var(--bleed) + var(--gap))}
+#tex-08 .t08-bl::after,#tex-08 .t08-br::after{top:calc(var(--bleed) + var(--gap))}
+#tex-08 .t08-reg{position:absolute;top:calc(50% - 9px);width:18px;height:18px}
+#tex-08 .t08-reg-l{left:calc((var(--bleed) + var(--gap) + 20px) * -1)}
+#tex-08 .t08-reg-r{right:calc((var(--bleed) + var(--gap) + 20px) * -1)}
+#tex-08 .t08-slug{position:absolute;top:6px;left:calc(var(--bleed) + var(--gap) + var(--len) + 18px);right:calc(var(--bleed) + var(--gap) + var(--len) + 18px);margin:0;font-size:10px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tex-08 .t08-bar{position:absolute;bottom:8px;left:50%;display:flex;translate:-50% 0}
+#tex-08 .t08-bar i{width:14px;height:10px}
+#tex-08 label{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font:700 14px ui-sans-serif,system-ui,sans-serif}
+#tex-08 input{flex:0 1 220px;accent-color:#141414}
+#tex-08 output{font:13px ui-monospace,monospace}
+#tex-08 small{font:12px/1.5 ui-monospace,monospace}
+#tex-08 :focus-visible{outline:3px solid #141414;outline-offset:3px}
+/* tex-09 Baseline grid (Source Serif 4) */
+#tex-09 .stage{--lh:24px;--off:0px}
+#tex-09 .t09{width:100%;max-width:640px;display:grid;gap:14px}
+#tex-09 .t09-page{position:relative;padding:var(--lh) clamp(16px,5vw,40px);background:#fff;color:#1C2430;font:16px/var(--lh) 'Source Serif 4',Georgia,serif}
+#tex-09 .t09-page.t09-on{background:linear-gradient(rgba(214,57,57,.45) 0 1px,transparent 1px) 0 var(--off)/100% var(--lh),#fff}
+#tex-09 .t09-page h3{margin:0 0 var(--lh);font-size:32px;line-height:calc(var(--lh) * 2);font-weight:600}
+#tex-09 .t09-page p{margin:0 0 var(--lh)}
+#tex-09 .t09-page .t09-note{margin:0;font-size:13px;color:#3A4352}
+#tex-09 [data-snap]{position:relative}
+#tex-09 .t09-b{display:inline-block;width:0;height:0}
+#tex-09 .t09-ctl{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;font:700 14px ui-sans-serif,system-ui,sans-serif}
+#tex-09 label{display:flex;align-items:center;gap:8px}
+#tex-09 input{accent-color:#1C2430}
+#tex-09 button{font:inherit;min-height:40px;padding:8px 14px;border:2px solid #1C2430;background:transparent;color:inherit;cursor:pointer}
+#tex-09 button[aria-pressed=true]{background:#1C2430;color:#fff}
+#tex-09 small{font:12px/1.5 ui-monospace,monospace}
+#tex-09 :focus-visible{outline:3px solid #1C2430;outline-offset:3px}
+/* tex-10 Blind emboss (Marcellus SC) */
+#tex-10 .stage{--dx:1;--dy:1;--k:1;--paper:#E4E2DD;--hi:rgba(255,255,255,.95);--lo:rgba(0,0,0,.3);background:var(--paper)}
+#tex-10 .t10{width:100%;max-width:760px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px 40px;align-items:center}
+#tex-10 .t10-seal{display:grid;place-items:center;width:200px;aspect-ratio:1;border-radius:50%;color:var(--paper);font:400 64px/1 'Marcellus SC',Georgia,serif;text-shadow:calc(var(--dx) * var(--k) * -1px) calc(var(--dy) * var(--k) * -1px) 1px var(--hi),calc(var(--dx) * var(--k) * 1px) calc(var(--dy) * var(--k) * 1px) 1px var(--lo);box-shadow:calc(var(--dx) * var(--k) * -1.5px) calc(var(--dy) * var(--k) * -1.5px) 2px var(--hi),calc(var(--dx) * var(--k) * 1.5px) calc(var(--dy) * var(--k) * 1.5px) 2px var(--lo),inset calc(var(--dx) * var(--k) * -1.5px) calc(var(--dy) * var(--k) * -1.5px) 2px var(--lo),inset calc(var(--dx) * var(--k) * 1.5px) calc(var(--dy) * var(--k) * 1.5px) 2px var(--hi)}
+#tex-10 .t10-copy{display:grid;gap:12px}
+#tex-10 .t10-name{margin:0;font:400 clamp(28px,4vw,40px)/1.1 'Marcellus SC',Georgia,serif}
+#tex-10 .t10-ctl{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;font:700 14px ui-sans-serif,system-ui,sans-serif}
+#tex-10 label{display:flex;align-items:center;gap:8px}
+#tex-10 input[type=range]{accent-color:#2E2C29}
+#tex-10 input[type=color]{width:48px;height:36px;border:2px solid #2E2C29;padding:0;background:none}
+#tex-10 button{font:inherit;min-height:40px;padding:8px 14px;border:2px solid #2E2C29;background:transparent;color:inherit;cursor:pointer}
+#tex-10 button[aria-pressed=true]{background:#2E2C29;color:#fff}
+#tex-10 small{font:12px/1.5 ui-monospace,monospace}
+#tex-10 :focus-visible{outline:3px solid #2E2C29;outline-offset:3px}
+@media (max-width:640px){#tex-10 .t10{grid-template-columns:1fr;justify-items:center}}
+/* tex-11 Duotone (Archivo Narrow) */
+#tex-11 .t11{width:100%;max-width:820px;display:grid;gap:14px}
+#tex-11 .t11-scene{display:block;width:100%;height:auto}
+#tex-11 .t11-on{filter:url(#tex-11-duo)}
+#tex-11 .t11-name{margin:0;font:700 clamp(32px,6vw,60px)/1 'Archivo Narrow','Arial Narrow',sans-serif;text-transform:uppercase}
+#tex-11 .t11-ctl{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;font:700 14px ui-sans-serif,system-ui,sans-serif}
+#tex-11 label{display:flex;align-items:center;gap:8px}
+#tex-11 input{width:48px;height:36px;border:2px solid #1B1A4A;padding:0;background:none}
+#tex-11 button{font:inherit;min-height:40px;padding:8px 14px;border:2px solid #1B1A4A;background:transparent;color:inherit;cursor:pointer}
+#tex-11 button[aria-pressed=true]{background:#1B1A4A;color:#fff}
+#tex-11 small{font:12px/1.5 ui-monospace,monospace}
+#tex-11 :focus-visible{outline:3px solid #1B1A4A;outline-offset:3px}
+</style>
+</head>
+<body>
+<main class="shell">
+<h1>Textures</h1>
+<p>Specimens to re-cut, never to ship as they are: change the copy, colours and strength to the product's own. All of them are pure CSS, SVG filters and canvas, with no image files. The texture trait in <code>scripts/roll.py</code> names the specimen to open, or roll one with <code>python3 scripts/roll.py --library textures</code>.</p>
+<ul class="index"><li><a href="#tex-01">tex-01 Halftone</a></li><li><a href="#tex-02">tex-02 Scanlines</a></li><li><a href="#tex-03">tex-03 Paper and torn edge</a></li><li><a href="#tex-04">tex-04 RGB split</a></li><li><a href="#tex-05">tex-05 Hand-drawn border</a></li><li><a href="#tex-06">tex-06 Dither</a></li><li><a href="#tex-07">tex-07 Engraved hatching</a></li><li><a href="#tex-08">tex-08 Crop marks</a></li><li><a href="#tex-09">tex-09 Baseline grid</a></li><li><a href="#tex-10">tex-10 Blind emboss</a></li><li><a href="#tex-11">tex-11 Duotone</a></li></ul>
+
+<article class="spec" id="tex-01" data-name="Halftone">
+<header><h2><code>tex-01</code> Halftone</h2><p><b>Use it when:</b> print dots should shade a shape or a photo. <b>Change:</b> the dot size, the ink, what is shaded.</p></header>
+<div class="stage" style="background:#FFE45C;color:#3B0A24">
+  <div class="t01">
+    <div class="t01-ink" role="img" aria-label="A sun setting into the sea, shaded in halftone dots"><div class="t01-dots"></div></div>
+    <div class="t01-copy">
+      <p class="t01-brand">Fizz &amp; Pop</p>
+      <p class="t01-line">Grapefruit soda, poured at sundown.</p>
+      <label>Dot size <input type="range" min="6" max="24" step="1" value="12"></label>
+      <label>Ink <input type="color" value="#e0218a"></label>
+      <small>Sample product: Fizz &amp; Pop, a sample soda. Soft dots multiplied by a tone drawing, then contrast(24): where the tone is darker, more of each dot passes the threshold, so the dots grow. Draw the tone in greys (gradients, shapes) and the dots follow. Lilita One · OFL · fallback system-ui.</small>
+    </div>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="tex-02" data-name="Scanlines">
+<header><h2><code>tex-02</code> Scanlines</h2><p><b>Use it when:</b> a screen, a terminal or anything live should glow like a CRT. <b>Change:</b> the phosphor colour, the line spacing, the copy.</p></header>
+<div class="stage" style="background:#1A1D1A;color:#E6EDE6">
+  <div class="t02">
+    <div class="t02-screen">
+      <p><span>NIGHT BUS · STOP K</span><span>SAMPLE</span></p>
+      <p><span>N14 ELM STREET</span><span>4 MIN</span></p>
+      <p><span>N29 HARBOUR ROAD</span><span>11 MIN</span></p>
+      <p><span>N87 KINGSWAY</span><span>19 MIN</span></p>
+      <p><span>&gt; TIMES ARE SAMPLE DATA_</span></p>
+    </div>
+    <div class="t02-ctl">
+      <label>Phosphor <select><option value="#7CFF9B">Green</option><option value="#FFB547">Amber</option><option value="#E8F1FF">White</option></select></label>
+      <label>Line spacing <input type="range" min="2" max="6" step="1" value="3"></label>
+    </div>
+    <small>Sample product: Night Bus, a sample transit board. Scanlines and the vignette sit in one ::after with pointer-events:none, so the text stays selectable; the flicker runs only without reduced motion. VT323 · OFL · fallback ui-monospace.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="tex-03" data-name="Paper and torn edge">
+<header><h2><code>tex-03</code> Paper and torn edge</h2><p><b>Use it when:</b> the page should feel like paper: grain alone, or grain with a torn edge. <b>Change:</b> the grain strength, the paper colour, which edge tears.</p></header>
+<div class="stage" style="background:#3A4A3F;color:#F4EAD8">
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute"><filter id="tex-03-tear" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="4" seed="7"/><feDisplacementMap in="SourceGraphic" scale="24" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+  <div class="t03">
+    <div class="t03-clip">
+      <div class="t03-sheet t03-torn">
+        <div class="t03-paper" aria-hidden="true"></div>
+        <p class="t03-kicker">Fieldnote Press · sample</p>
+        <p>No. 4 pocket notebook: 48 pages, sewn, not glued, with a ruled page for every day of a field trip.</p>
+        <p>Price on request. A sample product for a sample maker.</p>
+      </div>
+    </div>
+    <div class="t03-ctl">
+      <label>Grain <input type="range" min="0" max="1" step=".05" value=".6"></label>
+      <label>Paper <input type="color" value="#d9c3a0"></label>
+      <button class="t03-tear" type="button" aria-pressed="true">Tear the bottom edge</button>
+    </div>
+    <small>The grain is SVG feTurbulence in a data URI; the tear is a displacement filter on the paper layer only, so the text is never distorted. The paper runs 30px past the clip on the other three sides, so only the bottom edge tears. Keep the text at 4.5:1 against the paper you pick. Cutive Mono · OFL · fallback ui-monospace.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="tex-04" data-name="RGB split">
+<header><h2><code>tex-04</code> RGB split</h2><p><b>Use it when:</b> a glitch should split one headline, not the whole page. <b>Change:</b> the word, the offset, the two channel colours.</p></header>
+<div class="stage" style="background:#0B0B14;color:#fff">
+  <div class="t04">
+    <p class="t04-word"><span class="t04-real">SIGNAL LOST</span><span class="t04-ch t04-a" aria-hidden="true">SIGNAL LOST</span><span class="t04-ch t04-b" aria-hidden="true">SIGNAL LOST</span></p>
+    <div class="t04-ctl">
+      <label>Headline <input type="text" value="SIGNAL LOST" spellcheck="false"></label>
+      <label>Offset <input type="range" min="0" max="10" step="1" value="4"></label>
+    </div>
+    <small>Sample product: Static FM, a sample late-night radio station. The white word is the real text; two aria-hidden copies in red and cyan sit on it with mix-blend-mode:screen, so they overlap to white and fringe at the edges. The slice jitter runs only without reduced motion. Teko · OFL · fallback Arial Narrow.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="tex-05" data-name="Hand-drawn border">
+<header><h2><code>tex-05</code> Hand-drawn border</h2><p><b>Use it when:</b> borders should look drawn by hand. <b>Change:</b> the wobble scale, the line colour and weight.</p></header>
+<div class="stage" style="background:#E9F4FF;color:#14213D">
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute"><filter id="tex-05-wob"><feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="1"/><feDisplacementMap in="SourceGraphic" scale="8" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+  <div class="t05">
+    <div class="t05-box"><span class="t05-line" aria-hidden="true"></span><p>Little Sprout: Saturday cooking classes for kids aged 6 to 10. Aprons provided. A sample class from a sample school.</p></div>
+    <button class="t05-redraw" type="button"><span class="t05-line" aria-hidden="true"></span>Redraw the lines</button>
+    <div class="t05-ctl">
+      <label>Wobble <input type="range" min="0" max="16" step="1" value="8"></label>
+      <label>Weight <input type="range" min="1" max="6" step="1" value="3"></label>
+    </div>
+    <small>The border lives on its own aria-hidden layer with an feTurbulence + feDisplacementMap filter, so the lines wobble and the text stays crisp. Redraw picks a new seed. Patrick Hand · OFL · fallback Comic Sans MS, cursive.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="tex-06" data-name="Dither">
+<header><h2><code>tex-06</code> Dither</h2><p><b>Use it when:</b> a gradient or a picture should step in pixels, like an old screen or a riso print. <b>Change:</b> the two colours, the pixel size, what is drawn.</p></header>
+<div class="stage" style="background:#0E2233;color:#EAF2F8">
+  <div class="t06">
+    <p class="t06-name">Lowres Weather</p>
+    <canvas role="img" aria-label="A dithered sky with a low sun over hills"></canvas>
+    <div class="t06-ctl">
+      <label>Dark <input type="color" value="#12324f"></label>
+      <label>Light <input type="color" value="#ffd35c"></label>
+      <label>Pixel size <input type="range" min="2" max="12" step="1" value="5"></label>
+    </div>
+    <small>Sample product: Lowres Weather, a sample forecast app. The scene is drawn in greys on a small canvas, then each pixel goes light or dark against a 4×4 Bayer threshold and the canvas is scaled up with image-rendering:pixelated. Any canvas drawing works; a photo works only if it is same-origin, or its pixels can't be read. Pixelify Sans · OFL · fallback ui-monospace.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="tex-07" data-name="Engraved hatching">
+<header><h2><code>tex-07</code> Engraved hatching</h2><p><b>Use it when:</b> shading should look engraved, like a banknote portrait or an old catalogue plate. <b>Change:</b> the line angle and spacing, the shape it shades.</p></header>
+<div class="stage" style="background:#E7EFE4;color:#10291C">
+  <div class="t07">
+    <div class="t07-ink" role="img" aria-label="A sphere shaded in engraved lines"><div class="t07-lines"></div></div>
+    <div class="t07-copy">
+      <p class="t07-name">Ashgrove Mint</p>
+      <label>Line angle <input type="range" min="0" max="180" step="5" value="35"></label>
+      <label>Spacing <input type="range" min="4" max="12" step="1" value="7"></label>
+      <small>Sample product: Ashgrove Mint, a sample coin dealer. The same threshold trick as tex-01 with soft repeating lines over a shading gradient: darker tone, thicker line. Shade any shape by drawing its tone in greys under the lines. Rozha One · OFL · fallback Georgia.</small>
+    </div>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="tex-08" data-name="Crop marks">
+<header><h2><code>tex-08</code> Crop marks</h2><p><b>Use it when:</b> the page should look like a print proof (publishing, printers, packaging). <b>Change:</b> the bleed, the colour bar, the slug line.</p></header>
+<div class="stage" style="background:#8F918C;color:#141414">
+  <div class="t08">
+    <div class="t08-sheet">
+      <p class="t08-slug">SAMPLE · halfmoon_tide-tables_cover.pdf · proof 2 · 27 Nov 2026</p>
+      <div class="t08-trim">
+        <div class="t08-bleed" aria-hidden="true"><div class="t08-moon"></div></div>
+        <div class="t08-art">
+          <p>Halfmoon Books</p>
+          <p class="t08-title">The Tide Tables</p>
+          <p>A sample title from a sample small publisher.</p>
+        </div>
+        <i class="t08-c t08-tl" aria-hidden="true"></i><i class="t08-c t08-tr" aria-hidden="true"></i><i class="t08-c t08-bl" aria-hidden="true"></i><i class="t08-c t08-br" aria-hidden="true"></i>
+        <svg class="t08-reg t08-reg-l" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="5" fill="none" stroke="#000"/><path d="M9 0V18M0 9H18" stroke="#000"/></svg>
+        <svg class="t08-reg t08-reg-r" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="5" fill="none" stroke="#000"/><path d="M9 0V18M0 9H18" stroke="#000"/></svg>
+      </div>
+      <div class="t08-bar" aria-hidden="true"><i style="background:#00AEEF"></i><i style="background:#EC008C"></i><i style="background:#FFF200"></i><i style="background:#000"></i><i style="background:#404040"></i><i style="background:#808080"></i><i style="background:#BFBFBF"></i></div>
+    </div>
+    <label>Bleed <input type="range" min="0" max="24" step="3" value="12"> <output>12px</output></label>
+    <small>The cover colour runs past the trim by the bleed; the crop marks stop short of it by a gap, at the trim lines. Registration targets, the CMYK and grey bar and the slug line are sample proof furniture: keep them decorative (aria-hidden) unless the slug says something true. Print bleed is usually 3 mm. Azeret Mono · OFL · fallback ui-monospace.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="tex-09" data-name="Baseline grid">
+<header><h2><code>tex-09</code> Baseline grid</h2><p><b>Use it when:</b> a quiet page should show its rigour: every line on a shared baseline. <b>Change:</b> the line height and the copy.</p></header>
+<div class="stage" style="background:#DDE3EA;color:#1C2430">
+  <div class="t09">
+    <div class="t09-page t09-on">
+      <h3 data-snap><span class="t09-b" aria-hidden="true"></span>A quieter month-end</h3>
+      <p class="t09-ref"><span class="t09-b" aria-hidden="true"></span>Ledgerline reconciles every account against the bank feed before the books close, so the last week of the month is for review, not for searching. Sample copy for a sample accounting firm.</p>
+      <p>Every margin and every line height on this page is a whole multiple of one line, so the text on both sides of a spread, or in two columns, lines up across the gutter.</p>
+      <p class="t09-note" data-snap><span class="t09-b" aria-hidden="true"></span>Body 16 on one line; the heading at 32 on two lines and this note at 13 on one are nudged onto the same baselines.</p>
+    </div>
+    <div class="t09-ctl">
+      <button class="t09-grid" type="button" aria-pressed="true">Show the grid</button>
+      <label>Line height <input type="range" min="20" max="32" step="4" value="24"></label>
+    </div>
+    <small>The script measures each block's first baseline with a zero-size inline-block and nudges it (position:relative; top) onto the grid set by the body text, then draws the grid from the same measurement. Text that wraps keeps the rhythm because every line height is a multiple. Source Serif 4 · OFL · fallback Georgia; the script re-measures once the font loads.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="tex-10" data-name="Blind emboss">
+<header><h2><code>tex-10</code> Blind emboss</h2><p><b>Use it when:</b> a seal or monogram should be pressed into the paper with no ink (luxury, legal, stationery). <b>Change:</b> the mark, the paper colour, the light angle.</p></header>
+<div class="stage" style="color:#2E2C29">
+  <div class="t10">
+    <div class="t10-seal" aria-hidden="true">V&amp;V</div>
+    <div class="t10-copy">
+      <p class="t10-name">Vellum &amp; Vane</p>
+      <div class="t10-ctl">
+        <label>Light from <input type="range" min="0" max="355" step="5" value="225"></label>
+        <label>Paper <input type="color" value="#e4e2dd"></label>
+        <button class="t10-press" type="button" aria-pressed="false">Pressed in</button>
+      </div>
+      <small>Sample product: Vellum &amp; Vane, a sample stationer. The seal is the paper's own colour, lit by one highlight and one shadow, so it has almost no contrast by design: it is decorative (aria-hidden) and the name is set again here in ink. Light from 225° is the top left. Marcellus SC · OFL · fallback Georgia.</small>
+    </div>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="tex-11" data-name="Duotone">
+<header><h2><code>tex-11</code> Duotone</h2><p><b>Use it when:</b> the product's own photos should share the page's two colours. <b>Change:</b> the two colours and the image.</p></header>
+<div class="stage" style="background:#FFF1E8;color:#1B1A4A">
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute"><filter id="tex-11-duo" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".2126 .7152 .0722 0 0 .2126 .7152 .0722 0 0 .2126 .7152 .0722 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues="0 1"/><feFuncG type="table" tableValues="0 1"/><feFuncB type="table" tableValues="0 1"/></feComponentTransfer></filter></svg>
+  <div class="t11">
+    <svg class="t11-scene t11-on" viewBox="0 0 640 400" role="img" aria-label="Stand-in drawing: a rowing eight crossing a harbour at sunset">
+      <defs>
+        <linearGradient id="tex-11-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5E8FD6"/><stop offset=".8" stop-color="#FFC98A"/></linearGradient>
+        <linearGradient id="tex-11-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3D6E91"/><stop offset="1" stop-color="#0E2234"/></linearGradient>
+      </defs>
+      <rect width="640" height="272" fill="url(#tex-11-sky)"/>
+      <circle cx="452" cy="236" r="54" fill="#FFF3D1"/>
+      <path d="M0 250 Q80 205 170 236 T340 226 T520 240 T640 228 V272 H0Z" fill="#4B6C88"/>
+      <rect y="268" width="640" height="132" fill="url(#tex-11-sea)"/>
+      <g fill="#FFE2A8"><rect x="418" y="286" width="70" height="4"/><rect x="430" y="300" width="46" height="4"/><rect x="440" y="314" width="28" height="3"/></g>
+      <g stroke="#0A0F1A" stroke-linecap="round" fill="none">
+        <path d="M150 334 H500" stroke-width="7"/>
+        <path d="M190 330 l6 -20 M226 330 l6 -20 M262 330 l6 -20 M298 330 l6 -20 M334 330 l6 -20 M370 330 l6 -20 M406 330 l6 -20 M442 330 l6 -20" stroke-width="6"/>
+        <path d="M195 322 l-38 30 M231 322 l-38 30 M267 322 l-38 30 M303 322 l-38 30 M339 322 l-38 30 M375 322 l-38 30 M411 322 l-38 30 M447 322 l-38 30" stroke-width="2.5"/>
+      </g>
+      <g fill="#0A0F1A"><circle cx="198" cy="304" r="5"/><circle cx="234" cy="304" r="5"/><circle cx="270" cy="304" r="5"/><circle cx="306" cy="304" r="5"/><circle cx="342" cy="304" r="5"/><circle cx="378" cy="304" r="5"/><circle cx="414" cy="304" r="5"/><circle cx="450" cy="304" r="5"/></g>
+    </svg>
+    <p class="t11-name">Harbourside Rowing</p>
+    <div class="t11-ctl">
+      <label>Shadows <input type="color" value="#1b1a4a"></label>
+      <label>Highlights <input type="color" value="#ff9a6b"></label>
+      <button class="t11-orig" type="button" aria-pressed="false">Show the original colours</button>
+    </div>
+    <small>Sample product: Harbourside Rowing, a sample rowing club. This drawing stands in for the product's own photo: put the photo in an &lt;img&gt; and give it the same filter:url(#…). The filter turns each pixel to its luminance, then maps black to the shadow colour and white to the highlight colour. Archivo Narrow · OFL · fallback Arial Narrow.</small>
+  </div>
+</div>
+</article>
+</main>
+<script>
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// tex-01 Halftone (Lilita One)
+{
+  const root = document.getElementById('tex-01'), stage = root.querySelector('.stage');
+  const [size, ink] = root.querySelectorAll('input');
+  const set = () => { stage.style.setProperty('--d', size.value + 'px'); stage.style.setProperty('--ink', ink.value); };
+  root.addEventListener('input', set);
+  set();
+}
+// tex-02 Scanlines (VT323)
+{
+  const root = document.getElementById('tex-02'), stage = root.querySelector('.stage');
+  const ph = root.querySelector('select'), gap = root.querySelector('input');
+  const set = () => { stage.style.setProperty('--ph', ph.value); stage.style.setProperty('--gap', gap.value + 'px'); };
+  root.addEventListener('input', set);
+  set();
+}
+// tex-03 Paper and torn edge (Cutive Mono)
+{
+  const root = document.getElementById('tex-03'), stage = root.querySelector('.stage'), sheet = root.querySelector('.t03-sheet');
+  const [grain, paper] = root.querySelectorAll('input'), tear = root.querySelector('.t03-tear');
+  const set = () => { stage.style.setProperty('--grain', grain.value); stage.style.setProperty('--paper', paper.value); };
+  root.addEventListener('input', set);
+  tear.addEventListener('click', () => tear.setAttribute('aria-pressed', sheet.classList.toggle('t03-torn')));
+  set();
+}
+// tex-04 RGB split (Teko)
+{
+  const root = document.getElementById('tex-04'), stage = root.querySelector('.stage');
+  const [word, off] = root.querySelectorAll('input'), spans = root.querySelectorAll('.t04-word span');
+  const set = () => { spans.forEach(s => { s.textContent = word.value || ' '; }); stage.style.setProperty('--off', off.value + 'px'); };
+  root.addEventListener('input', set);
+  set();
+}
+// tex-05 Hand-drawn border (Patrick Hand)
+{
+  const root = document.getElementById('tex-05'), stage = root.querySelector('.stage');
+  const turb = root.querySelector('feTurbulence'), disp = root.querySelector('feDisplacementMap');
+  const [wobble, weight] = root.querySelectorAll('input');
+  const set = () => { disp.setAttribute('scale', wobble.value); stage.style.setProperty('--w', weight.value + 'px'); };
+  root.addEventListener('input', set);
+  root.querySelector('.t05-redraw').addEventListener('click', () => turb.setAttribute('seed', 1 + Math.floor(Math.random() * 999)));
+  set();
+}
+// tex-06 Dither (Pixelify Sans)
+{
+  const root = document.getElementById('tex-06'), canvas = root.querySelector('canvas'), ctx = canvas.getContext('2d', { willReadFrequently: true });
+  const [dark, light, size] = root.querySelectorAll('input');
+  const B = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5]; // 4×4 Bayer matrix, row by row
+  const lit = (v, x, y) => v > (B[(y & 3) * 4 + (x & 3)] + .5) / 16;
+  console.assert([...B].sort((a, b) => a - b).every((v, i) => v === i), 'tex-06: Bayer matrix holds 0–15 once each');
+  console.assert(B.filter((_, i) => lit(.5, i & 3, i >> 2)).length === 8, 'tex-06: 50% grey lights half the pixels');
+  const rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const draw = () => {
+    const px = +size.value, w = Math.max(1, Math.round(canvas.clientWidth / px)), h = Math.max(1, Math.round(canvas.clientHeight / px));
+    canvas.width = w; canvas.height = h;
+    const sky = ctx.createLinearGradient(0, 0, 0, h * .75);
+    sky.addColorStop(0, '#1a1a1a'); sky.addColorStop(1, '#f0f0f0');
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, w, h);
+    const sun = ctx.createRadialGradient(w * .68, h * .5, 0, w * .68, h * .5, h * .34);
+    sun.addColorStop(0, '#fff'); sun.addColorStop(.4, '#fff'); sun.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = sun; ctx.fillRect(0, 0, w, h);
+    const hill = ctx.createLinearGradient(0, h * .55, 0, h);
+    hill.addColorStop(0, '#777'); hill.addColorStop(1, '#111');
+    ctx.fillStyle = hill;
+    ctx.beginPath(); ctx.moveTo(0, h); ctx.lineTo(0, h * .7);
+    ctx.quadraticCurveTo(w * .3, h * .5, w * .55, h * .72); ctx.quadraticCurveTo(w * .8, h * .88, w, h * .64);
+    ctx.lineTo(w, h); ctx.fill();
+    const img = ctx.getImageData(0, 0, w, h), d = img.data, a = rgb(dark.value), b = rgb(light.value);
+    for (let i = 0; i < d.length; i += 4) {
+      const p = i / 4, c = lit(d[i] / 255, p % w, (p / w) | 0) ? b : a;
+      d[i] = c[0]; d[i + 1] = c[1]; d[i + 2] = c[2]; d[i + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+  };
+  root.addEventListener('input', draw);
+  new ResizeObserver(draw).observe(canvas);
+}
+// tex-07 Engraved hatching (Rozha One)
+{
+  const root = document.getElementById('tex-07'), stage = root.querySelector('.stage');
+  const [angle, spacing] = root.querySelectorAll('input');
+  const set = () => { stage.style.setProperty('--ang', angle.value + 'deg'); stage.style.setProperty('--s', spacing.value + 'px'); };
+  root.addEventListener('input', set);
+  set();
+}
+// tex-08 Crop marks (Azeret Mono)
+{
+  const root = document.getElementById('tex-08'), stage = root.querySelector('.stage');
+  const bleed = root.querySelector('input'), out = root.querySelector('output');
+  const set = () => { stage.style.setProperty('--bleed', bleed.value + 'px'); out.textContent = bleed.value + 'px'; };
+  root.addEventListener('input', set);
+  set();
+}
+// tex-09 Baseline grid (Source Serif 4)
+{
+  const root = document.getElementById('tex-09'), stage = root.querySelector('.stage'), page = root.querySelector('.t09-page');
+  const ref = root.querySelector('.t09-ref'), snapped = [...root.querySelectorAll('[data-snap]')];
+  const toggle = root.querySelector('.t09-grid'), lhInput = root.querySelector('input');
+  const snap = () => {
+    const lh = +lhInput.value;
+    stage.style.setProperty('--lh', lh + 'px');
+    snapped.forEach(el => { el.style.top = '0px'; });
+    const top = page.getBoundingClientRect().top;
+    const base = el => el.querySelector('.t09-b').getBoundingClientRect().top - top;
+    const mod = v => ((v % lh) + lh) % lh;
+    const off = mod(base(ref));
+    page.style.setProperty('--off', off + 'px');
+    snapped.forEach(el => { const d = mod(off - base(el)); el.style.top = (d > lh / 2 ? d - lh : d) + 'px'; });
+    const miss = el => { const r = mod(base(el) - off); return Math.min(r, lh - r); };
+    console.assert([ref, ...snapped].every(el => miss(el) < .75), 'tex-09: every baseline sits on the grid');
+  };
+  toggle.addEventListener('click', () => toggle.setAttribute('aria-pressed', page.classList.toggle('t09-on')));
+  lhInput.addEventListener('input', snap);
+  new ResizeObserver(snap).observe(page);
+  document.fonts.ready.then(snap);
+}
+// tex-10 Blind emboss (Marcellus SC)
+{
+  const root = document.getElementById('tex-10'), stage = root.querySelector('.stage');
+  const [angle, paper] = root.querySelectorAll('input'), press = root.querySelector('.t10-press');
+  const away = deg => [-Math.cos(deg * Math.PI / 180) * 1.4, -Math.sin(deg * Math.PI / 180) * 1.4]; // shadow falls away from the light
+  console.assert(away(225).every(v => v > 0), 'tex-10: light from the top left throws shadow to the bottom right');
+  const set = () => {
+    const [dx, dy] = away(+angle.value);
+    stage.style.setProperty('--dx', dx.toFixed(3)); stage.style.setProperty('--dy', dy.toFixed(3));
+    stage.style.setProperty('--paper', paper.value);
+  };
+  root.addEventListener('input', set);
+  press.addEventListener('click', () => {
+    const on = press.getAttribute('aria-pressed') !== 'true';
+    press.setAttribute('aria-pressed', on);
+    stage.style.setProperty('--k', on ? -1 : 1);
+  });
+  set();
+}
+// tex-11 Duotone (Archivo Narrow)
+{
+  const root = document.getElementById('tex-11'), scene = root.querySelector('.t11-scene');
+  const [shadow, highlight] = root.querySelectorAll('input'), funcs = root.querySelectorAll('feComponentTransfer > *');
+  const orig = root.querySelector('.t11-orig');
+  const rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
+  console.assert(rgb('#ff8000').join() === [1, 128 / 255, 0].join(), 'tex-11: hex to rgb');
+  const set = () => {
+    const a = rgb(shadow.value), b = rgb(highlight.value);
+    funcs.forEach((f, i) => f.setAttribute('tableValues', `${a[i].toFixed(3)} ${b[i].toFixed(3)}`));
+  };
+  root.addEventListener('input', set);
+  orig.addEventListener('click', () => orig.setAttribute('aria-pressed', !scene.classList.toggle('t11-on')));
+  set();
+}
+</script>
+</body>
+</html>

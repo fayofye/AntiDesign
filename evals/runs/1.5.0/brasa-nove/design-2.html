@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brasa Nove · survey of the menu and the fire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@300;500;600&family=Spectral:ital,wght@1,400&display=swap" rel="stylesheet">
+<style>
+/* Four colours: paper = ground, slate = ink, ochre = contours and their tints, fire = the one spot colour. */
+:root{--paper:#F1F3EE;--slate:#22313A;--ochre:#8C5A1E;--fire:#C8321A;
+  --u:8px;--s1:12px;--s2:14px;--s3:18px;--s4:28px;--s5:44px;
+  --sans:"Barlow Semi Condensed","Arial Narrow","Roboto Condensed","Helvetica Neue",Arial,sans-serif;
+  --ital:Spectral,Georgia,"Times New Roman",serif}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--slate)}
+body{font:400 var(--s2)/1.5 var(--sans);font-variant-numeric:tabular-nums;overflow:hidden}
+:focus-visible{outline:2px solid var(--fire);outline-offset:2px}
+button,select{font:inherit;color:inherit}
+
+/* One sheet. A desktop screen holds all of it; a phone pans sideways across it, title block first. */
+.sheet{width:100%;height:100svh;display:grid;grid-auto-flow:column;
+  grid-template-columns:auto 290px 280px;overflow-x:auto;overflow-y:hidden;
+  scrollbar-color:var(--ochre) var(--paper);border:1px solid var(--slate)}
+.col{height:100svh;overflow-y:auto;padding:calc(var(--u)*3) calc(var(--u)*2.5)}
+.col{border-left:1px solid var(--slate)}
+.field{position:relative;height:100svh;padding:calc(var(--u)*2) var(--u)}
+/* the title cartouche sits inside the neatline, in the empty south-west of the sheet */
+.cartouche{position:absolute;left:calc(var(--u) + 6.5%);bottom:calc(var(--u)*2 + 5%);width:34%;min-width:220px;padding:var(--u) calc(var(--u)*1.5) calc(var(--u)*1.5);background:var(--paper);border:1px solid var(--slate);outline:1px solid var(--slate);outline-offset:3px}
+.cartouche h1{font-size:var(--s4);margin-top:4px}
+.cartouche p{margin:4px 0 0}
+.cartouche a{color:var(--slate);font-weight:600;text-underline-offset:3px}
+.cartouche a:hover{color:var(--fire)}
+.field svg{display:block;height:100%;width:auto;max-width:none}
+
+/* Margin type */
+.kicker{margin:0;font:500 var(--s1)/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase}
+h1{margin:var(--u) 0 0;font:300 var(--s5)/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;text-wrap:balance}
+.sub{margin:var(--u) 0 0;font:italic 400 var(--s3)/1.3 var(--ital)}
+.col p{margin:var(--u) 0 0;text-wrap:pretty;max-width:42ch}
+h2{margin:calc(var(--u)*3) 0 var(--u);padding-top:var(--u);border-top:1px solid var(--slate);
+  font:600 var(--s1)/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase}
+.small{font-size:var(--s1);line-height:1.45}
+
+/* Field booking */
+.row{display:grid;grid-template-columns:6em minmax(0,1fr);gap:var(--u);align-items:center;margin-top:var(--u)}
+.row label{font-weight:500}
+select{min-height:44px;width:100%;padding:0 var(--u);background:var(--paper);border:1px solid var(--slate);border-radius:0}
+.send{margin-top:calc(var(--u)*2);min-height:44px;width:100%;border:1px solid var(--slate);background:var(--slate);color:var(--paper);font-weight:600;letter-spacing:.06em;cursor:pointer}
+.status{min-height:3em}
+.status:empty{min-height:0}
+
+/* Scale bar: parties, the way a map scale counts kilometres */
+.scale{margin-top:calc(var(--u)*2)}
+.scale svg{display:block;width:100%;height:auto;overflow:visible}
+
+/* Legend and gazetteer */
+.legend{list-style:none;margin:0;padding:0;display:grid;gap:var(--u)}
+.legend li{display:grid;grid-template-columns:48px minmax(0,1fr);gap:var(--u);align-items:center}
+.legend svg{display:block;width:48px;height:24px}
+.gaz{width:100%;border-collapse:collapse}
+.gaz th{font:600 var(--s1)/1.3 var(--sans);letter-spacing:.08em;text-transform:uppercase;text-align:left;padding:0 0 4px;border-bottom:1px solid var(--slate)}
+.gaz th:not(:first-child),.gaz td:not(:first-child){text-align:right;width:3.5em}
+.gaz td{padding:4px 0;border-bottom:1px solid #22313A33;vertical-align:baseline}
+.gaz a{color:var(--slate);font:italic 400 var(--s2)/1.3 var(--ital);text-decoration:underline;text-decoration-color:#22313A66;text-underline-offset:3px;display:inline-block;min-height:24px}
+.gaz a:hover{text-decoration-color:var(--fire)}
+
+/* Map */
+.grid line{stroke:var(--slate);stroke-width:.5;opacity:.35}
+.neat{fill:none;stroke:var(--slate);stroke-width:1.2}
+.gl{font:500 12px var(--sans);fill:var(--slate);text-anchor:middle;dominant-baseline:middle}
+.tint{stroke:none}
+.contour{fill:none;stroke:var(--ochre);stroke-width:.8}
+.contour.index{stroke-width:1.4}
+.foot{fill:none;stroke:var(--ochre);stroke-width:1.4}
+.fire-case{fill:none;stroke:var(--fire);stroke-width:7;stroke-linecap:round}
+.fire-core{fill:none;stroke:var(--paper);stroke-width:2.2;stroke-linecap:round}
+.halo{paint-order:stroke;stroke:var(--paper);stroke-width:3.5px;stroke-linejoin:round}
+.name{font:italic 400 15px var(--ital);fill:var(--slate)}
+.firename{font:italic 400 15px var(--ital);fill:var(--fire)}
+.spot{font:600 14px var(--sans);fill:var(--slate)}
+.note{font:400 12px var(--sans);fill:var(--slate)}
+.leader{fill:none;stroke:var(--slate);stroke-width:.7}
+.hill:focus{outline:none}
+.hill.found .foot{stroke:var(--slate);stroke-width:2.6}
+.hill.found .name{fill:var(--fire)}
+@media (prefers-reduced-motion:no-preference){
+  .draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.4s cubic-bezier(.3,.6,.2,1) forwards;animation-delay:calc(var(--k,0) * 45ms + 200ms)}
+}
+@keyframes draw{to{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet">
+
+  <section class="field" id="map" aria-labelledby="t-name">
+    <svg id="survey" viewBox="-28 -28 776 856" role="group" aria-labelledby="map-title">
+      <title id="map-title">Map: six hills standing along one fire line. Each hill is a dish; its height is its price in euros.</title>
+      <g class="grid" id="grid"></g>
+      <g id="hills"></g>
+      <g id="fire"></g>
+      <g id="notes"></g>
+      <rect class="neat" x="0" y="0" width="720" height="800"/>
+    </svg>
+    <div class="cartouche" id="title">
+      <p class="kicker">Sheet 1 · the menu and the fire</p>
+      <h1 id="t-name">Brasa Nove</h1>
+      <p class="sub">A wood-fire restaurant.</p>
+      <p>Open Tuesday to Saturday, 17:00 to 23:00.</p>
+      <p><a href="#book">Book a table, up to 8 →</a></p>
+    </div>
+  </section>
+
+  <section class="col margin-a" id="booking-col" aria-labelledby="book">
+    <h2 id="book" style="margin-top:0">Field booking</h2>
+    <form id="booking" aria-labelledby="book">
+      <div class="row"><label for="party">Party</label>
+        <select id="party" name="party">
+          <option>1</option><option selected>2</option><option>3</option><option>4</option>
+          <option>5</option><option>6</option><option>7</option><option>8</option>
+          <option value="9+">9 or more</option>
+        </select></div>
+      <div class="row"><label for="day">Day</label>
+        <select id="day" name="day">
+          <option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option selected>Friday</option><option>Saturday</option>
+        </select></div>
+      <div class="row"><label for="time">Time</label><select id="time" name="time"></select></div>
+      <button type="submit" class="send">Request a table</button>
+      <p class="status small" id="status" role="status"></p>
+    </form>
+
+    <div class="scale" aria-labelledby="scale-cap">
+      <svg viewBox="0 0 260 46" role="img" aria-labelledby="scale-cap">
+        <g id="scalebar"></g>
+      </svg>
+      <p class="small" id="scale-cap">Scale of parties. Online booking covers 1 to 8 guests; beyond 8, book by phone.</p>
+    </div>
+
+    <h2>Notes</h2>
+    <p class="small">Open Tuesday to Saturday, 17:00 to 23:00. Closed Sunday and Monday.</p>
+    <p class="small">Heights are menu prices in euros. Hills are drawn as cones: their shapes and places on the sheet are a drawing, not a recipe.</p>
+    <p class="small">This page is a design. A booking request made here is not sent anywhere.</p>
+  </section>
+
+  <section class="col margin-b" id="legend" aria-labelledby="l-legend">
+    <h2 id="l-legend" style="margin-top:0">Legend</h2>
+    <ul class="legend">
+      <li><svg viewBox="0 0 48 24" aria-hidden="true"><path d="M18 17 L24 7 L30 17 Z" fill="#22313A"/></svg><span>Spot height: the price in euros</span></li>
+      <li><svg viewBox="0 0 48 24" aria-hidden="true"><path d="M2 16 C12 4 22 20 32 9 S44 12 46 8" fill="none" stroke="#8C5A1E" stroke-width="1.2"/></svg><span>Contour, every €4</span></li>
+      <li><svg viewBox="0 0 48 24" aria-hidden="true"><rect x="2" y="5" width="14" height="14" id="sw1"/><rect x="17" y="5" width="14" height="14" id="sw2"/><rect x="32" y="5" width="14" height="14" id="sw3"/></svg><span>Tints: €0–20, €20–40, over €40</span></li>
+      <li><svg viewBox="0 0 48 24" aria-hidden="true"><path d="M2 12 H46" class="fire-case"/><path d="M2 12 H46" class="fire-core"/></svg><span>The fire. The foot of every hill touches it.</span></li>
+      <li><svg viewBox="0 0 48 24" aria-hidden="true"><text x="24" y="16" class="gl" style="font-size:12px">A1</text></svg><span>Grid squares, lettered west to east, numbered north to south</span></li>
+    </ul>
+
+    <h2 id="l-index">Index of features</h2>
+    <table class="gaz" aria-labelledby="l-index">
+      <thead><tr><th scope="col">Feature</th><th scope="col">Grid</th><th scope="col">€</th></tr></thead>
+      <tbody id="gaz">
+        <tr><td><a href="#h-flatbread">Flatbread with lardo</a></td><td data-grid></td><td>9</td></tr>
+        <tr><td><a href="#h-leeks">Charred leeks with romesco</a></td><td data-grid></td><td>11</td></tr>
+        <tr><td><a href="#h-clams">Clams in cider</a></td><td data-grid></td><td>16</td></tr>
+        <tr><td><a href="#h-chicken">Half chicken</a></td><td data-grid></td><td>24</td></tr>
+        <tr><td><a href="#h-ribeye">Rib-eye for two</a></td><td data-grid></td><td>68</td></tr>
+        <tr><td><a href="#h-cheesecake">Burnt cheesecake</a></td><td data-grid></td><td>8</td></tr>
+      </tbody>
+    </table>
+    <p class="small"><a href="#book">Field booking</a> · <a href="#title">Title cartouche</a></p>
+
+  </section>
+</div>
+
+<script>
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const C = {paper: '#F1F3EE', slate: '#22313A', ochre: '#8C5A1E', fire: '#C8321A'};
+  const MENU = [ // id, name, price in euros, place along the fire line (0 to 1), side of the line
+    ['flatbread', 'Flatbread with lardo', 9, .15, -1], ['leeks', 'Charred leeks with romesco', 11, .17, 1],
+    ['clams', 'Clams in cider', 16, .40, -1], ['chicken', 'Half chicken', 24, .66, -1],
+    ['ribeye', 'Rib-eye for two', 68, .50, 1], ['cheesecake', 'Burnt cheesecake', 8, .86, 1]];
+  const W = 720, H = 800, STEP = 4;
+  const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+  const mix = t => '#' + [1, 3, 5].map(i => Math.round(parseInt(C.paper.slice(i, i + 2), 16) * (1 - t) + parseInt(C.ochre.slice(i, i + 2), 16) * t).toString(16).padStart(2, '0')).join('');
+  const tint = h => mix(.06 + .34 * Math.min(h, 68) / 68); // the same height gets the same tint on every hill
+
+  /* The fire line: one cubic curve, sampled */
+  const P = [[-20, 90], [260, 170], [300, 660], [740, 720]];
+  const bez = t => { const u = 1 - t; return [0, 1].map(k => u * u * u * P[0][k] + 3 * u * u * t * P[1][k] + 3 * u * t * t * P[2][k] + t * t * t * P[3][k]); };
+  const pts = Array.from({length: 2001}, (_, i) => bez(i / 2000));
+  const len = [0]; for (let i = 1; i < pts.length; i++) len.push(len[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+  const total = len.at(-1);
+  const at = s => { const i = Math.max(1, Math.min(2000, len.findIndex(l => l >= s * total)));
+    const a = pts[i - 1], b = pts[Math.min(i + 1, 2000)], m = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    return {p: pts[i], t: [(b[0] - a[0]) / m, (b[1] - a[1]) / m]}; };
+  const distToLine = (x, y) => Math.min(...pts.map(q => Math.hypot(q[0] - x, q[1] - y)));
+
+  /* Grid */
+  const grid = document.getElementById('grid');
+  for (let x = 120; x < W; x += 120) el('line', {x1: x, y1: 0, x2: x, y2: H}, grid);
+  for (let y = 100; y < H; y += 100) el('line', {x1: 0, y1: y, x2: W, y2: y}, grid);
+  'ABCDEF'.split('').forEach((c, i) => { [-14, H + 14].forEach(y => { const t = el('text', {x: 60 + i * 120, y, class: 'gl'}, grid); t.textContent = c; }); });
+  for (let r = 0; r < 8; r++) [-14, W + 14].forEach(x => { const t = el('text', {x, y: 50 + r * 100, class: 'gl'}, grid); t.textContent = r + 1; });
+  const ref = (x, y) => 'ABCDEF'[Math.floor(x / 120)] + (Math.floor(y / 100) + 1);
+
+  /* Hills: cones whose foot touches the fire line; one contour every €4 below the summit */
+  const hillsG = document.getElementById('hills'), placed = [];
+  const wob = (ph, a) => 1 + .07 * Math.sin(3 * a + ph) + .04 * Math.sin(5 * a + ph * 1.7);
+  const ring = (cx, cy, r, ph) => {
+    let d = '';
+    for (let i = 0; i <= 120; i++) { const a = i / 120 * Math.PI * 2, rr = r * wob(ph, a); d += (i ? 'L' : 'M') + (cx + rr * Math.cos(a)).toFixed(1) + ' ' + (cy + rr * Math.sin(a)).toFixed(1); }
+    return d + 'Z';
+  };
+  MENU.forEach(([id, name, price, s, side], hi) => {
+    const R = 30 + 2.1 * price, ph = hi * 1.9 + .6, {p, t} = at(s);
+    const n = side === 1 ? [t[1], -t[0]] : [-t[1], t[0]];
+    const toLine = Math.atan2(-n[1], -n[0]), Rw = R * wob(ph, toLine);
+    const cx = p[0] + n[0] * Rw, cy = p[1] + n[1] * Rw;
+    const g = el('g', {id: 'h-' + id, class: 'hill', tabindex: '-1', role: 'img', 'aria-label': `${name}: spot height ${price}, grid ${ref(cx, cy)}`}, hillsG);
+    const levels = []; for (let h = 0; h < price; h += STEP) levels.push(h); // the foot (0) and every €4 below the summit
+    levels.forEach(h => el('path', {d: ring(cx, cy, R * (1 - h / price), ph), class: 'tint', fill: tint(h)}, g));
+    levels.forEach((h, k) => el('path', {d: ring(cx, cy, R * (1 - h / price), ph), class: (h ? 'contour' : 'foot') + (h && h % 20 === 0 ? ' index' : '') + ' draw', pathLength: 1, style: `--k:${k}`}, g));
+    // spot height
+    el('path', {d: `M${cx - 5} ${cy + 4}L${cx} ${cy - 5}L${cx + 5} ${cy + 4}Z`, fill: C.slate}, g);
+    const sp = el('text', {x: cx + 8, y: cy + 4, class: 'spot halo'}, g); sp.textContent = price;
+    // name set along the foot, on the side away from the fire
+    const up = n[1] < 0, r = R * 1.13 + (up ? 6 : 17);
+    const arc = el('path', {id: 'arc-' + id, fill: 'none', d: `M${cx - r} ${cy} A${r} ${r} 0 0 ${up ? 1 : 0} ${cx + r} ${cy}`}, g);
+    const tx = el('text', {class: 'name halo'}, g);
+    const tp = el('textPath', {href: '#arc-' + id, startOffset: '50%', 'text-anchor': 'middle'}, tx); tp.textContent = name;
+    placed.push({id, name, price, cx, cy, R, ph, side, touch: p, levels: levels.length});
+  });
+
+  /* The fire line, named along its course */
+  const fireG = document.getElementById('fire');
+  const fd = `M${P[0]} C${P[1]} ${P[2]} ${P[3]}`;
+  el('path', {d: fd, class: 'fire-case draw', pathLength: 1}, fireG);
+  el('path', {d: fd, class: 'fire-core'}, fireG);
+  el('path', {d: fd, id: 'fire-path', fill: 'none'}, fireG);
+  const ft = el('text', {class: 'firename halo', dy: -9}, fireG);
+  const ftp = el('textPath', {href: '#fire-path', startOffset: '33.5%', 'text-anchor': 'middle'}, ft);
+  ftp.textContent = 'Everything on the menu touches the fire.';
+
+  /* Annotations: thin leaders out to labels */
+  const notes = document.getElementById('notes');
+  const note = (from, to, lines, anchor = 'start') => {
+    el('path', {class: 'leader', d: `M${from[0]} ${from[1]}L${to[0]} ${to[1]}`}, notes);
+    el('circle', {cx: from[0], cy: from[1], r: 2, fill: C.slate}, notes);
+    lines.forEach((l, i) => { const t = el('text', {x: to[0] + (anchor === 'start' ? 4 : -4), y: to[1] + 4 + i * 15, class: 'note halo', style: 'text-anchor:' + anchor}, notes); t.textContent = l; });
+  };
+  const rib = placed.find(h => h.id === 'ribeye');
+  note([rib.cx, rib.cy - 6], [rib.cx + 90, 60], ['Spot height 68: the rib-eye for two,', 'the highest point on the sheet']);
+  const ca = -.75, cr = rib.R * (1 - 20 / 68) * wob(rib.ph, ca); // a point on the €20 index contour
+  note([rib.cx + cr * Math.cos(ca), rib.cy + cr * Math.sin(ca)], [590, 118], ['Contours every €4;', 'every fifth', 'drawn heavier']);
+  const cake = placed.find(h => h.id === 'cheesecake');
+  note(cake.touch, [470, 760], ['Foot of the burnt cheesecake:', 'it touches the fire, as every hill does']);
+
+  /* North point */
+  const np = el('g', {transform: 'translate(320 44)', 'aria-hidden': 'true'}, notes);
+  el('path', {d: 'M0 -22 L6 0 L0 -5 L-6 0 Z', fill: C.slate}, np);
+  const nt = el('text', {x: 0, y: 12, class: 'gl'}, np); nt.textContent = 'N';
+
+  /* Legend swatches use the map's own tints */
+  [[10, 'sw1'], [30, 'sw2'], [60, 'sw3']].forEach(([h, id]) => document.getElementById(id).setAttribute('fill', tint(h)));
+
+  /* Index: grid references come from where the hills actually stand */
+  document.querySelectorAll('#gaz tr').forEach(tr => {
+    const id = tr.querySelector('a').hash.slice(3), h = placed.find(x => x.id === id);
+    tr.querySelector('[data-grid]').textContent = ref(h.cx, h.cy);
+  });
+
+  /* Scale bar of parties: eight segments online, then a dashed run for phone bookings */
+  const sb = document.getElementById('scalebar'), seg = 26;
+  for (let i = 0; i < 8; i++) el('rect', {x: i * seg, y: 10, width: seg, height: 8, fill: i % 2 ? C.paper : C.slate, stroke: C.slate, 'stroke-width': 1}, sb);
+  el('path', {d: `M${8 * seg} 14 H${8 * seg + 50}`, stroke: C.slate, 'stroke-width': 1.5, 'stroke-dasharray': '4 3'}, sb);
+  [0, 2, 4, 6, 8].forEach(v => { const t = el('text', {x: v * seg, y: 32, class: 'gl'}, sb); t.textContent = v; });
+  const ph9 = el('text', {x: 8 * seg + 26, y: 32, class: 'gl'}, sb); ph9.textContent = '9+ ☎';
+  const unit = el('text', {x: 0, y: 4, class: 'gl', style: 'text-anchor:start'}, sb); unit.textContent = 'GUESTS · ONLINE';
+
+  /* Booking: online up to 8, larger groups by phone; times inside 17:00 to 23:00 */
+  const form = document.getElementById('booking'), status = document.getElementById('status');
+  const route = size => (size === '9+' || +size > 8) ? 'phone' : 'online';
+  const slots = []; for (let m = 17 * 60; m < 23 * 60; m += 30) slots.push(`${String(m / 60 | 0).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`);
+  slots.forEach(s => form.time.add(new Option(s, s, false, s === '20:00')));
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    status.textContent = route(form.party.value) === 'phone'
+      ? 'Parties of 9 or more book by phone with the restaurant; online booking covers up to 8.'
+      : `Noted: ${form.party.value} on ${form.day.value} at ${form.time.value}. This page is a design, so nothing was sent.`;
+  });
+
+  /* Index links pan the sheet to the hill and mark it */
+  const sheet = document.getElementById('sheet');
+  const go = hash => {
+    const t = hash && document.getElementById(hash.slice(1)); if (!t) return;
+    document.querySelectorAll('.hill.found').forEach(h => h.classList.remove('found'));
+    if (t.classList.contains('hill')) t.classList.add('found');
+    t.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'nearest', inline: 'center'});
+    t.focus({preventScroll: true});
+  };
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]'); if (!a) return;
+    e.preventDefault(); history.replaceState(null, '', a.hash); go(a.hash);
+  });
+  if (location.hash) go(location.hash);
+
+  /* Self-check */
+  const page = [...document.querySelectorAll('#gaz tr')].map(tr => [tr.querySelector('a').textContent, +tr.cells[2].textContent]);
+  console.assert(page.every(([n, p]) => MENU.some(m => m[1] === n && m[2] === p)) && page.length === 6, 'index matches the menu');
+  placed.forEach(h => {
+    console.assert(h.levels === Math.ceil(h.price / STEP), `${h.id}: one ring per €4 band`);
+    console.assert(Math.abs(distToLine(h.cx, h.cy) - Math.hypot(h.cx - h.touch[0], h.cy - h.touch[1])) < 2, `${h.id}: foot touches the fire line`);
+    console.assert(h.cx - h.R * 1.11 > 0 && h.cx + h.R * 1.11 < W && h.cy - h.R * 1.11 > 0 && h.cy + h.R * 1.11 < H, `${h.id}: inside the sheet`);
+  });
+  placed.forEach((a, i) => placed.slice(i + 1).forEach(b => {
+    if (a.side === b.side) console.assert(Math.hypot(a.cx - b.cx, a.cy - b.cy) > (a.R + b.R) * 1.11, `${a.id} and ${b.id} do not overlap`);
+  }));
+  console.assert(route('8') === 'online' && route('9+') === 'phone', 'party routing');
+  console.assert(slots[0] === '17:00' && slots.at(-1) === '22:30', 'times sit inside opening hours');
+})();
+</script>
+</body>
+</html>
