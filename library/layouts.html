@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AntiDesign library: layouts</title>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Archivo+Black&family=Cabin+Sketch:wght@400;700&family=Cinzel:wght@400..900&family=Kode+Mono:wght@400..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Righteous&family=Rubik+Mono+One&family=Zen+Old+Mincho:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Shell: the gallery around the specimens. Not part of any specimen; never copy it. */
+body{margin:0;background:#E8E8E3;color:#141414;font:16px/1.5 ui-sans-serif,system-ui,sans-serif}
+.shell{max-width:1240px;margin:0 auto;padding:32px 16px 96px}
+.shell>h1{margin:0;font-size:24px}
+.shell>p{margin:4px 0 0;max-width:70ch}
+.index{display:flex;flex-wrap:wrap;gap:6px 16px;margin:20px 0 36px;padding:0;list-style:none;font-size:14px}
+.index a{color:#141414}
+.spec{margin:0 0 40px;border:2px solid #141414;background:#FFFFFF;scroll-margin-top:16px}
+.spec>header{display:flex;flex-wrap:wrap;gap:4px 20px;align-items:baseline;padding:10px 14px;border-bottom:2px solid #141414;font-size:14px}
+.spec>header h2{margin:0;font-size:16px}
+.spec>header code{font:600 13px ui-monospace,monospace;background:#141414;color:#FFFFFF;padding:2px 6px}
+.spec>header p{margin:0;flex:1 1 320px}
+.stage{position:relative;min-height:360px;display:grid;place-items:center;padding:48px 20px;overflow:hidden;box-sizing:border-box}
+.replay{position:absolute;top:10px;right:10px;font:600 13px ui-sans-serif,system-ui,sans-serif;padding:8px 12px;min-height:40px;border:2px solid currentColor;background:transparent;color:inherit;cursor:pointer}
+.replay:focus-visible,.index a:focus-visible{outline:3px solid currentColor;outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* lay-01 Sideways scroll (Archivo Black) */
+#lay-01 .l01{width:100%;min-width:0;display:grid;gap:14px}
+#lay-01 .l01-brand{margin:0;font:700 13px ui-monospace,monospace;letter-spacing:.04em}
+#lay-01 .l01-box{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:4px;padding:4px 4px 16px;scrollbar-color:#FF5A1F #0D1757}
+#lay-01 .l01-panel{flex:0 0 min(80%,380px);box-sizing:border-box;min-height:260px;padding:20px 22px;background:#FF5A1F;color:#121212;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:space-between}
+#lay-01 .l01-panel:nth-child(even){background:#F4F1E8}
+#lay-01 .l01-n{margin:0;font:400 clamp(56px,10vw,96px)/.85 'Archivo Black',Impact,sans-serif}
+#lay-01 h3{margin:14px 0 6px;font:400 28px/1 'Archivo Black',Impact,sans-serif;text-transform:uppercase}
+#lay-01 .l01-panel p:last-child{margin:0;max-width:34ch}
+#lay-01 .l01-ctl{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#lay-01 .l01-ctl button{font:400 15px 'Archivo Black',Impact,sans-serif;min-height:44px;padding:0 16px;border:2px solid #F4F1E8;background:transparent;color:#F4F1E8;cursor:pointer}
+#lay-01 .l01-ctl button[aria-disabled=true]{opacity:.45;cursor:default}
+#lay-01 .l01-pos{font:700 14px ui-monospace,monospace;font-variant-numeric:tabular-nums}
+#lay-01 small{font:12px/1.5 ui-monospace,monospace;max-width:72ch}
+#lay-01 :focus-visible{outline:3px solid #FFE14D;outline-offset:3px}
+/* lay-02 One screen, swapped in place (Rubik Mono One) */
+#lay-02 .l02{width:100%;min-width:0;display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto 340px auto;gap:14px 18px}
+#lay-02 .l02-brand,#lay-02 small{grid-column:1/-1}
+#lay-02 .l02-brand{margin:0;font:700 13px ui-monospace,monospace;letter-spacing:.04em}
+#lay-02 .l02-tabs{display:flex;flex-direction:column;gap:8px}
+#lay-02 [role=tab]{font:400 14px 'Rubik Mono One',ui-monospace,monospace;text-transform:uppercase;text-align:left;min-height:44px;padding:0 16px;border:2px solid #C6FF3D;background:transparent;color:#C6FF3D;cursor:pointer}
+#lay-02 [role=tab][aria-selected=true]{background:#C6FF3D;color:#0B0B0B}
+#lay-02 .l02-screen{display:grid;min-height:0;border:2px solid #C6FF3D}
+#lay-02 [role=tabpanel]{grid-area:1/1;min-height:0;overflow:auto;padding:20px 22px;background:#0B0B0B;scrollbar-color:#C6FF3D #0B0B0B}
+#lay-02 .l02-k{margin:0 0 10px;font:700 12px ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}
+#lay-02 h3{margin:0 0 12px;font:400 clamp(20px,3.4vw,34px)/1.15 'Rubik Mono One',ui-monospace,monospace;color:#C6FF3D}
+#lay-02 [role=tabpanel] p{max-width:52ch}
+#lay-02 ol{margin:0;padding:0;list-style:none;font:15px/1.4 ui-monospace,monospace}
+#lay-02 li{display:flex;gap:16px;padding:10px 0;border-top:1px solid #3A3A3A}
+#lay-02 li b{color:#C6FF3D;font-variant-numeric:tabular-nums}
+#lay-02 small{font:12px/1.5 ui-monospace,monospace;max-width:72ch}
+#lay-02 :focus-visible{outline:3px solid #FF4FD8;outline-offset:3px}
+@media (max-width:599px){#lay-02 .l02{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto 340px auto}#lay-02 .l02-tabs{flex-direction:row;flex-wrap:wrap}}
+/* lay-03 Columns right to left (Zen Old Mincho) */
+#lay-03 .l03{width:100%;min-width:0;display:grid;gap:12px}
+#lay-03 .l03-brand{margin:0;font:700 13px ui-monospace,monospace;letter-spacing:.04em}
+#lay-03 .l03-box{box-sizing:border-box;width:100%;height:380px;writing-mode:vertical-rl;text-orientation:mixed;display:flex;flex-direction:column;gap:36px;overflow-x:auto;overflow-y:hidden;padding:22px 18px;border-top:4px double #1B2A4A;border-bottom:4px double #1B2A4A;font:400 17px/1.9 'Zen Old Mincho','Hiragino Mincho ProN','Yu Mincho',Georgia,serif;scrollbar-color:#1B2A4A transparent}
+#lay-03 .l03-box>section{flex:none}
+#lay-03 h3{margin:0;margin-block-end:10px;font:700 26px/1.5 'Zen Old Mincho','Hiragino Mincho ProN','Yu Mincho',Georgia,serif;letter-spacing:.08em}
+#lay-03 .l03-box p{margin:0;margin-block-end:.4em}
+#lay-03 .l03-tcy{text-combine-upright:all}
+#lay-03 .l03-seal{display:inline-block;margin-block-start:14px;padding:6px 4px;border:2px solid #B3261E;color:#B3261E;font-weight:700;letter-spacing:.2em}
+#lay-03 button{font:700 16px/1.6 'Zen Old Mincho',Georgia,serif;padding:12px 8px;border:2px solid #1B2A4A;background:transparent;color:#1B2A4A;cursor:pointer}
+#lay-03 button[aria-pressed=true]{background:#1B2A4A;color:#E9EEF4}
+#lay-03 small{font:12px/1.5 ui-monospace,monospace;max-width:72ch}
+#lay-03 :focus-visible{outline:3px solid #B3261E;outline-offset:3px}
+/* lay-04 Bottom to top (Kode Mono) */
+#lay-04 .l04{width:100%;min-width:0;max-width:640px;display:grid;gap:12px}
+#lay-04 .l04-brand{margin:0;font:700 13px ui-monospace,monospace;letter-spacing:.04em}
+#lay-04 .l04-box{height:340px;overflow-y:auto;display:flex;flex-direction:column-reverse;border-left:3px solid #5EF2C2;scrollbar-color:#5EF2C2 transparent}
+#lay-04 .l04-log{margin:0;padding:0;list-style:none;display:flex;flex-direction:column-reverse}
+#lay-04 li{display:grid;grid-template-columns:7ch minmax(0,1fr);gap:8px 14px;align-items:baseline;padding:22px 16px;border-top:1px dashed #2E6B66;font:400 15px/1.5 'Kode Mono',ui-monospace,monospace}
+#lay-04 li b{font:700 18px 'Kode Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+#lay-04 .l04-start{background:#5EF2C2;color:#021B1F;border-top:0}
+#lay-04 li button{grid-column:2;justify-self:start;font:700 15px 'Kode Mono',ui-monospace,monospace;min-height:44px;padding:0 14px;border:2px solid #5EF2C2;background:transparent;color:#5EF2C2;cursor:pointer}
+#lay-04 li button[aria-pressed=true]{background:#5EF2C2;color:#021B1F}
+#lay-04 small{font:12px/1.5 ui-monospace,monospace;max-width:72ch}
+#lay-04 :focus-visible{outline:3px solid #FFD84D;outline-offset:3px}
+/* lay-05 Zoom to read (Abril Fatface) */
+#lay-05 .l05{width:100%;min-width:0;max-width:760px;display:grid;gap:14px}
+#lay-05 .l05-brand{margin:0;font:700 13px ui-monospace,monospace;letter-spacing:.04em}
+#lay-05 .l05-view{display:grid;overflow:hidden;min-height:260px;border:2px solid #0E2A22;background:#F4FBF6}
+#lay-05 .l05-level{grid-area:1/1;position:relative;padding:28px clamp(18px,4vw,40px)}
+#lay-05 h3{margin:0 0 14px;font:400 clamp(34px,6vw,64px)/1 'Abril Fatface',Didot,Georgia,serif}
+#lay-05 .l05-level p{margin:0;max-width:40ch;font:400 clamp(19px,2.4vw,24px)/1.5 Georgia,'Times New Roman',serif}
+#lay-05 .l05-in{font:700 1em/1 Georgia,'Times New Roman',serif;color:#B22A12;background:none;border:0;border-bottom:3px solid #B22A12;padding:0 1px;cursor:zoom-in}
+#lay-05 .l05-in::after{content:" ⊕";font-size:.7em}
+#lay-05 .l05-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+#lay-05 .l05-out{font:700 15px Georgia,serif;min-height:44px;padding:0 16px;border:2px solid #0E2A22;background:transparent;color:#0E2A22;cursor:zoom-out}
+#lay-05 .l05-out[aria-disabled=true]{opacity:.45;cursor:default}
+#lay-05 .l05-where{font:700 14px ui-monospace,monospace}
+#lay-05 small{font:12px/1.5 ui-monospace,monospace;max-width:72ch}
+#lay-05 :focus-visible{outline:3px solid #0E2A22;outline-offset:3px}
+/* lay-06 Drag-around surface (Cabin Sketch) */
+#lay-06 .l06{width:100%;min-width:0;display:grid;gap:12px}
+#lay-06 .l06-brand{margin:0;font:700 13px ui-monospace,monospace;letter-spacing:.04em}
+#lay-06 .l06-go{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font:700 14px ui-monospace,monospace}
+#lay-06 .l06-go button{font:700 17px 'Cabin Sketch',Georgia,serif;min-height:42px;padding:0 12px;border:2px solid #1E2A12;background:#F3F7E8;color:#1E2A12;cursor:pointer}
+#lay-06 .l06-view{height:380px;overflow:auto;border:3px solid #1E2A12;cursor:grab;scrollbar-color:#1E2A12 #DDEBC5}
+#lay-06 .l06-view.l06-drag{cursor:grabbing;user-select:none}
+#lay-06 .l06-plane{position:relative;width:2400px;height:1600px;background:linear-gradient(#1E2A1226 1px,transparent 1px) 0 0/80px 80px,linear-gradient(90deg,#1E2A1226 1px,transparent 1px) 0 0/80px 80px,#DDEBC5}
+#lay-06 .l06-path{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#lay-06 .l06-path path{fill:none;stroke:#1E2A12;stroke-width:3;stroke-dasharray:2 12;stroke-linecap:round}
+#lay-06 .l06-item{position:absolute;box-sizing:border-box;width:250px;padding:14px 16px;background:#7A4E22;color:#FFF8EE;border:3px solid #1E2A12;transform:rotate(var(--r,0deg))}
+#lay-06 .l06-item.l06-water{background:#1F5A8A}
+#lay-06 h3{margin:0 0 6px;font:700 30px/1 'Cabin Sketch',Georgia,serif}
+#lay-06 .l06-item p{margin:0;font:15px/1.45 Georgia,serif}
+#lay-06 small{font:12px/1.5 ui-monospace,monospace;max-width:72ch}
+#lay-06 :focus-visible{outline:3px solid #B0189A;outline-offset:3px}
+/* lay-07 Opposite halves (Anton) */
+#lay-07 .stage{padding:32px 20px}
+#lay-07 .l07{width:100%;min-width:0;display:grid;gap:12px}
+#lay-07 .l07-brand{margin:0;font:700 13px ui-monospace,monospace;letter-spacing:.04em}
+#lay-07 .l07-scroll{height:420px;overflow-y:auto;border:3px solid #F2C14E;scrollbar-color:#F2C14E #0D1B3D}
+#lay-07 .l07-stage{position:sticky;top:0;height:420px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+#lay-07 .l07-half{min-width:0;overflow:hidden}
+#lay-07 .l07-left{background:#0D1B3D;color:#F2F2F2}
+#lay-07 .l07-right{background:#F2C14E;color:#0D1B3D}
+#lay-07 .l07-col{display:flex;flex-direction:column;gap:0;padding:20px clamp(14px,3vw,28px)}
+#lay-07 .l07-left .l07-col{flex-direction:column-reverse}
+#lay-07 h3{margin:0;padding:10px 0 18px;font:400 clamp(30px,5vw,56px)/1 Anton,Impact,sans-serif;text-transform:uppercase}
+#lay-07 .l07-left h3{padding:18px 0 10px}
+#lay-07 .l07-stop{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:22px 0;border-top:2px solid currentColor;font:400 clamp(20px,2.6vw,28px)/1.1 Anton,Impact,sans-serif;text-transform:uppercase}
+#lay-07 .l07-stop span{font:700 15px ui-monospace,monospace;font-variant-numeric:tabular-nums}
+#lay-07 small{font:12px/1.5 ui-monospace,monospace;max-width:72ch}
+#lay-07 :focus-visible{outline:3px solid #F2C14E;outline-offset:3px}
+@media (max-width:599px),(prefers-reduced-motion:reduce){
+#lay-07 .l07-stage{position:static;height:auto;grid-template-columns:minmax(0,1fr)}
+#lay-07 .l07-track{height:auto!important}
+#lay-07 .l07-col{transform:none!important}
+#lay-07 .l07-left .l07-col{flex-direction:column}
+#lay-07 .l07-left h3{padding:10px 0 18px}
+}
+/* lay-08 Ring (Cinzel) */
+#lay-08 .l08{width:100%;min-width:0;display:grid;gap:16px;justify-items:center}
+#lay-08 .l08-brand{margin:0;justify-self:start;font:700 13px ui-monospace,monospace;letter-spacing:.04em}
+#lay-08 .l08-ring{position:relative;box-sizing:border-box;width:min(100%,460px);aspect-ratio:1;container-type:inline-size;border:2px solid #E8C66A66;border-radius:50%}
+#lay-08 .l08-item{position:absolute;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;border:2px solid #E8C66A;background:#14123A;color:#E8C66A;font:700 14px/1.1 Cinzel,Georgia,serif;cursor:pointer;transform:rotate(var(--a,0deg)) translateY(calc(40px - 50cqi)) rotate(calc(-1 * var(--a,0deg)));transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+#lay-08 .l08-item[aria-current=true]{background:#E8C66A;color:#14123A}
+#lay-08 .l08-centre{position:absolute;left:50%;top:50%;width:46%;transform:translate(-50%,-50%);text-align:center}
+#lay-08 h3{margin:0 0 6px;font:700 clamp(17px,5cqi,26px)/1.15 Cinzel,Georgia,serif}
+#lay-08 .l08-centre p{margin:0;font:clamp(12px,3.3cqi,15px)/1.4 Georgia,serif;color:#F3EAD0}
+#lay-08 .l08-bar{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+#lay-08 .l08-bar button{font:700 15px Cinzel,Georgia,serif;min-height:44px;padding:0 16px;border:2px solid #E8C66A;background:transparent;color:#E8C66A;cursor:pointer}
+#lay-08 small{font:12px/1.5 ui-monospace,monospace;max-width:72ch;color:#F3EAD0}
+#lay-08 :focus-visible{outline:3px solid #7FE7FF;outline-offset:3px}
+@media (prefers-reduced-motion:reduce){#lay-08 .l08-item{transition:none}}
+/* lay-09 Slope (Righteous) */
+#lay-09 .l09{width:100%;min-width:0;display:grid;gap:14px}
+#lay-09 .l09-brand{margin:0;font:700 13px ui-monospace,monospace;letter-spacing:.04em}
+#lay-09 .l09-slope{--n:5;--w:min(300px,64%);position:relative;display:grid;gap:16px}
+#lay-09 .l09-rule{position:absolute;top:36px;bottom:36px;left:calc(var(--w) / 2);width:calc(100% - var(--w));height:calc(100% - 72px);overflow:visible}
+#lay-09 .l09-rule line{stroke:#E8401C;stroke-width:4;stroke-dasharray:12 8}
+#lay-09 .l09-step{position:relative;box-sizing:border-box;width:var(--w);margin-left:calc((100% - var(--w)) * var(--i) / (var(--n) - 1));padding:14px 18px 16px;background:#FFFFFF;border:3px solid #10203A}
+#lay-09 .l09-alt{margin:0;font:400 clamp(30px,5vw,44px)/1 Righteous,'Arial Rounded MT Bold',sans-serif;color:#C2330F}
+#lay-09 h3{margin:4px 0 6px;font:400 22px/1.1 Righteous,'Arial Rounded MT Bold',sans-serif}
+#lay-09 .l09-step p:last-child{margin:0;font:15px/1.45 ui-sans-serif,system-ui,sans-serif}
+#lay-09 small{font:12px/1.5 ui-monospace,monospace;max-width:72ch}
+/* lay-10 Book (Libre Baskerville) */
+#lay-10 .l10{width:100%;min-width:0;display:grid;gap:14px;justify-items:center}
+#lay-10 .l10-brand{margin:0;justify-self:start;font:700 13px ui-monospace,monospace;letter-spacing:.04em}
+#lay-10 .l10-book{position:relative;width:min(100%,780px);aspect-ratio:780/470;perspective:2200px}
+#lay-10 .l10-endpaper{position:absolute;inset:0;background:#7A2B38;border:2px solid #2A0A10}
+#lay-10 .l10-leaf{position:absolute;top:0;bottom:0;left:50%;width:50%;transform-origin:left center;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.45,.1,.2,1)}
+#lay-10 .l10-leaf.l10-turned{transform:rotateY(-180deg)}
+#lay-10 .l10-face{position:absolute;inset:0;box-sizing:border-box;padding:28px 30px 40px;overflow:auto;background:#F1EFE9;color:#2A1A12;border:1px solid #CFC7B8;-webkit-backface-visibility:hidden;backface-visibility:hidden;font:15px/1.65 'Libre Baskerville',Georgia,serif}
+#lay-10 .l10-back{transform:rotateY(180deg)}
+#lay-10 h3{margin:0 0 12px;font:700 24px/1.2 'Libre Baskerville',Georgia,serif}
+#lay-10 .l10-face p{margin:0 0 10px}
+#lay-10 .l10-face ol{margin:0;padding-left:1.2em}
+#lay-10 .l10-folio{position:absolute;bottom:12px;left:0;right:0;margin:0!important;text-align:center;font-style:italic;font-size:13px}
+#lay-10 .l10-title{display:grid;align-content:center;text-align:center}
+#lay-10 .l10-title h3{font-size:30px}
+#lay-10 .l10-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
+#lay-10 .l10-bar button{font:700 15px 'Libre Baskerville',Georgia,serif;min-height:44px;padding:0 16px;border:2px solid #F1EFE9;background:transparent;color:#F1EFE9;cursor:pointer}
+#lay-10 .l10-bar button[aria-disabled=true]{opacity:.45;cursor:default}
+#lay-10 .l10-where{font:italic 15px 'Libre Baskerville',Georgia,serif;font-variant-numeric:tabular-nums}
+#lay-10 small{font:12px/1.5 ui-monospace,monospace;max-width:72ch}
+#lay-10 :focus-visible{outline:3px solid #FFD27A;outline-offset:3px}
+@media (max-width:599px){
+#lay-10 .l10-book{aspect-ratio:auto;height:440px;perspective:none}
+#lay-10 .l10-endpaper{display:none}
+#lay-10 .l10-leaf{display:contents}
+#lay-10 .l10-face{display:none;transform:none;-webkit-backface-visibility:visible;backface-visibility:visible}
+#lay-10 .l10-face.l10-on{display:block}
+#lay-10 .l10-title.l10-on{display:grid}
+}
+@media (prefers-reduced-motion:reduce){#lay-10 .l10-leaf{transition:none}}
+</style>
+</head>
+<body>
+<main class="shell">
+<h1>Layouts</h1>
+<p>Specimens to re-cut, never to ship as they are: change the copy, colours and type to the product's own. Each is a working skeleton for one rolled reading direction, in the same order as the roll table. Open the one your design rolled, or roll one with <code>python3 scripts/roll.py --library layouts</code>.</p>
+<ul class="index"><li><a href="#lay-01">lay-01 Sideways scroll</a></li><li><a href="#lay-02">lay-02 One screen, swapped in place</a></li><li><a href="#lay-03">lay-03 Columns right to left</a></li><li><a href="#lay-04">lay-04 Bottom to top</a></li><li><a href="#lay-05">lay-05 Zoom to read</a></li><li><a href="#lay-06">lay-06 Drag-around surface</a></li><li><a href="#lay-07">lay-07 Opposite halves</a></li><li><a href="#lay-08">lay-08 Ring</a></li><li><a href="#lay-09">lay-09 Slope</a></li><li><a href="#lay-10">lay-10 Book</a></li></ul>
+
+<article class="spec" id="lay-01" data-name="Sideways scroll">
+<header><h2><code>lay-01</code> Sideways scroll</h2><p><b>Use it when:</b> the design reads horizontally only. <b>Change:</b> the panels, their width, the snap points.</p></header>
+<div class="stage" style="background:#13207A;color:#F4F1E8">
+  <div class="l01">
+    <p class="l01-brand">KILN LANE · a sample evening pottery course</p>
+    <div class="l01-box" role="region" aria-label="The course, week by week; scrolls sideways" tabindex="0">
+      <section class="l01-panel"><p class="l01-n">01</p><div><h3>Centre</h3><p>Week one: wedge the clay and centre it on the wheel until it stops fighting you.</p></div></section>
+      <section class="l01-panel"><p class="l01-n">02</p><div><h3>Throw</h3><p>Week two: open the lump, pull the walls up, and lose your first three cylinders on purpose.</p></div></section>
+      <section class="l01-panel"><p class="l01-n">03</p><div><h3>Trim</h3><p>Week three: turn the leather-hard pots over and carve each one a foot ring.</p></div></section>
+      <section class="l01-panel"><p class="l01-n">04</p><div><h3>Glaze</h3><p>Week four: dip, pour or brush. The colours lie until the kiln tells the truth.</p></div></section>
+      <section class="l01-panel"><p class="l01-n">05</p><div><h3>Fire</h3><p>Week five: the kiln opens on Saturday at 9 a.m. (a sample time) and you take home what survived.</p></div></section>
+    </div>
+    <div class="l01-ctl"><button type="button" data-step="-1">← Earlier</button><span class="l01-pos">Week 1 of 5</span><button type="button" data-step="1">Later →</button></div>
+    <small>A mouse wheel moves the strip sideways until it reaches an end, then the page scrolls on, so nobody is trapped. Focus the strip and use the arrow keys, or swipe on a phone. Archivo Black · OFL · fallback Impact.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="lay-02" data-name="One screen, swapped in place">
+<header><h2><code>lay-02</code> One screen, swapped in place</h2><p><b>Use it when:</b> the page is one screen and never scrolls. <b>Change:</b> the tabs and panels, the swap.</p></header>
+<div class="stage" style="background:#0B0B0B;color:#F2F2F2">
+  <div class="l02">
+    <p class="l02-brand">NIGHT BUS RADIO · a sample late-night station</p>
+    <div class="l02-tabs" role="tablist" aria-label="Night Bus Radio">
+      <button type="button" role="tab" id="l02-t1" aria-controls="l02-p1" aria-selected="true">Now</button>
+      <button type="button" role="tab" id="l02-t2" aria-controls="l02-p2" aria-selected="false" tabindex="-1">Tonight</button>
+      <button type="button" role="tab" id="l02-t3" aria-controls="l02-p3" aria-selected="false" tabindex="-1">Hosts</button>
+      <button type="button" role="tab" id="l02-t4" aria-controls="l02-p4" aria-selected="false" tabindex="-1">Tune in</button>
+    </div>
+    <div class="l02-screen">
+      <section role="tabpanel" id="l02-p1" aria-labelledby="l02-t1" tabindex="0"><p class="l02-k">On air · sample</p><h3>Slow songs for the last bus</h3><p>Midnight to four, every night. One host, no adverts, requests by text.</p></section>
+      <section role="tabpanel" id="l02-p2" aria-labelledby="l02-t2" tabindex="0" hidden><p class="l02-k">Sample schedule</p><h3>Tonight</h3><ol><li><b>00:00</b>Last Orders</li><li><b>00:30</b>The Quiet Carriage</li><li><b>01:00</b>Requests from the Depot</li><li><b>01:30</b>Rain on the Windows</li><li><b>02:00</b>The Night Shift Hour</li><li><b>02:30</b>Songs in Other Languages</li><li><b>03:00</b>Weather for Nobody</li><li><b>03:20</b>One Long Record</li><li><b>03:45</b>The First Tram</li><li><b>04:00</b>Sign-off</li></ol></section>
+      <section role="tabpanel" id="l02-p3" aria-labelledby="l02-t3" tabindex="0" hidden><p class="l02-k">Invented hosts</p><h3>Who's driving</h3><p>Three hosts take turns: a night nurse, a baker and a retired bus driver. Each picks the records and answers the texts.</p></section>
+      <section role="tabpanel" id="l02-p4" aria-labelledby="l02-t4" tabindex="0" hidden><p class="l02-k">Sample frequency</p><h3>Tune in</h3><p>98.4 FM in town, or the stream on any phone. It keeps playing with the screen off.</p></section>
+    </div>
+    <small>In a real page this stage is 100dvh and nothing outside it scrolls; a panel that outgrows the screen scrolls inside itself, as Tonight does here. Arrow keys, Home and End move between tabs. Rubik Mono One · OFL · fallback ui-monospace.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="lay-03" data-name="Columns right to left">
+<header><h2><code>lay-03</code> Columns right to left</h2><p><b>Use it when:</b> the design reads in vertical columns, top to bottom, right to left. <b>Change:</b> the copy, the column height, upright numbers.</p></header>
+<div class="stage" style="background:#E9EEF4;color:#1B2A4A">
+  <div class="l03">
+    <p class="l03-brand">HANA-NO-MA · a sample tea room</p>
+    <div class="l03-box" role="region" aria-label="Tea room notes, read in columns from right to left" tabindex="0">
+      <section><h3>Hana-no-ma</h3><p>A sample tea room of six mats, one low window and a scroll that changes with the season.</p><p class="l03-seal" aria-hidden="true" lang="ja">見本</p></section>
+      <section><h3>Spring sencha</h3><p>Picked in the first <span class="l03-tcy">10</span> days of May.</p><p>Steep it at <span class="l03-tcy">70</span>°C for one minute; the second cup is the better one.</p></section>
+      <section><h3>Hours</h3><p>Open <span class="l03-tcy">11</span> to <span class="l03-tcy">17</span>, closed on Tuesdays.</p><p>Sample hours.</p></section>
+      <section><h3>Sweets</h3><p>One small sweet before the first cup, so the bitter tastes round.</p><p>Made each morning by the shop next door.</p></section>
+      <section><h3>Water</h3><p>Soft water, boiled once and left to cool in a bowl. Never pour boiling water on green leaves.</p></section>
+      <section><h3>The second cup</h3><p>Pour it a little hotter, a little shorter. Most guests say it is the one they remember.</p></section>
+      <section><h3>Sit with us</h3><p>Eight seats, booked by the half hour.</p><p><button type="button" aria-pressed="false">Ask for a seat (sample)</button></p></section>
+    </div>
+    <small>writing-mode sits on this full-width box, never on html or body, or phones zoom the whole page out. Inside vertical-rl a flex row runs top to bottom, so the sections use flex-direction: column to sit right to left. The box opens at its right edge; two-digit numbers stand upright with text-combine-upright. Zen Old Mincho · OFL · fallback a system Mincho, then Georgia.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="lay-04" data-name="Bottom to top">
+<header><h2><code>lay-04</code> Bottom to top</h2><p><b>Use it when:</b> the design reads from the bottom up. <b>Change:</b> the entries and the start marker.</p></header>
+<div class="stage" style="background:#021B1F;color:#DFF7F2">
+  <div class="l04">
+    <p class="l04-brand">DEEPLINE · a sample freediving school</p>
+    <div class="l04-box" role="region" aria-label="The ascent, read from the bottom up" tabindex="0">
+      <ol class="l04-log">
+        <li class="l04-start"><b>−40 m</b><span>▲ Start here and read upward. The deepest point of the sample course: the line, the tag, the turn.</span></li>
+        <li><b>−30 m</b><span>Kick again. Most divers feel the urge to breathe here; it passes.</span></li>
+        <li><b>−20 m</b><span>You float on your own again. Long, slow fin strokes; save the effort.</span></li>
+        <li><b>−10 m</b><span>The light turns from blue to green. Your buddy drops to meet you.</span></li>
+        <li><b>−5 m</b><span>Look up, keep the chin tucked, let a little air go.</span></li>
+        <li><b>0 m</b><span>Surface: three recovery breaths, then the OK sign. Courses run at weekends (a sample schedule).</span><button type="button" aria-pressed="false">Hold a sample place</button></li>
+      </ol>
+    </div>
+    <small>column-reverse on the scroll box makes it open at the bottom, and column-reverse on the list puts the first entry at the bottom, so reading order, DOM order and tab order all run upward. Kode Mono · OFL · fallback ui-monospace.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="lay-05" data-name="Zoom to read">
+<header><h2><code>lay-05</code> Zoom to read</h2><p><b>Use it when:</b> each level of the page is a closer look. <b>Change:</b> the levels and the words that zoom.</p></header>
+<div class="stage" style="background:#E4F2EA;color:#0E2A22">
+  <div class="l05">
+    <p class="l05-brand">CONTOUR &amp; CO. · a sample map shop</p>
+    <div class="l05-view">
+      <section class="l05-level" aria-labelledby="l05-h0">
+        <h3 id="l05-h0" tabindex="-1">Maps for walking</h3>
+        <p>We print folding <button type="button" class="l05-in" data-to="1"><span class="sr">Zoom into </span>maps</button> of the hills nobody else bothers with.</p>
+      </section>
+      <section class="l05-level" aria-labelledby="l05-h1" hidden>
+        <h3 id="l05-h1" tabindex="-1">Each map</h3>
+        <p>One sheet at 1:25,000 on waterproof paper, every stile and gate, and <button type="button" class="l05-in" data-to="2"><span class="sr">Zoom into </span>contours</button> drawn every five metres.</p>
+      </section>
+      <section class="l05-level" aria-labelledby="l05-h2" hidden>
+        <h3 id="l05-h2" tabindex="-1">Contours</h3>
+        <p>Close lines mean steep ground. Ten lines between two paths is a 50 m climb. A sample sheet; real scales vary by map.</p>
+      </section>
+    </div>
+    <div class="l05-bar"><button type="button" class="l05-out" aria-disabled="true">Zoom out</button><span class="l05-where" aria-live="polite">Level 1 of 3</span></div>
+    <small>Each marked word is a button that zooms the page into itself, from where it sits; focus then moves to the new level's heading. Zoom out, or press Escape. Reduced motion swaps the levels instantly. Abril Fatface · OFL · fallback Didot, then Georgia.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="lay-06" data-name="Drag-around surface">
+<header><h2><code>lay-06</code> Drag-around surface</h2><p><b>Use it when:</b> the page is a 2D surface you move around. <b>Change:</b> the plane size and what sits on it.</p></header>
+<div class="stage" style="background:#F3F7E8;color:#1E2A12">
+  <div class="l06">
+    <p class="l06-brand">ALLOTMENT 14 · a sample community garden plan</p>
+    <div class="l06-go" role="group" aria-label="Go to a plot">Go to <button type="button" data-go="l06-beans">Beans</button><button type="button" data-go="l06-shed">Shed</button><button type="button" data-go="l06-pond">Pond</button><button type="button" data-go="l06-bees">Bees</button><button type="button" data-go="l06-compost">Compost</button></div>
+    <div class="l06-view" role="region" aria-label="Garden plan; drag, scroll or use the arrow keys to move around" tabindex="0">
+      <div class="l06-plane">
+        <svg class="l06-path" viewBox="0 0 2400 1600" aria-hidden="true"><path d="M420 330C800 300 900 620 1250 560S1900 300 2000 760 1500 1300 1000 1240 300 1100 420 330"/></svg>
+        <section class="l06-item" id="l06-beans" tabindex="-1" style="left:300px;top:220px;--r:-2deg"><h3>Beans</h3><p>Runner beans up hazel poles. Pick them small and often.</p></section>
+        <section class="l06-item" id="l06-shed" tabindex="-1" style="left:1120px;top:440px;--r:1.5deg"><h3>Shed</h3><p>Tools, seed tins and the kettle. The key is under the third pot.</p></section>
+        <section class="l06-item l06-water" id="l06-pond" tabindex="-1" style="left:1880px;top:640px;--r:-1deg"><h3>Pond</h3><p>Frogs since March. Keep the edge wild; no fish.</p></section>
+        <section class="l06-item" id="l06-bees" tabindex="-1" style="left:1520px;top:1180px;--r:2deg"><h3>Bees</h3><p>Two hives at the far fence. Walk past them, not in front.</p></section>
+        <section class="l06-item" id="l06-compost" tabindex="-1" style="left:420px;top:1040px;--r:-1.5deg"><h3>Compost</h3><p>Three bays: this year, last year, ready. Turn it on Sundays.</p></section>
+      </div>
+    </div>
+    <small>The plane is 2400 × 1600 inside an ordinary scroll box: a mouse drags it, touch and trackpads scroll it natively, arrow keys scroll it once focused, and the buttons jump to a plot and focus it. Drags never start on a link or a button. Cabin Sketch · OFL · fallback Georgia.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="lay-07" data-name="Opposite halves">
+<header><h2><code>lay-07</code> Opposite halves</h2><p><b>Use it when:</b> the two halves of the screen scroll in opposite directions. <b>Change:</b> the two columns' content.</p></header>
+<div class="stage" style="background:#0D1B3D;color:#F2F2F2">
+  <div class="l07">
+    <p class="l07-brand">TWO RIVERS FERRY · a sample timetable</p>
+    <div class="l07-scroll" role="region" aria-label="Both directions of the ferry; scroll to move the halves" tabindex="0">
+      <div class="l07-track">
+        <div class="l07-stage">
+          <section class="l07-half l07-left"><div class="l07-col">
+            <h3>Northbound</h3>
+            <p class="l07-stop">Harbour <span>07:10</span></p><p class="l07-stop">Mill Quay <span>07:22</span></p><p class="l07-stop">Old Bridge <span>07:35</span></p><p class="l07-stop">Tannery <span>07:44</span></p><p class="l07-stop">Ferry Lane <span>07:52</span></p><p class="l07-stop">Boatyard <span>08:01</span></p><p class="l07-stop">North Wharf <span>08:10</span></p>
+          </div></section>
+          <section class="l07-half l07-right"><div class="l07-col">
+            <h3>Southbound</h3>
+            <p class="l07-stop">North Wharf <span>07:15</span></p><p class="l07-stop">Boatyard <span>07:24</span></p><p class="l07-stop">Ferry Lane <span>07:33</span></p><p class="l07-stop">Tannery <span>07:41</span></p><p class="l07-stop">Old Bridge <span>07:50</span></p><p class="l07-stop">Mill Quay <span>08:03</span></p><p class="l07-stop">Harbour <span>08:15</span></p>
+          </div></section>
+        </div>
+      </div>
+    </div>
+    <small>One local scroll drives both halves: northbound climbs the left side as southbound runs down the right. Sample times. Under 600px wide, or with reduced motion, the halves stack and scroll as one column. Anton · OFL · fallback Impact.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="lay-08" data-name="Ring">
+<header><h2><code>lay-08</code> Ring</h2><p><b>Use it when:</b> the content is read around a circle. <b>Change:</b> the sections and the ring size.</p></header>
+<div class="stage" style="background:#14123A;color:#E8C66A">
+  <div class="l08">
+    <p class="l08-brand">SOLSTICE BAKERY · a sample bakery's day</p>
+    <div class="l08-ring" role="group" aria-label="The bakery's day, around the clock">
+      <button type="button" class="l08-item" data-title="Ovens lit" data-text="The first loaves go in while the street is still dark.">4 am</button>
+      <button type="button" class="l08-item" data-title="Doors open" data-text="Rolls warm from the oven for the early shift.">6 am</button>
+      <button type="button" class="l08-item" data-title="Coffee" data-text="The counter fills; the second bake comes out.">9 am</button>
+      <button type="button" class="l08-item" data-title="Bread" data-text="Sourdough is ready. Most days it is gone by two.">Noon</button>
+      <button type="button" class="l08-item" data-title="Cakes" data-text="Slices by weight, cut while you wait.">3 pm</button>
+      <button type="button" class="l08-item" data-title="Close" data-text="What is left goes to the shelter down the road.">6 pm</button>
+      <div class="l08-centre" aria-live="polite"><h3></h3><p></p></div>
+    </div>
+    <div class="l08-bar"><button type="button" data-step="-1">← Earlier</button><button type="button" data-step="1">Later →</button></div>
+    <small>Sample hours. The item at the top is read in the centre. Turn the ring with the buttons, the arrow keys, or by choosing a time; it always turns the short way round. Items stay upright. Cinzel · OFL · fallback Georgia.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="lay-09" data-name="Slope">
+<header><h2><code>lay-09</code> Slope</h2><p><b>Use it when:</b> content is laid on a diagonal. <b>Change:</b> the blocks and the slope.</p></header>
+<div class="stage" style="background:#9FD7FF;color:#10203A">
+  <div class="l09">
+    <p class="l09-brand">SWITCHBACK · a sample downhill bike route</p>
+    <div class="l09-slope">
+      <svg class="l09-rule" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100" vector-effect="non-scaling-stroke"/></svg>
+      <section class="l09-step" style="--i:0"><p class="l09-alt">820 m</p><h3>Summit café</h3><p>Fill the bottles, drop the saddle, check the brakes twice.</p></section>
+      <section class="l09-step" style="--i:1"><p class="l09-alt">690 m</p><h3>First hairpin</h3><p>Brake before the bend, never in it.</p></section>
+      <section class="l09-step" style="--i:2"><p class="l09-alt">560 m</p><h3>The roots</h3><p>Stand up, stay loose, let the bike move under you.</p></section>
+      <section class="l09-step" style="--i:3"><p class="l09-alt">430 m</p><h3>Pine straight</h3><p>The fast part. Look far ahead.</p></section>
+      <section class="l09-step" style="--i:4"><p class="l09-alt">310 m</p><h3>Valley station</h3><p>The lift back up runs every 15 minutes (a sample timetable).</p></section>
+    </div>
+    <small>Each block steps right by (container width − block width) ÷ 4, so the slope gets steeper on wide screens and shallower on phones, and never overflows. Text stays level; DOM order is reading order. Sample heights. Righteous · OFL · fallback a rounded system sans.</small>
+  </div>
+</div>
+</article>
+
+<article class="spec" id="lay-10" data-name="Book">
+<header><h2><code>lay-10</code> Book</h2><p><b>Use it when:</b> the page turns like a book. <b>Change:</b> the pages and the paper.</p></header>
+<div class="stage" style="background:#4A1420;color:#F1EFE9">
+  <div class="l10">
+    <p class="l10-brand">THE QUIET KITCHEN · a sample cookbook</p>
+    <div class="l10-book" role="region" aria-label="The Quiet Kitchen; arrow keys turn the pages" tabindex="0">
+      <div class="l10-endpaper" aria-hidden="true"></div>
+      <div class="l10-leaf">
+        <section class="l10-face l10-front l10-title"><div><h3>The Quiet Kitchen</h3><p>Recipes for one pot and a low flame.</p><p><i>A sample book; sample recipes.</i></p></div></section>
+        <section class="l10-face l10-back"><h3>Contents</h3><ol><li>Broth, page 3</li><li>Bread, page 4</li><li>Pickles, page 5</li><li>Index, page 6</li></ol><p class="l10-folio">2</p></section>
+      </div>
+      <div class="l10-leaf">
+        <section class="l10-face l10-front"><h3>Broth</h3><p>Bones, an onion cut in half, cold water to cover. Bring it up slowly and never let it boil.</p><p>Skim once, then leave it alone for four hours.</p><p class="l10-folio">3</p></section>
+        <section class="l10-face l10-back"><h3>Bread</h3><p>500 g flour, 350 g water, 10 g salt, a pinch of yeast.</p><p>Mix at night, shape in the morning, bake at 240 °C for 40 minutes.</p><p class="l10-folio">4</p></section>
+      </div>
+      <div class="l10-leaf">
+        <section class="l10-face l10-front"><h3>Pickles</h3><p>One part vinegar, one part water, a spoon each of sugar and salt. Pour it hot over whatever the garden gave too much of.</p><p class="l10-folio">5</p></section>
+        <section class="l10-face l10-back"><h3>Index</h3><p>Bones 3 · Flour 4 · Onion 3 · Salt 3–5 · Sugar 5 · Vinegar 5 · Yeast 4</p><p class="l10-folio">6</p></section>
+      </div>
+    </div>
+    <div class="l10-bar"><button type="button" data-step="-1">← Back</button><span class="l10-where" aria-live="polite">Page 1 of 6</span><button type="button" data-step="1">Turn →</button></div>
+    <small>Each leaf holds two pages, front and back, and turns around the spine. On a phone the book shows one page at a time with no 3D; with reduced motion the pages change without turning. Libre Baskerville · OFL · fallback Georgia.</small>
+  </div>
+</div>
+</article>
+</main>
+<script>
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// lay-01 Sideways scroll (Archivo Black)
+{
+  const root = document.getElementById('lay-01');
+  const box = root.querySelector('.l01-box'), panels = [...box.children], pos = root.querySelector('.l01-pos');
+  const [back, fwd] = root.querySelectorAll('.l01-ctl button');
+  const offset = i => panels[i].offsetLeft - panels[0].offsetLeft;
+  const nearest = x => panels.reduce((best, _, i) => Math.abs(offset(i) - x) < Math.abs(offset(best) - x) ? i : best, 0);
+  console.assert(nearest(0) === 0 && nearest(offset(panels.length - 1)) === panels.length - 1, 'lay-01: nearest panel');
+  const max = () => box.scrollWidth - box.clientWidth;
+  box.addEventListener('wheel', e => {
+    if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return; // a sideways swipe already scrolls the strip
+    if (e.deltaY > 0 ? box.scrollLeft >= max() - 1 : box.scrollLeft <= 0) return; // at an end: let the page scroll on
+    e.preventDefault();
+    box.scrollLeft += e.deltaY * (e.deltaMode === 1 ? 40 : 1);
+  }, {passive: false});
+  const at = () => box.scrollLeft >= max() - 1 ? panels.length - 1 : nearest(box.scrollLeft);
+  const show = () => {
+    pos.textContent = `Week ${at() + 1} of ${panels.length}`;
+    back.setAttribute('aria-disabled', box.scrollLeft <= 0);
+    fwd.setAttribute('aria-disabled', box.scrollLeft >= max() - 1);
+  };
+  root.querySelector('.l01-ctl').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b || b.getAttribute('aria-disabled') === 'true') return;
+    const i = Math.max(0, Math.min(panels.length - 1, at() + +b.dataset.step));
+    box.scrollTo({left: offset(i), behavior: reduce ? 'auto' : 'smooth'});
+  });
+  box.addEventListener('scroll', show, {passive: true});
+  show();
+}
+// lay-02 One screen, swapped in place (Rubik Mono One)
+{
+  const root = document.getElementById('lay-02');
+  const tabs = [...root.querySelectorAll('[role=tab]')];
+  const panel = t => document.getElementById(t.getAttribute('aria-controls'));
+  const wrap = i => (i + tabs.length) % tabs.length;
+  console.assert(wrap(-1) === tabs.length - 1 && wrap(tabs.length) === 0, 'lay-02: arrow keys wrap');
+  let cur = 0;
+  const select = i => {
+    if (i === cur) return;
+    const out = panel(tabs[cur]), into = panel(tabs[i]);
+    tabs.forEach((t, j) => { t.setAttribute('aria-selected', j === i); t.tabIndex = j === i ? 0 : -1; });
+    cur = i;
+    into.hidden = false;
+    if (reduce) { out.hidden = true; return; }
+    into.animate([{opacity: 0}, {opacity: 1}], 260);
+    out.animate([{opacity: 1}, {opacity: 0}], 260).onfinish = () => { if (out !== panel(tabs[cur])) out.hidden = true; };
+  };
+  root.querySelector('[role=tablist]').addEventListener('click', e => {
+    const t = e.target.closest('[role=tab]');
+    if (t) select(tabs.indexOf(t));
+  });
+  root.querySelector('[role=tablist]').addEventListener('keydown', e => {
+    const to = {ArrowRight: cur + 1, ArrowDown: cur + 1, ArrowLeft: cur - 1, ArrowUp: cur - 1, Home: 0, End: tabs.length - 1}[e.key];
+    if (to === undefined) return;
+    e.preventDefault();
+    select(wrap(to));
+    tabs[cur].focus();
+  });
+}
+// lay-03 Columns right to left (Zen Old Mincho)
+{
+  const root = document.getElementById('lay-03');
+  const ask = root.querySelector('button');
+  ask.addEventListener('click', () => ask.setAttribute('aria-pressed', ask.getAttribute('aria-pressed') !== 'true'));
+}
+// lay-04 Bottom to top (Kode Mono)
+{
+  const root = document.getElementById('lay-04');
+  const box = root.querySelector('.l04-box'), hold = root.querySelector('button');
+  box.scrollTop = box.scrollHeight; // engines that start column-reverse at the top jump to the bottom; the rest clamp to it
+  console.assert(box.scrollHeight > box.clientHeight, 'lay-04: the log overflows, so it opens at the bottom');
+  hold.addEventListener('click', () => hold.setAttribute('aria-pressed', hold.getAttribute('aria-pressed') !== 'true'));
+}
+// lay-05 Zoom to read (Abril Fatface)
+{
+  const root = document.getElementById('lay-05');
+  const levels = [...root.querySelectorAll('.l05-level')], out = root.querySelector('.l05-out'), where = root.querySelector('.l05-where');
+  console.assert([...root.querySelectorAll('[data-to]')].every(b => levels[+b.dataset.to] && b.closest('.l05-level') === levels[b.dataset.to - 1]), 'lay-05: each zoom word opens the next level');
+  const k = 4, origins = [];
+  let level = 0, busy = false;
+  const go = (to, origin) => {
+    if (busy || to < 0 || to === level) return;
+    const from = levels[level], next = levels[to], deeper = to > level;
+    level = to;
+    out.setAttribute('aria-disabled', to === 0);
+    where.textContent = `Level ${to + 1} of ${levels.length}: ${next.querySelector('h3').textContent}`;
+    next.hidden = false;
+    const done = () => {
+      const keep = root.contains(document.activeElement) || document.activeElement === document.body; // never pull focus back from elsewhere
+      from.hidden = true;
+      busy = false;
+      if (keep) next.querySelector('h3').focus();
+    };
+    if (reduce) return done();
+    busy = true;
+    from.style.transformOrigin = next.style.transformOrigin = origin;
+    next.animate([{transform: `scale(${deeper ? 1 / k : k})`, opacity: 0}, {transform: 'scale(1)', opacity: 1}], {duration: 480, easing: 'ease-out'});
+    const a = from.animate([{transform: 'scale(1)', opacity: 1}, {transform: `scale(${deeper ? k : 1 / k})`, opacity: 0}], {duration: 480, easing: 'ease-in', fill: 'forwards'});
+    a.onfinish = () => { done(); a.cancel(); };
+  };
+  root.querySelector('.l05-view').addEventListener('click', e => {
+    const b = e.target.closest('.l05-in');
+    if (!b) return;
+    const to = +b.dataset.to;
+    origins[to] = `${b.offsetLeft + b.offsetWidth / 2}px ${b.offsetTop + b.offsetHeight / 2}px`;
+    go(to, origins[to]);
+  });
+  const back = () => level > 0 && go(level - 1, origins[level]);
+  out.addEventListener('click', back);
+  root.addEventListener('keydown', e => { if (e.key === 'Escape' && level > 0) { e.preventDefault(); back(); } });
+}
+// lay-06 Drag-around surface (Cabin Sketch)
+{
+  const root = document.getElementById('lay-06');
+  const view = root.querySelector('.l06-view'), buttons = [...root.querySelectorAll('[data-go]')];
+  console.assert(buttons.every(b => document.getElementById(b.dataset.go)), 'lay-06: every go-to button has a plot');
+  const centre = item => ({left: item.offsetLeft - (view.clientWidth - item.offsetWidth) / 2, top: item.offsetTop - (view.clientHeight - item.offsetHeight) / 2});
+  let drag = null;
+  view.addEventListener('pointerdown', e => {
+    if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('a,button,input,select,textarea')) return;
+    e.preventDefault(); // no text selection while dragging
+    view.focus({preventScroll: true});
+    drag = {x: e.clientX, y: e.clientY, left: view.scrollLeft, top: view.scrollTop};
+    view.setPointerCapture(e.pointerId);
+    view.classList.add('l06-drag');
+  });
+  view.addEventListener('pointermove', e => {
+    if (!drag) return;
+    view.scrollLeft = drag.left - (e.clientX - drag.x);
+    view.scrollTop = drag.top - (e.clientY - drag.y);
+  });
+  const end = () => { drag = null; view.classList.remove('l06-drag'); };
+  view.addEventListener('pointerup', end);
+  view.addEventListener('pointercancel', end);
+  root.querySelector('.l06-go').addEventListener('click', e => {
+    const b = e.target.closest('[data-go]');
+    if (!b) return;
+    const item = document.getElementById(b.dataset.go);
+    view.scrollTo({...centre(item), behavior: reduce ? 'auto' : 'smooth'});
+    item.focus({preventScroll: true});
+  });
+  view.scrollTo(centre(document.getElementById('l06-beans')));
+}
+// lay-07 Opposite halves (Anton)
+{
+  const root = document.getElementById('lay-07');
+  const scroller = root.querySelector('.l07-scroll'), track = root.querySelector('.l07-track'), stage = root.querySelector('.l07-stage');
+  const [left, right] = root.querySelectorAll('.l07-col');
+  const flat = matchMedia('(max-width: 599px), (prefers-reduced-motion: reduce)');
+  // left starts showing its bottom and moves down; right starts at its top and moves up
+  const offsets = (p, tl, tr) => [-(1 - p) * tl, -p * tr];
+  console.assert(offsets(0, 100, 80)[0] === -100 && offsets(1, 100, 80)[0] === 0 && offsets(1, 100, 80)[1] === -80, 'lay-07: opposite offsets');
+  let tl = 0, tr = 0;
+  const place = () => {
+    if (flat.matches) return;
+    const max = scroller.scrollHeight - scroller.clientHeight;
+    const [l, r] = offsets(max > 0 ? scroller.scrollTop / max : 0, tl, tr);
+    left.style.transform = `translateY(${l}px)`;
+    right.style.transform = `translateY(${r}px)`;
+  };
+  const measure = () => {
+    if (flat.matches) { track.style.height = left.style.transform = right.style.transform = ''; return; }
+    tl = Math.max(0, left.offsetHeight - stage.clientHeight);
+    tr = Math.max(0, right.offsetHeight - stage.clientHeight);
+    track.style.height = stage.clientHeight + Math.max(tl, tr) + 'px';
+    place();
+  };
+  scroller.addEventListener('scroll', place, {passive: true});
+  flat.addEventListener('change', measure);
+  new ResizeObserver(measure).observe(stage);
+  measure();
+}
+// lay-08 Ring (Cinzel)
+{
+  const root = document.getElementById('lay-08');
+  const ring = root.querySelector('.l08-ring'), items = [...ring.querySelectorAll('.l08-item')], n = items.length, step = 360 / n;
+  const title = ring.querySelector('.l08-centre h3'), text = ring.querySelector('.l08-centre p');
+  const mod = i => ((i % n) + n) % n;
+  const delta = (from, to) => { const d = mod(to - from); return d > n / 2 ? d - n : d; }; // the short way round
+  console.assert(delta(0, n - 1) === -1 && delta(0, 2) === 2 && mod(-1) === n - 1, 'lay-08: shortest turn');
+  let turn = 0;
+  const show = () => {
+    const cur = items[mod(turn)];
+    items.forEach((b, i) => {
+      b.style.setProperty('--a', (i - turn) * step + 'deg');
+      if (b === cur) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+    });
+    title.textContent = cur.dataset.title;
+    text.textContent = cur.dataset.text;
+  };
+  const by = (d, focus) => { turn += d; show(); if (focus) items[mod(turn)].focus(); };
+  ring.addEventListener('click', e => {
+    const b = e.target.closest('.l08-item');
+    if (b) by(delta(mod(turn), items.indexOf(b)), false);
+  });
+  ring.addEventListener('keydown', e => {
+    const d = {ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1}[e.key];
+    if (!d || !e.target.closest('.l08-item')) return;
+    e.preventDefault();
+    by(d, true);
+  });
+  root.querySelector('.l08-bar').addEventListener('click', e => {
+    const b = e.target.closest('[data-step]');
+    if (b) by(+b.dataset.step, false);
+  });
+  items.forEach(b => b.style.transition = 'none'); // place the items without flying them out from the top on load
+  show();
+  ring.offsetWidth; // commit those positions before transitions come back
+  items.forEach(b => b.style.transition = '');
+}
+// lay-10 Book (Libre Baskerville)
+{
+  const root = document.getElementById('lay-10');
+  const book = root.querySelector('.l10-book'), leaves = [...book.querySelectorAll('.l10-leaf')], faces = [...book.querySelectorAll('.l10-face')];
+  const where = root.querySelector('.l10-where'), [back, fwd] = root.querySelectorAll('.l10-bar button');
+  const phone = matchMedia('(max-width: 599px)');
+  const n = leaves.length, last = faces.length - 1;
+  const spread = f => Math.ceil(f / 2); // spread k shows face 2k-1 on the left and 2k on the right
+  const first = k => Math.max(2 * k - 1, 0);
+  console.assert(spread(0) === 0 && spread(1) === 1 && spread(2) === 1 && spread(last) === n && first(spread(3)) === 3, 'lay-10: faces to spreads');
+  let f = 0;
+  const turning = new Set(); // every leaf still in the air, so a quick second turn can't drop the first one mid-flight
+  const show = () => {
+    const k = spread(f);
+    leaves.forEach((leaf, i) => {
+      leaf.classList.toggle('l10-turned', i < k);
+      const stack = i < k ? i : n - i;
+      leaf.style.zIndex = turning.has(i) ? n + 1 + stack : stack; // leaves in the air ride above both stacks, in landing order
+    });
+    const seen = (phone.matches ? [f] : [2 * k - 1, 2 * k]).filter(i => i >= 0 && i <= last);
+    faces.forEach((face, i) => { const on = seen.includes(i); face.classList.toggle('l10-on', on); face.inert = !on; });
+    where.textContent = (seen.length > 1 ? `Pages ${seen[0] + 1}–${seen[1] + 1}` : `Page ${seen[0] + 1}`) + ` of ${faces.length}`;
+    back.setAttribute('aria-disabled', f === 0);
+    fwd.setAttribute('aria-disabled', phone.matches ? f === last : k === n);
+  };
+  const go = d => {
+    if (phone.matches) {
+      f = Math.max(0, Math.min(last, f + d));
+    } else {
+      const k = spread(f), k2 = Math.max(0, Math.min(n, k + d));
+      if (k2 === k) return;
+      if (!reduce) turning.add(d > 0 ? k : k2);
+      f = first(k2);
+    }
+    show();
+  };
+  leaves.forEach((leaf, i) => {
+    const land = e => { if (e.target === leaf && e.propertyName === 'transform') { turning.delete(i); show(); } };
+    leaf.addEventListener('transitionend', land);
+    leaf.addEventListener('transitioncancel', land);
+  });
+  root.querySelector('.l10-bar').addEventListener('click', e => {
+    const b = e.target.closest('[data-step]');
+    if (b && b.getAttribute('aria-disabled') !== 'true') go(+b.dataset.step);
+  });
+  book.addEventListener('keydown', e => {
+    const d = {ArrowRight: 1, ArrowLeft: -1}[e.key];
+    if (!d) return;
+    e.preventDefault();
+    go(d);
+  });
+  phone.addEventListener('change', () => { turning.clear(); show(); });
+  show();
+}
+</script>
+</body>
+</html>

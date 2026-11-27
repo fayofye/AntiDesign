@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halden Mutual · pull a shape</title>
+<meta name="description" content="Halden Mutual, a savings bank owned by its members since 1874. Easy-access saver 3.10% AER variable, 95-day notice saver 3.60% AER variable, no fees, open with £1.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;700&family=Titan+One&display=swap">
+<style>
+/* Design 3: Memphis, in the brand's one green. One screen that never scrolls; sections are shapes in a pile. */
+:root{
+  --ground:#FFFFFF; --ink:#1F4D3A;               /* locked brand: Halden green on white; Memphis clashes in pattern, not hue */
+  --u:8px;
+  --s1:.875rem; --s2:1.0625rem; --s3:1.5rem; --s4:clamp(2rem,1rem + 3vw,3.5rem); --s5:clamp(4rem,2rem + 7vw,8rem);
+  --display:'Titan One','Arial Rounded MT Bold','Arial Black',system-ui,sans-serif;
+  --body:'Gabarito',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --checks:repeating-conic-gradient(var(--ink) 0 25%,var(--ground) 0 50%) 0 0/16px 16px;
+  --stripes:repeating-linear-gradient(45deg,var(--ink) 0 6px,var(--ground) 6px 12px);
+  --squiggle:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='10'%3E%3Cpath d='M0 5Q6 0 12 5T24 5' fill='none' stroke='%231F4D3A' stroke-width='3'/%3E%3C/svg%3E");
+  --squiggle-w:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='10'%3E%3Cpath d='M0 5Q6 0 12 5T24 5' fill='none' stroke='%23FFFFFF' stroke-width='3'/%3E%3C/svg%3E");
+  --terrazzo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cg fill='%231F4D3A'%3E%3Cpolygon points='12,18 24,14 22,27 13,29'/%3E%3Cpolygon points='60,8 66,12 61,16'/%3E%3Cpolygon points='100,30 118,26 120,38 104,41'/%3E%3Cpolygon points='140,10 150,16 144,22 136,18'/%3E%3Cpolygon points='30,70 38,64 44,74 34,80'/%3E%3Cpolygon points='80,60 86,58 88,66 81,67'/%3E%3Cpolygon points='126,78 140,72 146,88 130,90'/%3E%3Cpolygon points='8,120 18,112 22,126'/%3E%3Cpolygon points='56,110 72,104 76,118 62,124'/%3E%3Cpolygon points='104,128 110,124 114,132 106,134'/%3E%3Cpolygon points='140,140 152,134 156,148 144,152'/%3E%3Cpolygon points='40,146 46,142 50,150'/%3E%3C/g%3E%3C/svg%3E");
+}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;overflow:hidden;color:var(--ink);background:var(--ground);-webkit-text-size-adjust:100%}
+body{margin:0;height:100dvh;overflow:clip;font:400 var(--s2)/1.45 var(--body);font-variant-numeric:tabular-nums;
+  background:var(--terrazzo) 0 0/160px 160px,var(--ground);
+  display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"mark" "pile" "tokens"}
+@media (min-width:900px){
+  body{grid-template-columns:minmax(0,1fr) calc(var(--u)*30);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"mark tokens" "pile tokens"}
+}
+h1,h2,p,ol{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.dark :focus-visible{outline-color:var(--ground)}
+.slab:focus{outline:none}
+
+/* Wordmark, tilted on its own slab */
+.mark{grid-area:mark;display:flex;flex-wrap:wrap;align-items:center;gap:var(--u) calc(var(--u)*2);padding:calc(var(--u)*2) calc(var(--u)*2) 0}
+.mark a{font:400 var(--s3)/1 var(--display);text-decoration:none;background:var(--ground);border:3px solid var(--ink);padding:var(--u) calc(var(--u)*1.5);transform:rotate(-3deg);box-shadow:6px 6px 0 0 var(--ink)}
+.mark p{background:var(--ground);padding:2px var(--u);font-size:var(--s1);font-weight:700}
+
+/* The pile */
+.pile{grid-area:pile;display:grid;grid-template:minmax(0,1fr)/minmax(0,1fr);place-items:center;padding:calc(var(--u)*3) calc(var(--u)*2);min-height:0}
+.slab{grid-area:1/1;display:flex;flex-direction:column;position:relative;width:min(100%,calc(var(--u)*82));max-height:100%;
+  border:4px solid var(--ink);background:var(--ground);
+  transform:translate(var(--x),var(--y)) rotate(var(--r));transition:transform .5s cubic-bezier(.3,1.45,.5,1)}
+.slab>.in{overflow:auto;min-height:0;padding:calc(var(--u)*4) calc(var(--u)*3);visibility:hidden;display:grid;gap:calc(var(--u)*2);align-content:start}
+.slab:target,.pile:not(:has(.slab:target)) #owned{z-index:9;--x:0px;--y:0px;--r:-1.5deg}
+.slab:target>.in,.pile:not(:has(.slab:target)) #owned>.in{visibility:visible}
+.dark{background:var(--ink);color:var(--ground)}
+.slab h2{font:400 var(--s3)/1.15 var(--display);text-wrap:balance}
+.slab p{max-width:56ch;text-wrap:pretty}
+.small{font-size:var(--s1)}
+
+/* Each slab's own Memphis piece, visible even at the back of the pile */
+[id=owned]{--x:-14px;--y:10px;--r:4deg}
+#owned::before{content:"";position:absolute;top:-40px;right:-34px;width:96px;height:96px;border-radius:50%;background:var(--checks);border:4px solid var(--ink);z-index:-1}
+#owned::after{content:"";position:absolute;left:24px;right:24px;bottom:-14px;height:10px;background:var(--squiggle) 0 0/24px 10px repeat-x}
+[id=rates]{--x:26px;--y:-14px;--r:7deg}
+#rates::before{content:"";position:absolute;inset:-4px auto -4px -28px;width:24px;background:var(--checks);border:4px solid var(--ink)}
+[id=pound]{--x:-30px;--y:18px;--r:-9deg}
+#pound{border:14px solid transparent;background:linear-gradient(var(--ground),var(--ground)) padding-box,var(--stripes) border-box}
+[id=since]{--x:30px;--y:22px;--r:12deg}
+#since::before{content:"";position:absolute;left:-4px;right:-4px;top:-18px;height:18px;
+  background:linear-gradient(135deg,transparent 50%,var(--ink) 50%) 0 0/18px 18px repeat-x,linear-gradient(225deg,transparent 50%,var(--ink) 50%) 0 0/18px 18px repeat-x}
+[id=open]{--x:8px;--y:-26px;--r:-5deg}
+#open::after{content:"";position:absolute;left:-26px;bottom:-26px;width:110px;height:55px;border-radius:110px 110px 0 0;background:var(--ink);transform:rotate(18deg);z-index:-1}
+
+/* Hero: the sentence that must stay word for word, stacked on three pieces */
+.stack{font:400 var(--s4)/1.05 var(--display);display:grid;gap:var(--u);justify-items:start}
+.stack span{display:block;width:fit-content;max-width:100%;text-wrap:balance}
+.stack span:nth-child(1){background:var(--ink);color:var(--ground);padding:2px var(--u) 6px;transform:rotate(-2deg)}
+.stack span:nth-child(2){padding-bottom:12px;background:var(--squiggle) 0 100%/24px 10px repeat-x}
+.stack span:nth-child(3){border:4px solid var(--ink);padding:2px var(--u) 6px;transform:rotate(1.5deg);box-shadow:6px 6px 0 0 var(--ink)}
+
+.go{justify-self:start;display:inline-block;font:400 var(--s3)/1 var(--display);text-decoration:none;color:var(--ground);background:var(--ink);
+  padding:calc(var(--u)*1.5) calc(var(--u)*2.5);border-radius:999px;transform:rotate(-2deg);box-shadow:5px 5px 0 0 var(--ground),5px 5px 0 4px var(--ink);transition:transform .2s}
+.go:hover{transform:rotate(2deg)}
+.go::after{content:" ↗"}
+
+/* Striped figures: a heavy face filled with stripes */
+.big{font:400 var(--s5)/1.1 var(--display);color:transparent;-webkit-background-clip:text;background-clip:text;
+  background-image:repeating-linear-gradient(180deg,var(--stripe,var(--ink)) 0 .075em,transparent .075em .105em)}
+.dark .big{--stripe:var(--ground)}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:calc(var(--u)*3)}
+.fig{container-type:inline-size}
+.fig .big{font-size:min(var(--s5),29cqi)} /* widest figure, 3.60%, is 3.3em in Titan One */
+.fig p+p{margin-top:var(--u)}
+.fig .what{display:flex;align-items:center;gap:var(--u);font-weight:700}
+.badge{flex:none;width:24px;height:24px;background:currentColor}
+.b-circle{border-radius:50%}
+.b-tri{clip-path:polygon(50% 0,100% 100%,0 100%)}
+.cross{position:relative;display:inline-block}
+.cross::after{content:"";position:absolute;left:-4px;right:-4px;top:45%;height:10px;background:var(--squiggle) 0 0/24px 10px repeat-x;transform:rotate(-8deg)}
+
+/* Hero stickers, slapped on at odd angles */
+.stickers{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;align-items:center;gap:calc(var(--u)*2)}
+.stk{width:calc(var(--u)*17);aspect-ratio:1;border-radius:50%;display:grid;place-content:center;text-align:center;padding:var(--u);
+  background:var(--ink);color:var(--ground);transform:rotate(-8deg);line-height:1.15;font-size:var(--s1);font-weight:700}
+.stk b{font:400 var(--s3)/1 var(--display)}
+.stk-b{background:var(--ground);color:var(--ink);border:4px solid var(--ink);box-shadow:6px 6px 0 0 var(--ink);transform:rotate(7deg)}
+.stk-go{flex-basis:100%}
+@media (min-width:600px){.stk-go{flex-basis:auto}}
+.stagger{grid-template-columns:minmax(0,1fr)}
+.stagger .fig:nth-child(2){justify-self:end;width:min(100%,24rem);transform:rotate(3deg)}
+.stagger .fig:nth-child(1){width:min(100%,24rem);transform:rotate(-2deg)}
+
+/* Tokens: the pile you pull from */
+.tokens{grid-area:tokens;padding:var(--u) calc(var(--u)*2) calc(var(--u)*2)}
+.tokens .tk-h{display:none}
+.tokens ol{list-style:none;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--u)}
+.tk{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:calc(var(--u)*8);padding:4px 2px;text-decoration:none;text-align:center;
+  font-size:var(--s1);font-weight:700;line-height:1.15;transition:transform .2s}
+.tk>span:last-child{background:var(--ground);padding:0 4px}
+.tk:hover{transform:rotate(-4deg)}
+.tk[aria-current]>span:last-child{background:var(--ink);color:var(--ground)}
+.tk[aria-current] .sh{transform:scale(1.25) rotate(-10deg)}
+.sh{flex:none;width:28px;height:28px;background:var(--ink);color:var(--ink);outline:3px solid var(--ground)}
+.sh-tri{outline:0}
+.sh-circle{border-radius:50%}
+.sh-tri{clip-path:polygon(50% 0,100% 100%,0 100%)}
+.sh-half{height:14px;margin:7px 0;border-radius:28px 28px 0 0}
+.sh-zig{background:repeating-linear-gradient(45deg,currentColor 0 4px,var(--ground) 4px 8px);border:2px solid currentColor}
+.sh-check{background:repeating-conic-gradient(currentColor 0 25%,var(--ground) 0 50%) 0 0/14px 14px;border:2px solid currentColor}
+@media (min-width:900px){
+  .tokens{padding:calc(var(--u)*4) calc(var(--u)*3);display:flex;flex-direction:column;justify-content:center}
+  .tokens .tk-h{display:block;font:400 var(--s3)/1.1 var(--display);background:var(--ground);width:fit-content;padding:2px var(--u);margin-bottom:calc(var(--u)*2);transform:rotate(-4deg)}
+  .tokens ol{grid-template-columns:1fr;gap:0}
+  .tk{flex-direction:row;justify-content:flex-start;gap:calc(var(--u)*1.5);font-size:var(--s2);padding:var(--u) 0}
+  .tokens li:nth-child(odd) .tk{transform:rotate(-3deg)}
+  .tokens li:nth-child(even) .tk{transform:rotate(4deg);margin-left:calc(var(--u)*2)}
+  .tokens li .tk:hover{transform:rotate(0)}
+  .sh{width:56px;height:56px}
+  .sh-half{height:28px;margin:14px 0;border-radius:56px 56px 0 0}
+  .slab>.in{padding:calc(var(--u)*5)}
+}
+@media (prefers-reduced-motion:reduce){.slab,.go,.tk{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="mark">
+  <a href="#owned">Halden Mutual</a>
+  <p>a savings bank, member-owned since 1874</p>
+</header>
+
+<main class="pile">
+
+  <section class="slab" id="owned" aria-labelledby="h-owned" tabindex="-1">
+    <div class="in">
+      <h1 class="stack" id="h-owned"><span>Halden Mutual</span> <span>is owned by its members,</span> <span>not by shareholders.</span></h1>
+      <ul class="stickers" aria-label="At a glance">
+        <li class="stk"><b>3.10%</b><span>easy access, AER variable</span></li>
+        <li class="stk stk-b"><b>3.60%</b><span>95-day notice, AER variable</span></li>
+        <li class="stk-go"><a class="go" href="#open">No fees. Open with £1</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="slab dark" id="rates" aria-labelledby="h-rates" tabindex="-1">
+    <div class="in">
+      <h2 id="h-rates">Two rates. Both variable. Both AER.</h2>
+      <div class="figs stagger">
+        <div class="fig">
+          <p class="big">3.10%</p>
+          <p class="what"><span class="badge b-circle" aria-hidden="true"></span>Easy-access saver</p>
+          <p>No notice to take money out.</p>
+        </div>
+        <div class="fig">
+          <p class="big">3.60%</p>
+          <p class="what"><span class="badge b-tri" aria-hidden="true"></span>95-day notice saver</p>
+          <p>Tell us 95 days before you take money out.</p>
+        </div>
+      </div>
+      <p class="small">Illustrative: £1,000 left for 12 months earns £31.00 with easy access or £36.00 with notice, £5.00 apart, if the rates stay the same. Variable rates can go down as well as up.</p>
+    </div>
+  </section>
+
+  <section class="slab" id="pound" aria-labelledby="h-pound" tabindex="-1">
+    <div class="in">
+      <h2 id="h-pound">£1 in. £0 out in fees.</h2>
+      <div class="figs">
+        <div class="fig"><p class="big">£1</p><p class="what">opens either account</p></div>
+        <div class="fig"><p class="big"><span class="cross">£0</span></p><p class="what">in fees, on either one</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slab dark" id="since" aria-labelledby="h-since" tabindex="-1">
+    <div class="in">
+      <h2 id="h-since">Same owners since 1874: the members.</h2>
+      <div class="figs">
+        <div class="fig"><p class="big">1874</p><p class="what">member-owned since</p></div>
+        <div class="fig"><p class="big">41</p><p class="what">branches</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slab" id="open" aria-labelledby="h-open" tabindex="-1">
+    <div class="in">
+      <h2 id="h-open">Pick one. Put in £1. Done.</h2>
+      <p>Easy-access saver, 3.10% AER variable. Or the 95-day notice saver, 3.60% AER variable. No fees on either.</p>
+      <a class="go" href="/open">Open an account</a>
+      <p class="small">AER is the annual equivalent rate: it shows what the interest would be if it were paid and added to your balance once a year. Both rates are variable and can go down as well as up.</p>
+    </div>
+  </section>
+
+</main>
+
+<nav class="tokens" aria-label="Pull a shape to the top of the pile">
+  <p class="tk-h" aria-hidden="true">pull a shape</p>
+  <ol>
+    <li><a class="tk" href="#owned"><span class="sh sh-circle" aria-hidden="true"></span><span>owned</span></a></li>
+    <li><a class="tk" href="#rates"><span class="sh sh-tri" aria-hidden="true"></span><span>rates</span></a></li>
+    <li><a class="tk" href="#pound"><span class="sh sh-half" aria-hidden="true"></span><span>£1, no fees</span></a></li>
+    <li><a class="tk" href="#since"><span class="sh sh-zig" aria-hidden="true"></span><span>since 1874</span></a></li>
+    <li><a class="tk" href="#open"><span class="sh sh-check" aria-hidden="true"></span><span>open</span></a></li>
+  </ol>
+</nav>
+
+<script>
+// The swap itself is CSS (:target), so plain links work without this; the script marks the token and moves focus.
+const slabs = [...document.querySelectorAll('.slab')];
+const tokens = [...document.querySelectorAll('.tk')];
+const front = hash => slabs.some(s => '#' + s.id === hash) ? hash : '#owned';
+console.assert(front('#rates') === '#rates' && front('') === '#owned' && front('#nope') === '#owned', 'design-3: front slab');
+function sync(moveFocus) {
+  const cur = front(location.hash);
+  tokens.forEach(t => t.hash === cur ? t.setAttribute('aria-current', 'true') : t.removeAttribute('aria-current'));
+  if (moveFocus) document.querySelector(cur).focus({preventScroll: true});
+  document.scrollingElement.scrollTop = 0;
+}
+addEventListener('hashchange', () => sync(true));
+sync(false);
+
+// Self-check: the illustrative figures add up.
+const interest = (pounds, aerPct) => Math.round(pounds * 100 * aerPct) / 10000;
+console.assert(interest(1000, 3.10) === 31 && interest(1000, 3.60) === 36 && interest(1000, 3.60) - interest(1000, 3.10) === 5, 'design-3: illustrative interest');
+</script>
+</body>
+</html>

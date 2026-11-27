@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Brasa Nove · check in for the fire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
+<style>
+/* Four colours, one job each: cold = ground, hot = ink on cold and ground of the core, ember = accent, flare = signal.
+   The shader paints the full thermal ramp between them; it is an image, not a fifth colour. */
+:root{--cold:#0C0114;--hot:#FFF4C4;--ember:#FF7A1A;--flare:#F0288A;
+  --u:8px;--tabw:36px;--mk:40px;
+  --s1:12px;--s2:14px;--s3:14px;--s4:22px;--s5:min(10vw,64px);
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --nabla:Nabla,"Arial Black",Impact,system-ui,sans-serif}
+@media (min-width:960px){.rule{--off:3px}:root{--tabw:64px;--mk:56px;--s2:16px;--s3:20px;--s4:34px;--s5:64px}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--cold);color:var(--hot)}
+body{font:400 var(--s2)/1.5 var(--mono);font-variant-numeric:tabular-nums}
+:focus-visible{outline:3px solid var(--hot);outline-offset:3px;box-shadow:0 0 0 6px var(--cold)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+button,select{font:inherit;color:inherit}
+canvas#heat{position:fixed;inset:0;width:100vw;height:100vh;display:block;z-index:0}
+.no-gl canvas#heat{display:none}
+
+/* The page: day tabs down the left edge, the hearth, the brand and the footnotes */
+.frame{position:relative;z-index:1;min-height:100svh;display:grid;
+  grid-template-columns:var(--tabw) minmax(0,1fr);grid-template-rows:auto auto 1fr;
+  grid-template-areas:"days brand" "days hearth" "days notes"}
+@media (min-width:960px){.frame{height:100svh;min-height:560px;grid-template-columns:var(--tabw) minmax(0,1fr) 320px;
+  grid-template-rows:auto 1fr;grid-template-areas:"days hearth brand" "days hearth notes"}}
+
+/* Index tabs down one edge: the departure day */
+.days{grid-area:days;margin:0;padding:calc(var(--u)*2) 0;border:0;border-right:2px solid var(--ember);
+  display:flex;flex-direction:column;gap:var(--u);background:var(--cold);min-width:0}
+.days legend{font:700 var(--s1)/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:0 0 var(--u);
+  width:100%;text-align:center;color:var(--ember)}
+.tab{position:relative;flex:1;min-height:52px;display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--ember);border-left:0;border-radius:0 calc(var(--u)*1.5) calc(var(--u)*1.5) 0;
+  margin-right:6px;cursor:pointer;background:var(--cold);color:var(--hot)}
+.tab span{writing-mode:vertical-rl;font:700 var(--s1)/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.tab input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.tab:has(:checked){background:var(--hot);color:var(--cold);margin-right:-10px;border-color:var(--hot)}
+.tab:has(:focus-visible){outline:3px solid var(--hot);outline-offset:2px}
+.tab.shut{border-style:dashed;color:var(--hot);cursor:not-allowed}
+.tab.shut input{cursor:not-allowed}
+.tab.shut span small{font:inherit;color:var(--ember)}
+
+/* Brand */
+.brand{grid-area:brand;padding:calc(var(--u)*2) calc(var(--u)*2) var(--u);background:var(--cold)}
+.name{margin:0;font:400 var(--s5)/.95 var(--nabla);font-variation-settings:"EDPT" 120,"EHLT" 12;letter-spacing:.01em;
+  text-wrap:balance}
+.no-nabla .name{font-weight:900;color:var(--hot);
+  text-shadow:1px 1px 0 var(--ember),2px 2px 0 var(--ember),3px 3px 0 var(--flare),4px 4px 0 var(--flare),5px 5px 0 #3A0873}
+.what{margin:var(--u) 0 0;font-size:var(--s2);max-width:46ch;text-wrap:pretty}
+.what b{color:var(--ember);font-weight:700}
+
+/* tex-04 RGB split, re-cut: one headline only, fringes in flare and ember */
+.rule{--off:2px;position:relative;margin:var(--u) 0 0;font:700 var(--s3)/1.3 var(--mono);color:var(--hot);text-wrap:balance}
+.rule .ch{position:absolute;inset:0;mix-blend-mode:screen;pointer-events:none}
+.rule .ch-a{color:var(--flare);transform:translateX(calc(var(--off)*-1))}
+.rule .ch-b{color:var(--ember);transform:translateX(var(--off))}
+@media (prefers-reduced-motion:no-preference){
+  .rule .ch-a{animation:jit 3.4s steps(1) infinite}
+  .rule .ch-b{animation:jit 3.4s steps(1) infinite -1.3s}}
+@keyframes jit{0%,84%,100%{clip-path:inset(0);translate:0 0}86%{clip-path:inset(18% 0 58% 0);translate:-6px 0}
+  89%{clip-path:inset(62% 0 12% 0);translate:5px 0}92%{clip-path:inset(38% 0 40% 0);translate:-3px 0}}
+
+/* The hearth: one round fire seen from above through a thermal camera, read around its rim (lay-08, re-cut) */
+.hearth-area{grid-area:hearth;position:relative;display:grid;place-items:center;padding:var(--u) 0;min-width:0}
+.ring{--d:min(calc(100vw - var(--tabw) - var(--mk) - 16px),max(280px,calc(100svh - 300px)));
+  position:relative;width:var(--d);aspect-ratio:1;container-type:inline-size;border-radius:50%;
+  margin:calc(var(--mk)/2 + 4px)}
+@media (min-width:960px){.ring{--d:min(calc(100svh - var(--mk) - 48px),calc(100vw - var(--tabw) - 320px - var(--mk) - 64px))}}
+.no-gl .ring{background:radial-gradient(closest-side,#FFF4C4 0 30%,#FFD24A 42%,#FF7A1A 56%,#D81B7F 72%,#3A0873 88%,#0C0114 100%)}
+.no-gl .gated .ring{background:radial-gradient(closest-side,#3A0873 0 40%,#1A0430 70%,#0C0114 100%)}
+.ring::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--hot);opacity:.5}
+.core{position:absolute;inset:calc(var(--mk)/2 + 6px);border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(closest-side,#FFF4C4A6 0 95%,#FFF4C400 100%);color:var(--cold)}
+/* the wash keeps text at 4.5:1 or better over any colour the shader paints: worst case, cold ground under it */
+.place{width:74%;max-height:62%;overflow:auto;text-align:left}
+.place h2{margin:0 0 var(--u);font:700 var(--s3)/1.25 var(--mono);text-wrap:balance}
+.place h2:focus{outline:none}
+.place h2:focus-visible{outline:3px solid var(--cold);outline-offset:2px}
+.fn{display:inline-block;min-width:1.6em;padding:0 .3em;margin-right:.3em;background:var(--cold);color:var(--hot);text-align:center;font-weight:700}
+.place p{margin:var(--u) 0 0;text-wrap:pretty}
+.fine{font-size:var(--s1);line-height:1.4}
+.sheet{list-style:none;margin:0;padding:0;display:grid;gap:calc(var(--u)/2)}
+.sheet li{display:grid;grid-template-columns:2.4em minmax(0,1fr);align-items:baseline;gap:var(--u)}
+.no{font:400 var(--s4)/1 var(--nabla);color:var(--cold);text-align:right}
+.no-nabla .no{font-weight:900;text-shadow:1px 1px 0 var(--ember),2px 2px 0 var(--flare)}
+.pass{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--u);margin:0}
+.pass div{border-top:2px solid var(--cold);padding-top:calc(var(--u)/2)}
+.pass dt{font-size:var(--s1);text-transform:uppercase;letter-spacing:.06em}
+.pass dd{margin:0;font-weight:700;font-size:var(--s3)}
+.link{background:none;border:0;padding:0;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer;color:inherit;min-height:24px}
+
+.mark{position:absolute;left:50%;top:50%;width:var(--mk);height:var(--mk);margin:calc(var(--mk)/-2) 0 0 calc(var(--mk)/-2);
+  border-radius:50%;border:2px solid var(--hot);background:var(--cold);color:var(--hot);cursor:pointer;padding:0;
+  font:400 var(--s4)/1 var(--nabla);
+  transform:rotate(var(--a,0deg)) translateY(-50cqi) rotate(calc(-1 * var(--a,0deg)));transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.no-nabla .mark{font-weight:900}
+.mark[aria-current=true]{background:var(--hot);color:var(--cold);border-color:var(--ember);border-width:3px}
+@media (prefers-reduced-motion:reduce){.mark{transition:none}}
+.js .ring:not(.live) .mark{transition:none}
+
+/* Thermal camera frame corners */
+.hearth-area::before,.hearth-area::after{content:"";position:absolute;width:28px;height:28px;border:2px solid var(--hot);opacity:.7;pointer-events:none}
+.hearth-area::before{top:var(--u);left:calc(var(--u)*2);border-right:0;border-bottom:0}
+.hearth-area::after{bottom:var(--u);right:calc(var(--u)*2);border-left:0;border-top:0}
+.hud{position:absolute;top:calc(var(--u)*1.5);right:calc(var(--u)*2);margin:0;font:700 var(--s1)/1 var(--mono);letter-spacing:.1em;color:var(--hot);background:var(--cold);padding:4px 6px}
+
+/* Check-in: the form you fill before you see the fire */
+.panel{position:absolute;z-index:2;inset:auto;width:min(calc(100% - 16px),420px);background:var(--cold);
+  border:2px solid var(--ember);padding:calc(var(--u)*2)}
+.panel h2{margin:0 0 var(--u);font:700 var(--s3)/1.2 var(--mono)}
+.panel p{margin:0 0 calc(var(--u)*2);text-wrap:pretty}
+.row{display:grid;grid-template-columns:7.5em minmax(0,1fr);align-items:center;gap:var(--u);margin-bottom:var(--u)}
+.row label{font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:var(--s1)}
+select{min-height:44px;width:100%;background:var(--cold);border:2px solid var(--hot);padding:0 var(--u);border-radius:0}
+.actions{display:flex;flex-wrap:wrap;gap:var(--u);margin-top:calc(var(--u)*2)}
+.btn{min-height:44px;padding:0 calc(var(--u)*2);border:2px solid var(--hot);background:var(--hot);color:var(--cold);font-weight:700;cursor:pointer}
+.btn.ghost{background:var(--cold);color:var(--hot)}
+.phone{border-left:4px solid var(--flare);padding-left:var(--u)}
+.js .frame:not(.gated) .panel{display:none}
+.js .gated .core,.js .gated .mark{visibility:hidden}
+
+/* Footnotes: every link is a numbered note */
+.notes{grid-area:notes;padding:calc(var(--u)*2);background:var(--cold);align-self:end}
+.notes h2{margin:0 0 var(--u);font:700 var(--s1)/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ember)}
+.notes ol{list-style:none;margin:0;padding:0;border-top:1px solid var(--ember)}
+.notes li{border-bottom:1px solid #FFF4C433}
+.notes a{display:grid;grid-template-columns:2em minmax(0,1fr);gap:var(--u);padding:calc(var(--u)/2) 0;color:var(--hot);text-decoration:none;font-size:var(--s1);line-height:1.45;min-height:32px;align-items:baseline}
+.notes a sup{font:700 var(--s2)/1 var(--mono);vertical-align:baseline;color:var(--ember)}
+.notes a:hover span,.notes a[aria-current=true] span{text-decoration:underline;text-underline-offset:3px}
+.notes a[aria-current=true] sup{color:var(--hot)}
+.notes .colophon{margin:calc(var(--u)*2) 0 0;font-size:var(--s1);color:var(--hot);opacity:.85}
+</style>
+</head>
+<body>
+<canvas id="heat" aria-hidden="true"></canvas>
+<div class="frame" id="frame">
+
+  <fieldset class="days" form="checkin">
+    <legend>Day</legend>
+    <label class="tab"><input type="radio" name="day" value="Tue" form="checkin"><span>Tue</span></label>
+    <label class="tab"><input type="radio" name="day" value="Wed" form="checkin"><span>Wed</span></label>
+    <label class="tab"><input type="radio" name="day" value="Thu" form="checkin"><span>Thu</span></label>
+    <label class="tab"><input type="radio" name="day" value="Fri" form="checkin" checked><span>Fri</span></label>
+    <label class="tab"><input type="radio" name="day" value="Sat" form="checkin"><span>Sat</span></label>
+    <label class="tab shut"><input type="radio" name="day" value="Sun" form="checkin" disabled><span>Sun <small>shut</small></span></label>
+    <label class="tab shut"><input type="radio" name="day" value="Mon" form="checkin" disabled><span>Mon <small>shut</small></span></label>
+  </fieldset>
+
+  <header class="brand">
+    <h1 class="name">Brasa Nove</h1>
+    <p class="what">Wood-fire restaurant. Departures <b>Tuesday to Saturday, 17:00 to 23:00</b>.</p>
+    <p class="rule"><span class="real">Everything on the menu touches the fire.</span><span class="ch ch-a" aria-hidden="true">Everything on the menu touches the fire.</span><span class="ch ch-b" aria-hidden="true">Everything on the menu touches the fire.</span></p>
+  </header>
+
+  <main class="hearth-area" id="hearth-area">
+    <p class="hud" aria-hidden="true">IR · HEARTH</p>
+    <div class="ring" id="hearth" role="group" aria-label="The hearth: six places around the fire. Turn it with the numbered marks, the arrow keys or the footnotes.">
+      <div class="core" aria-live="polite">
+
+        <section class="place" id="p-pass" aria-labelledby="h-pass">
+          <h2 id="h-pass" tabindex="-1"><span class="fn">1</span>Boarding pass</h2>
+          <div data-pass>
+            <dl class="pass">
+              <div><dt>Party</dt><dd data-f="party">2</dd></div>
+              <div><dt>Day</dt><dd data-f="day">Fri</dd></div>
+              <div><dt>Boards</dt><dd data-f="time">20:00</dd></div>
+            </dl>
+            <p class="fine">Gate: the hearth. A design: nothing is sent. <button type="button" class="link" data-again>Change</button></p>
+          </div>
+          <div data-nopass hidden>
+            <p>Not checked in yet. Online check-in takes parties of up to 8.</p>
+            <p><button type="button" class="link" data-again>Check in now</button></p>
+          </div>
+        </section>
+
+        <section class="place" id="p-front" aria-labelledby="h-front">
+          <h2 id="h-front" tabindex="-1"><span class="fn">2</span>Front two</h2>
+          <ol class="sheet">
+            <li><b class="no">9</b><span>Flatbread with lardo</span></li>
+            <li><b class="no">11</b><span>Charred leeks with romesco</span></li>
+          </ol>
+          <p class="fine">Squad numbers = €.</p>
+        </section>
+
+        <section class="place" id="p-middle" aria-labelledby="h-middle">
+          <h2 id="h-middle" tabindex="-1"><span class="fn">3</span>Middle two</h2>
+          <ol class="sheet">
+            <li><b class="no">16</b><span>Clams in cider</span></li>
+            <li><b class="no">24</b><span>Half chicken</span></li>
+          </ol>
+          <p class="fine">Squad numbers = €.</p>
+        </section>
+
+        <section class="place" id="p-back" aria-labelledby="h-back">
+          <h2 id="h-back" tabindex="-1"><span class="fn">4</span>Back two</h2>
+          <ol class="sheet">
+            <li><b class="no">68</b><span>Rib-eye for two</span></li>
+            <li><b class="no">8</b><span>Burnt cheesecake</span></li>
+          </ol>
+          <p class="fine">Squad numbers = €.</p>
+        </section>
+
+        <section class="place" id="p-hours" aria-labelledby="h-hours">
+          <h2 id="h-hours" tabindex="-1"><span class="fn">5</span>Departures</h2>
+          <p>Tuesday to Saturday. Boarding from 17:00; the gate closes at 23:00.</p>
+          <p class="fine">No departures on Sunday or Monday.</p>
+        </section>
+
+        <section class="place" id="p-groups" aria-labelledby="h-groups">
+          <h2 id="h-groups" tabindex="-1"><span class="fn">6</span>Group travel</h2>
+          <p>Online check-in carries parties of up to 8.</p>
+          <p class="fine">Nine or more: book by phone with the restaurant.</p>
+        </section>
+
+      </div>
+      <button type="button" class="mark" data-i="0" aria-label="1, boarding pass">1</button>
+      <button type="button" class="mark" data-i="1" aria-label="2, line-up: front two">2</button>
+      <button type="button" class="mark" data-i="2" aria-label="3, line-up: middle two">3</button>
+      <button type="button" class="mark" data-i="3" aria-label="4, line-up: back two">4</button>
+      <button type="button" class="mark" data-i="4" aria-label="5, departures">5</button>
+      <button type="button" class="mark" data-i="5" aria-label="6, group travel">6</button>
+    </div>
+
+    <div class="panel" id="panel">
+      <form id="checkin" action="#p-pass">
+        <h2 id="h-checkin" tabindex="-1">Check in for the fire</h2>
+        <p>Online check-in for parties of up to 8. Pick your day on the tabs at the left edge.</p>
+        <div class="row"><label for="party">Party</label>
+          <select id="party" name="party">
+            <option>1</option><option selected>2</option><option>3</option><option>4</option>
+            <option>5</option><option>6</option><option>7</option><option>8</option>
+            <option value="9+">9 or more</option>
+          </select></div>
+        <div class="row"><label for="time">Boards at</label><select id="time" name="time"></select></div>
+        <p class="phone" id="phone" role="status" hidden>Nine or more travel by phone: please call the restaurant to book. Online check-in takes up to 8.</p>
+        <div class="actions">
+          <button type="submit" class="btn">Check in</button>
+          <button type="button" class="btn ghost" id="skip">Skip, show the fire</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <nav class="notes" id="notes" aria-labelledby="h-notes">
+    <h2 id="h-notes">Notes</h2>
+    <ol>
+      <li><a href="#p-pass"><sup>1</sup><span>Boarding pass: party, day and time, once you check in.</span></a></li>
+      <li><a href="#p-front"><sup>2</sup><span>Line-up, front two: flatbread, leeks. Squad numbers are prices in euros.</span></a></li>
+      <li><a href="#p-middle"><sup>3</sup><span>Line-up, middle two: clams, chicken.</span></a></li>
+      <li><a href="#p-back"><sup>4</sup><span>Line-up, back two: rib-eye for two, cheesecake.</span></a></li>
+      <li><a href="#p-hours"><sup>5</sup><span>Departures: Tuesday to Saturday, 17:00 to 23:00.</span></a></li>
+      <li><a href="#p-groups"><sup>6</sup><span>Group travel: up to 8 online, more by phone.</span></a></li>
+    </ol>
+    <p class="colophon">The colours are a thermal camera's: the hotter, the brighter.</p>
+  </nav>
+</div>
+
+<script>
+(() => {
+  const html = document.documentElement;
+  html.classList.add('js');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const frame = document.getElementById('frame'), ring = document.getElementById('hearth');
+  const marks = [...ring.querySelectorAll('.mark')], n = marks.length, step = 360 / n;
+  const places = [...ring.querySelectorAll('.place')];
+  const noteLinks = [...document.querySelectorAll('.notes a')];
+  const form = document.getElementById('checkin'), party = form.party, time = form.time, phone = document.getElementById('phone');
+
+  /* ---- facts and rules, checked on load ---- */
+  const MENU = [['Flatbread with lardo', 9], ['Charred leeks with romesco', 11], ['Clams in cider', 16],
+                ['Half chicken', 24], ['Rib-eye for two', 68], ['Burnt cheesecake', 8]];
+  const OPEN_DAYS = ['Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const route = size => (size === '9+' || +size > 8) ? 'phone' : 'online'; // online up to 8, larger groups by phone
+  const slots = []; // boarding times inside opening hours, 17:00 to 23:00
+  for (let m = 17 * 60; m < 23 * 60; m += 30) slots.push(`${String(m / 60 | 0).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`);
+  slots.forEach(s => time.add(new Option(s, s, false, s === '20:00')));
+  const mod = i => ((i % n) + n) % n;
+  const delta = (from, to) => { const d = mod(to - from); return d > n / 2 ? d - n : d; }; // the short way round
+  const shown = [...document.querySelectorAll('.sheet li')].map(li => [li.querySelector('span').textContent, +li.querySelector('.no').textContent]);
+  console.assert(JSON.stringify(shown) === JSON.stringify(MENU), 'menu on the page matches the facts');
+  console.assert(route('8') === 'online' && route('9+') === 'phone' && route('1') === 'online', 'party routing');
+  console.assert(slots[0] === '17:00' && slots.at(-1) === '22:30' && slots.length === 12, 'slots sit inside 17:00 to 23:00');
+  console.assert([...document.querySelectorAll('.days input:not(:disabled)')].map(i => i.value).join() === OPEN_DAYS.join(), 'open days are Tuesday to Saturday');
+  console.assert(delta(0, n - 1) === -1 && delta(0, 2) === 2 && mod(-1) === n - 1, 'ring turns the short way');
+
+  /* ---- the ring ---- */
+  let turn = 0, checkedIn = false;
+  const show = focus => {
+    const cur = mod(turn);
+    marks.forEach((b, i) => {
+      b.style.setProperty('--a', (i - turn) * step + 'deg');
+      if (i === cur) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+    });
+    places.forEach((p, i) => { p.hidden = i !== cur; });
+    noteLinks.forEach((a, i) => { if (i === cur) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+    if (focus === 'heading') places[cur].querySelector('h2').focus();
+    if (focus === 'mark') marks[cur].focus();
+  };
+  const goTo = (i, focus) => { turn += delta(mod(turn), i); show(focus); };
+  ring.addEventListener('click', e => { const b = e.target.closest('.mark'); if (b) goTo(+b.dataset.i); });
+  ring.addEventListener('keydown', e => {
+    const d = {ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1}[e.key];
+    if (!d || !e.target.closest('.mark')) return;
+    e.preventDefault(); turn += d; show('mark');
+  });
+
+  /* ---- check-in gate: pre-filled, and skippable ---- */
+  const open = (i, focus) => { frame.classList.remove('gated'); heatTo(1); goTo(i, focus); };
+  const fillPass = () => {
+    const f = new FormData(form);
+    ring.querySelector('[data-f=party]').textContent = f.get('party');
+    ring.querySelector('[data-f=day]').textContent = f.get('day');
+    ring.querySelector('[data-f=time]').textContent = f.get('time');
+    ring.querySelector('[data-pass]').hidden = !checkedIn;
+    ring.querySelector('[data-nopass]').hidden = checkedIn;
+  };
+  party.addEventListener('change', () => { phone.hidden = route(party.value) === 'online'; });
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (route(party.value) === 'phone') { phone.hidden = false; return; }
+    checkedIn = true; fillPass(); open(0, 'heading');
+  });
+  document.getElementById('skip').addEventListener('click', () => { fillPass(); open(1, 'heading'); });
+  ring.addEventListener('click', e => {
+    if (!e.target.closest('[data-again]')) return;
+    frame.classList.add('gated'); heatTo(.3);
+    document.getElementById('h-checkin').focus();
+  });
+  const fromHash = () => {
+    const i = places.findIndex(p => '#' + p.id === location.hash);
+    if (i < 0) return false;
+    fillPass(); open(i, 'heading'); return true;
+  };
+  window.addEventListener('hashchange', fromHash);
+
+  /* ---- Nabla is a colour font: if it does not arrive, extrude the fallback with shadows ---- */
+  window.addEventListener('load', () => {
+    document.fonts.load('40px Nabla').then(f => { if (!f.length) html.classList.add('no-nabla'); }, () => html.classList.add('no-nabla'));
+  });
+
+  /* ---- the thermal shader ---- */
+  const cv = document.getElementById('heat');
+  let gl = null, prog = null, U = {}, heat = .3, target = .3, raf = 0, t0 = performance.now();
+  const VS = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  const FS = `precision mediump float;
+uniform vec2 res;uniform vec3 ring;uniform float t,heat;
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float no(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+ return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*no(p);p*=2.03;a*=.5;}return v;}
+vec3 ramp(float x){x=clamp(x,0.,1.);
+ vec3 c0=vec3(.047,.004,.078),c1=vec3(.23,.03,.45),c2=vec3(.85,.10,.50),c3=vec3(1.,.48,.10),c4=vec3(1.,.86,.25),c5=vec3(1.,.96,.77);
+ if(x<.2)return mix(c0,c1,x/.2);if(x<.4)return mix(c1,c2,(x-.2)/.2);if(x<.6)return mix(c2,c3,(x-.4)/.2);
+ if(x<.8)return mix(c3,c4,(x-.6)/.2);return mix(c4,c5,(x-.8)/.2);}
+void main(){
+ vec2 d=(gl_FragCoord.xy-ring.xy)/ring.z;float r=length(d);
+ float n=fbm(d*3.2+vec2(0.,-t*.35));
+ float core=smoothstep(1.02,0.,r);
+ float logs=smoothstep(.16,0.,abs(d.y-d.x*.35))*step(r,.8)+smoothstep(.14,0.,abs(d.y+d.x*.9+.1))*step(r,.75);
+ float grate=step(.82,fract(d.x*5.+.5))*step(r,.97);
+ float rim=smoothstep(.05,0.,abs(r-1.))*.6;
+ float v=core*(.42+.55*n)+logs*.25*n+rim-grate*core*.28;
+ v=max(v,smoothstep(.8,.15,r)*.6);
+ float halo=exp(-max(r-1.,0.)*2.4)*.42*n;
+ v=max(v,halo)*heat;
+ gl_FragColor=vec4(ramp(v),1.);}`;
+  try {
+    gl = cv.getContext('webgl', {antialias: false, depth: false});
+    const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
+    prog = gl.createProgram();
+    gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error('link');
+    gl.useProgram(prog);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    ['res', 'ring', 't', 'heat'].forEach(k => { U[k] = gl.getUniformLocation(prog, k); });
+  } catch (err) { gl = null; html.classList.add('no-gl'); }
+
+  const S = .5; // draw at half resolution: heat is soft anyway
+  const size = () => { if (!gl) return; cv.width = Math.max(1, innerWidth * S | 0); cv.height = Math.max(1, innerHeight * S | 0); gl.viewport(0, 0, cv.width, cv.height); };
+  const draw = now => {
+    if (!gl) return;
+    const r = ring.getBoundingClientRect();
+    gl.uniform2f(U.res, cv.width, cv.height);
+    gl.uniform3f(U.ring, (r.left + r.width / 2) * S, (innerHeight - (r.top + r.height / 2)) * S, r.width / 2 * S);
+    gl.uniform1f(U.t, reduce.matches ? 7 : (now - t0) / 1000);
+    gl.uniform1f(U.heat, heat);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  };
+  const loop = now => {
+    heat += (target - heat) * .045;
+    draw(now);
+    raf = document.hidden ? 0 : requestAnimationFrame(loop);
+  };
+  const run = () => {
+    cancelAnimationFrame(raf); raf = 0;
+    if (reduce.matches) { heat = target; draw(performance.now()); } else raf = requestAnimationFrame(loop);
+  };
+  function heatTo(v) { target = v; run(); }
+  size(); run();
+  addEventListener('resize', () => { size(); run(); });
+  addEventListener('scroll', () => { if (reduce.matches) draw(performance.now()); }, {passive: true});
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) run(); });
+  reduce.addEventListener('change', run);
+
+  frame.classList.add('gated');
+  fillPass(); show();
+  fromHash();
+  requestAnimationFrame(() => requestAnimationFrame(() => ring.classList.add('live')));
+})();
+</script>
+</body>
+</html>

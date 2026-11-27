@@ -2,14 +2,17 @@
 
 A skill for Claude Code (and other agents that read `SKILL.md` skills) that designs web pages the model would never make on its own.
 
-A model's first design is its most probable one: a centred hero, a gradient, three feature cards, three pricing cards with the middle one highlighted. This skill makes the agent write that default down first, trait by trait, then move away from it on purpose with four moves:
+A model's first design is its most probable one: a centred hero, a gradient, three feature cards, three pricing cards with the middle one highlighted. This skill makes the agent write that default down first, trait by trait, then move away from it on purpose with five moves:
 
 1. **Invert** every trait of the default, past the first opposite that comes to mind.
 2. **Let the data draw**: the layout is the product's own numbers (blocks sized by value, copy riding a chart line, a hero that is the calculation).
 3. **Become a domain artifact**: the page is an object the product's world already trusts, such as a banknote, a bond coupon, a ledger, a boarding pass or a field guide.
-4. **Roll** ten traits from a table of ten billion unusual combinations and build exactly what comes out.
+4. **Borrow a movement**: follow a rolled design movement's rules to the letter (Swiss International Style, Constructivism, a 1970s identity manual).
+5. **Roll** eleven traits from a table of a hundred billion unusual combinations and build exactly what comes out.
 
-Every design ends with a table of the ten traits marked kept or broken; fewer than eight broken means it isn't done, and every design gets a desktop and phone screenshot pass. Four things stay fixed: real facts (sample figures are labelled and add up), accessibility, pages that work on phones, and no copying of real brands.
+Every design takes a tone: **loud** (strange on purpose) or **quiet** (unusual but credible, for a bank, a law firm or B2B software). Traits the brand already owns, such as its colours or typefaces, can be locked so no move overrides them.
+
+Every design is then stripped to its skeleton (fonts, colours and images removed, every box outlined) and held against the default, because a reskinned row of three pricing cards is still a row of three pricing cards. It ends with a table of the eleven traits marked kept, broken or locked; more than two kept means it isn't done. A craft pass (one type scale, at most four colours, tabular figures, a five-second test on a phone) and a desktop and phone screenshot pass follow. Four things stay fixed: real facts (sample figures are labelled and add up), accessibility, pages that work on phones, and no copying of real brands.
 
 ## Demo
 
@@ -66,7 +69,7 @@ Working, self-contained demos in `elements/`, for the agent to re-cut to each pr
 
 ## Library
 
-Smaller parts in `library/`: 69 numbered specimens on four pages, each a working mechanism with its own typeface and palette. None of them is a gradient pill, a fade-up on scroll or a centred headline with two buttons.
+Smaller parts in `library/`: 90 numbered specimens on six pages, each a working mechanism with its own typeface and palette. None of them is a gradient pill, a fade-up on scroll or a centred headline with two buttons.
 
 | Page | Specimens | Examples |
 |---|---|---|
@@ -74,8 +77,10 @@ Smaller parts in `library/`: 69 numbered specimens on four pages, each a working
 | `motion.html` | 19 | An odometer, a split-flap headline, words that fall and pile up, a pen plotter, an aperture iris, a thermal receipt fed by scroll |
 | `heroes.html` | 13 | A newspaper front page, a crossword, an exploded diagram, a tape measure, a tide chart, a transit line |
 | `type.html` | 20 | Letters that melt with the year, a chart inside a sentence, a scannable barcode, words redacted until clicked, text on a spiral |
+| `layouts.html` | 10 | One working skeleton per strange reading direction: sideways, columns right to left, bottom to top, zoom to read, a ring, a book whose pages turn |
+| `textures.html` | 11 | Halftone and engraved hatching that follow tone, CRT scanlines, torn paper, dither, crop marks, a baseline grid, duotone for the product's own photos |
 
-The agent doesn't pick from them by taste. It rolls for one and re-cuts it to the product:
+The agent doesn't pick from them by taste. Layouts and textures are named by the rolled trait; for the rest it rolls for one and re-cuts it to the product:
 
 ```bash
 python3 scripts/roll.py --library heroes
@@ -139,24 +144,37 @@ To roll designs yourself:
 
 ```bash
 python3 scripts/roll.py --count 3
-python3 scripts/roll.py --trait colour
+python3 scripts/roll.py --count 3 --tone quiet --keep colour,type
+python3 scripts/roll.py --movement --tone quiet
+python3 scripts/roll.py --trait colour --tone quiet
 ```
 
 ```
-Design 1014730075  (drawn: 3319805863 9272279496 9326594069 1014730075 1141958003 1544821760)
-  Reading direction: One screen, no scroll; content swaps in place
-  Layout: Blocks sized by the product's own numbers
-  Hero: A form you fill before you see anything
-  Components: Index tabs down one edge
-  Type: Comic Neue against Times
-  Colour: Thermal camera
-  Texture: Halftone dots
-  Pricing: Blocks sized by price
-  Voice: A horoscope
-  Motion: Parallax that tilts in 3D
+Design 47657395644  (loud; drawn: 53686637776 47657395644 83944875551 07045051689 91904639032 20411628849)
+  Reading direction: Zoom in to read: each level is closer (library/layouts.html#lay-05)
+  Layout: A timeline running off both edges
+  Navigation: A departure board listing every section
+  Hero: A spotlight under the cursor; the rest is dark
+  Components: Notes clipped to a line, at angles
+  Type: Worn typewriter (Special Elite)
+  Colour: Mid-grey only
+  Texture: Dithered gradients (library/textures.html#tex-06)
+  Pricing: A price tag on a string
+  Voice: Classified ads
+  Motion: Typing, like a terminal
+```
+
+To strip a page to its skeleton for the check (it writes `page.skeleton.html` beside the page):
+
+```bash
+python3 scripts/skeleton.py path/to/page.html
 ```
 
 Python 3.8 or later, standard library only. The elements need only a browser.
+
+## Evals
+
+`evals/README.md` holds five invented product briefs (a bank, B2B software, a restaurant, a charity, a developer tool) and a scoring rubric. Run them in fresh sessions with and without the skill before each release, and log the scores there.
 
 ## License
 

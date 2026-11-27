@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halden Mutual · an abstract of two savings accounts</title>
+<meta name="description" content="Halden Mutual, a savings bank owned by its members since 1874. Easy-access saver 3.10% AER variable, 95-day notice saver 3.60% AER variable, no fees, open with £1.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@400;600&display=swap">
+<style>
+/* Design 1: the abstract, filed as a form. Mono only, hairlines only, every change instant. */
+:root{
+  --ground:#FFFFFF; --ink:#1F4D3A;             /* locked brand: Halden green on white */
+  --u:8px;                                       /* every gap is a multiple of this */
+  --ruler:calc(var(--u)*7);
+  --m:calc(var(--u)*2);                          /* page margin around the form */
+  --s1:.8125rem; --s2:1rem; --s3:clamp(1.375rem,1.1rem + 1.2vw,2.125rem); --s4:clamp(5.5rem,24vw,16rem);
+  --rule:1px solid var(--ink);
+}
+@media (min-width:960px){:root{--m:calc(var(--u)*6)}}
+*,*::before,*::after{box-sizing:border-box}
+html{color:var(--ink);background:var(--ground);scroll-padding-top:var(--ruler);-webkit-text-size-adjust:100%}
+body{margin:0;font:400 var(--s2)/1.5 'Spline Sans Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-variant-numeric:tabular-nums lining-nums}
+h1,h2,p,table,dl,dd,ol{margin:0}
+a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:1px}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+/* The ruler: sections are its marks */
+.ruler{position:fixed;inset:0 0 auto;height:var(--ruler);z-index:2;border-bottom:var(--rule);background:
+  repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px var(--u)) 0 100%/100% var(--u) no-repeat,
+  repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px calc(var(--u)*5)) 0 100%/100% calc(var(--u)*2) no-repeat,
+  var(--ground)}
+.ruler ol{list-style:none;padding:0 0 0 var(--m);height:100%;display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.ruler a{display:block;height:calc(100% - var(--u)*2);border-left:var(--rule);padding:calc(var(--u)/2) var(--u);font-size:var(--s1);line-height:1.3;text-decoration:none;white-space:nowrap;overflow:hidden}
+.ruler a[aria-current]{background:var(--ink);color:var(--ground)}
+.ruler a:hover .t{text-decoration:underline}
+.ruler .n{display:block;font-weight:600}
+@media (max-width:759px){.ruler .t{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}}
+
+/* The form: one sheet per screen, every word inside a numbered box */
+main{padding-top:var(--ruler)}
+.sheet{min-height:calc(100svh - var(--ruler));display:grid;grid-template-rows:auto minmax(0,1fr);padding:0 var(--m) calc(var(--u)*4)}
+.sheet-head{display:flex;justify-content:space-between;gap:var(--u);padding:calc(var(--u)*2) 0 var(--u);font-size:var(--s1)}
+.boxes{display:grid;grid-template-columns:minmax(0,1fr);border-top:var(--rule);border-left:var(--rule)}
+.bx{position:relative;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;gap:calc(var(--u)*2);
+  padding:calc(var(--u)*5) calc(var(--u)*2) calc(var(--u)*2);border-right:var(--rule);border-bottom:var(--rule)}
+.bn{position:absolute;top:0;left:0;padding:2px var(--u);border-right:var(--rule);border-bottom:var(--rule);font-size:var(--s1);font-weight:600}
+.label{position:absolute;top:2px;left:calc(var(--u)*7);font-size:var(--s2);font-weight:600;font-variant-caps:all-small-caps;letter-spacing:.08em;line-height:1.3}
+.blank{display:none}
+@media (min-width:960px){
+  .boxes{grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:var(--rows,auto)}
+  .bx{grid-column:var(--c,1/-1);grid-row:var(--r,auto)}
+  .bx.tall{padding-bottom:calc(var(--u)*4)}
+  /* Space left blank on purpose, struck through as forms do */
+  .blank{display:block;background:linear-gradient(to top right,transparent calc(50% - .5px),var(--ink) 50%,transparent calc(50% + .5px))}
+}
+.sentence{font-size:var(--s3);font-weight:400;line-height:1.3;max-width:34ch;text-wrap:balance}
+.v{max-width:48ch;text-wrap:pretty}
+.v.big{font-size:var(--s3)}
+.small{font-size:var(--s1);max-width:64ch;text-wrap:pretty}
+
+/* Hero: the key figure, huge and still, breaking out across the form's left edge once */
+.figure{font-size:var(--s4);line-height:.85;letter-spacing:-.05em;font-weight:400;
+  margin-left:calc(-1 * (var(--m) + var(--u)*2 + 1px));padding-right:var(--u);width:max-content;max-width:calc(100% + var(--m) + var(--u)*2);background:var(--ground)}
+.figure .pc{font-size:.5em;letter-spacing:0;vertical-align:.8em}
+.act{align-self:flex-start;padding:var(--u) 0;font-weight:600}
+.act::after{content:" →"}
+
+/* Account boxes to tick: changing one changes every figure at once, with no transition */
+.ticks{display:grid;gap:var(--u)}
+.ticks label{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--u);align-items:start;cursor:pointer}
+.ticks input{appearance:none;margin:2px 0 0;width:20px;height:20px;border:var(--rule);background:var(--ground);display:grid;place-content:center;font:inherit;color:inherit;cursor:pointer}
+.ticks input:checked::before{content:"×";font-size:20px;line-height:1}
+
+/* Working shown small */
+.working{border-collapse:collapse;font-size:var(--s1)}
+.working td{padding:calc(var(--u)/2) var(--u) calc(var(--u)/2) 0;vertical-align:baseline}
+.working .num{text-align:right;white-space:nowrap}
+.working .eq td{border-top:var(--rule)}
+.working th{font-weight:600;text-align:right;padding:0 var(--u) calc(var(--u)/2) 0;font-variant-caps:all-small-caps;letter-spacing:.08em}
+.working input{font:inherit;color:inherit;width:9ch;text-align:right;border:0;border-bottom:var(--rule);background:transparent;padding:0;border-radius:0}
+
+/* Pricing: dotted leaders, like a contents page */
+.leaders{display:grid;gap:var(--u);font-size:var(--s2);width:100%;max-width:60ch}
+@media (min-width:760px){.leaders{font-size:var(--s3)}}
+.leaders div{display:flex;align-items:baseline;gap:var(--u)}
+.leaders div::after{content:"";order:1;flex:1;min-width:calc(var(--u)*3);border-bottom:1px dotted var(--ink)}
+.leaders dt{order:0}
+.leaders dd{order:2;white-space:nowrap}
+.leaders .head{font-size:var(--s1);font-weight:600;font-variant-caps:all-small-caps;letter-spacing:.08em}
+.leaders .head::after{border:0}
+</style>
+</head>
+<body>
+
+<nav class="ruler" aria-label="Sections of this page">
+  <ol>
+    <li><a href="#result"><span class="n">01</span><span class="t">Result</span></a></li>
+    <li><a href="#background"><span class="n">02</span><span class="t">Background</span></a></li>
+    <li><a href="#method"><span class="n">03</span><span class="t">Method</span></a></li>
+    <li><a href="#rates"><span class="n">04</span><span class="t">Rates</span></a></li>
+    <li><a href="#comparison"><span class="n">05</span><span class="t">Comparison</span></a></li>
+    <li><a href="#limits"><span class="n">06</span><span class="t">Limits</span></a></li>
+    <li><a href="#open"><span class="n">07</span><span class="t">Conclusion</span></a></li>
+  </ol>
+</nav>
+
+<main>
+
+<section class="sheet" id="result" aria-labelledby="h1">
+  <p class="sheet-head"><span>Abstract · two savings accounts</span><span>Sheet 1 of 7</span></p>
+  <div class="boxes" style="--rows:auto auto minmax(0,1fr)">
+    <div class="bx" style="--c:1/8;--r:1">
+      <span class="bn" aria-hidden="true">1.1</span><p class="label">Bank</p>
+      <p class="v"><strong>Halden Mutual</strong>, a savings bank owned by its members since 1874</p>
+    </div>
+    <div class="bx" style="--c:8/13;--r:1" role="group" aria-labelledby="l-acct">
+      <span class="bn" aria-hidden="true">1.2</span><p class="label" id="l-acct">Account</p>
+      <div class="ticks">
+        <label><input type="radio" name="acct" value="3.60" checked><span>95-day notice saver</span></label>
+        <label><input type="radio" name="acct" value="3.10"><span>Easy-access saver</span></label>
+      </div>
+    </div>
+    <div class="bx" style="--c:1/13;--r:2">
+      <span class="bn" aria-hidden="true">1.3</span><p class="label">Result</p>
+      <p class="figure" aria-hidden="true"><span id="fig">3.60</span><span class="pc">%</span></p>
+    </div>
+    <div class="bx tall" style="--c:1/8;--r:3">
+      <span class="bn" aria-hidden="true">1.4</span><p class="label">Finding</p>
+      <h1 class="sentence" id="h1">Our 95-day notice saver pays 3.60% AER variable, easy access pays 3.10%, neither charges a fee, and £1 opens either.</h1>
+      <a class="act" href="#open">Open an account with £1</a>
+    </div>
+    <div class="bx tall" style="--c:8/13;--r:3">
+      <span class="bn" aria-hidden="true">1.5</span><p class="label">Working, illustrative</p>
+      <table class="working">
+        <tbody>
+          <tr><td></td><td class="num">£<input id="amt" type="number" inputmode="decimal" min="1" step="1" value="1000" aria-label="Amount kept for 12 months, in pounds"></td><td>kept for 12 months</td></tr>
+          <tr><td>×</td><td class="num" id="w-rate">3.60%</td><td>AER, if the rate stays the same</td></tr>
+          <tr class="eq"><td>=</td><td class="num"><output id="w-int" for="amt" aria-live="polite">£36.00</output></td><td>interest</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="background" aria-labelledby="h-background">
+  <p class="sheet-head"><span>Abstract · two savings accounts</span><span>Sheet 2 of 7</span></p>
+  <div class="boxes" style="--rows:auto minmax(0,1fr)">
+    <div class="bx tall" style="--c:1/9;--r:1/3">
+      <span class="bn" aria-hidden="true">2.1</span><h2 class="label" id="h-background">Background</h2>
+      <p class="sentence">Halden Mutual is owned by its members, not by shareholders.</p>
+    </div>
+    <div class="bx" style="--c:9/11;--r:1"><span class="bn" aria-hidden="true">2.2</span><p class="label">Since</p><p class="v big">1874</p></div>
+    <div class="bx" style="--c:11/13;--r:1"><span class="bn" aria-hidden="true">2.3</span><p class="label">Branches</p><p class="v big">41</p></div>
+    <div class="bx blank" style="--c:9/13;--r:2" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="sheet" id="method" aria-labelledby="h-method">
+  <p class="sheet-head"><span>Abstract · two savings accounts</span><span>Sheet 3 of 7</span></p>
+  <div class="boxes" style="--rows:auto auto auto auto minmax(0,1fr)">
+    <div class="bx tall" style="--c:5/13;--r:1/6">
+      <span class="bn" aria-hidden="true">3.1</span><h2 class="label" id="h-method">Method</h2>
+      <p class="sentence">Choose easy access or 95 days’ notice, put in £1 or more, and pay no fees on either.</p>
+    </div>
+    <div class="bx" style="--c:1/5;--r:1"><span class="bn" aria-hidden="true">3.2</span><p class="label">Easy access</p><p class="v">Take money out without giving notice.</p></div>
+    <div class="bx" style="--c:1/5;--r:2"><span class="bn" aria-hidden="true">3.3</span><p class="label">95-day notice</p><p class="v">Tell us 95 days before you take money out.</p></div>
+    <div class="bx" style="--c:1/5;--r:3"><span class="bn" aria-hidden="true">3.4</span><p class="label">Fees</p><p class="v">None, on either account.</p></div>
+    <div class="bx" style="--c:1/5;--r:4"><span class="bn" aria-hidden="true">3.5</span><p class="label">To open</p><p class="v">£1.</p></div>
+    <div class="bx blank" style="--c:1/5;--r:5" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="sheet" id="rates" aria-labelledby="h-rates">
+  <p class="sheet-head"><span>Abstract · two savings accounts</span><span>Sheet 4 of 7</span></p>
+  <div class="boxes" style="--rows:minmax(0,1fr) auto">
+    <div class="bx tall" style="--c:1/13;--r:1">
+      <span class="bn" aria-hidden="true">4.1</span><h2 class="label" id="h-rates">Rates</h2>
+      <p class="sentence">Two accounts, two variable rates, and no fee on either.</p>
+    </div>
+    <div class="bx" style="--c:1/10;--r:2">
+      <span class="bn" aria-hidden="true">4.2</span><p class="label">Schedule</p>
+      <dl class="leaders">
+        <div class="head"><dt>Account</dt><dd>AER, variable</dd></div>
+        <div><dt>Easy-access saver</dt><dd>3.10%</dd></div>
+        <div><dt>95-day notice saver</dt><dd>3.60%</dd></div>
+        <div><dt>Fees</dt><dd>none</dd></div>
+        <div><dt>To open</dt><dd>£1</dd></div>
+      </dl>
+    </div>
+    <div class="bx blank" style="--c:10/13;--r:2" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="sheet" id="comparison" aria-labelledby="h-comparison">
+  <p class="sheet-head"><span>Abstract · two savings accounts</span><span>Sheet 5 of 7</span></p>
+  <div class="boxes" style="--rows:minmax(0,1fr) auto">
+    <div class="bx tall" style="--c:1/8;--r:1/3">
+      <span class="bn" aria-hidden="true">5.1</span><h2 class="label" id="h-comparison">Comparison</h2>
+      <p class="sentence">On an illustrative £1,000 kept for 12 months, easy access earns £31.00 and 95-day notice earns £36.00, so waiting 95 days is worth £5.00.</p>
+    </div>
+    <div class="bx blank" style="--c:8/13;--r:1" aria-hidden="true"></div>
+    <div class="bx" style="--c:8/13;--r:2">
+      <span class="bn" aria-hidden="true">5.2</span><p class="label">Working, illustrative</p>
+      <table class="working">
+        <thead><tr><td></td><th scope="col">Easy access</th><th scope="col">95-day</th></tr></thead>
+        <tbody>
+          <tr><td>Kept 12 months</td><td class="num">£1,000.00</td><td class="num">£1,000.00</td></tr>
+          <tr><td>× AER</td><td class="num">3.10%</td><td class="num">3.60%</td></tr>
+          <tr class="eq"><td>= Interest</td><td class="num">£31.00</td><td class="num">£36.00</td></tr>
+          <tr><td>Difference</td><td></td><td class="num">£5.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="limits" aria-labelledby="h-limits">
+  <p class="sheet-head"><span>Abstract · two savings accounts</span><span>Sheet 6 of 7</span></p>
+  <div class="boxes" style="--rows:auto auto minmax(0,1fr)">
+    <div class="bx tall" style="--c:4/13;--r:1/4">
+      <span class="bn" aria-hidden="true">6.1</span><h2 class="label" id="h-limits">Limits</h2>
+      <p class="sentence">Both rates are variable and can go down as well as up, and money in the notice saver is paid out 95 days after you ask for it.</p>
+    </div>
+    <div class="bx" style="--c:1/4;--r:1"><span class="bn" aria-hidden="true">6.2</span><p class="label">AER</p><p class="v small">The annual equivalent rate: what the interest would be if it were paid and added to your balance once a year.</p></div>
+    <div class="bx" style="--c:1/4;--r:2"><span class="bn" aria-hidden="true">6.3</span><p class="label">Illustrative</p><p class="v small">Figures marked so assume £1,000 held for 12 months, nothing taken out and rates unchanged.</p></div>
+    <div class="bx blank" style="--c:1/4;--r:3" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="sheet" id="open" aria-labelledby="h-open">
+  <p class="sheet-head"><span>Abstract · two savings accounts</span><span>Sheet 7 of 7</span></p>
+  <div class="boxes" style="--rows:minmax(0,1fr) auto">
+    <div class="bx tall" style="--c:1/13;--r:1">
+      <span class="bn" aria-hidden="true">7.1</span><h2 class="label" id="h-open">Conclusion</h2>
+      <p class="sentence">If you can leave money for 95 days, the notice saver pays more; if you may need it sooner, easy access pays 3.10%; £1 opens either.</p>
+      <a class="act" href="/open">Open an account</a>
+    </div>
+    <div class="bx" style="--c:1/9;--r:2"><span class="bn" aria-hidden="true">7.2</span><p class="label">Filed by</p><p class="v small">Halden Mutual · a savings bank owned by its members since 1874 · 41 branches. Rates are AER, variable. Figures marked illustrative are examples, not offers.</p></div>
+    <div class="bx blank" style="--c:9/13;--r:2" aria-hidden="true"></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+// Ruler: the sheet in view is the marked tick. No animation anywhere: every change is a cut.
+const marks = [...document.querySelectorAll('.ruler a')];
+const mark = id => marks.forEach(a => a.hash === '#' + id ? a.setAttribute('aria-current', 'location') : a.removeAttribute('aria-current'));
+const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && mark(e.target.id)), {rootMargin: '-45% 0px -54% 0px'});
+document.querySelectorAll('.sheet').forEach(s => io.observe(s));
+mark(location.hash.slice(1) || 'result');
+
+// Interest on an amount for 12 months at an AER, rounded to the penny.
+const interest = (pounds, aerPct) => Math.round(pounds * aerPct) / 100;
+const gbp = n => '£' + n.toLocaleString('en-GB', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+console.assert(interest(1000, 3.10) === 31 && interest(1000, 3.60) === 36, 'design-1: interest on £1,000');
+console.assert(interest(1000, 3.60) - interest(1000, 3.10) === 5, 'design-1: £5.00 difference');
+console.assert(interest(1234.56, 3.60) === 44.44 && gbp(36) === '£36.00', 'design-1: rounding and format');
+
+// Ticking an account or typing an amount swaps the figure and the working at once.
+const amt = document.getElementById('amt');
+function work() {
+  const r = parseFloat(document.querySelector('input[name=acct]:checked').value);
+  const v = parseFloat(amt.value);
+  document.getElementById('fig').textContent = r.toFixed(2);
+  document.getElementById('w-rate').textContent = r.toFixed(2) + '%';
+  document.getElementById('w-int').textContent = v >= 1 ? gbp(interest(v, r)) : '—';
+}
+document.getElementById('result').addEventListener('input', work);
+work();
+</script>
+</body>
+</html>

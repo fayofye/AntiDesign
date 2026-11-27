@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brasa Nove · 68 = 9 + 11 + 16 + 24 + 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Six+Caps&display=swap" rel="stylesheet">
+<style>
+/* Mid-grey only: ash for the ground, charcoal for the ink, white for the big figures.
+   The dither is charcoal and white pixels, so from a step back it is the same grey. */
+:root{--ash:#8C8C88;--char:#111111;--chalk:#F4F4F2;
+  --u:clamp(12px,1.6svh,18px);--g:8px;
+  --s1:14px;--s2:18px;--s3:24px;--s4:clamp(56px,14vw,120px);
+  --hand:Kalam,"Chalkboard SE","Comic Sans MS","Segoe Print",cursive;
+  --tall:"Six Caps",Impact,"Arial Narrow",sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--ash);color:var(--char)}
+body{font:400 var(--s2)/1.5 var(--hand);overflow:hidden}
+:focus-visible{outline:3px solid var(--char);outline-offset:2px;box-shadow:0 0 0 5px var(--chalk)}
+a{color:var(--char);text-decoration-thickness:2px;text-underline-offset:4px}
+button,select{font:inherit;color:inherit}
+
+/* Bottom to top (lay-04, re-cut to the whole page): the box opens at its foot,
+   and column-reverse puts the first section in the DOM at the bottom, so reading and tab order run upward. */
+.climb{width:100%;height:100svh;overflow-y:auto;display:flex;flex-direction:column-reverse;scrollbar-color:var(--char) var(--ash)}
+.climb:focus-visible{outline-offset:-3px}
+
+/* The foot of the page: the theorem */
+.start{min-height:100svh;display:flex;flex-direction:column;justify-content:space-between;gap:calc(var(--g)*2);
+  padding:calc(var(--g)*2) calc(var(--g)*2) calc(var(--g)*3);border-top:4px solid var(--char)}
+.up{margin:0;font:700 var(--s1)/1.3 var(--hand);display:flex;gap:var(--g);align-items:center}
+.up::before{content:"▲";font-size:var(--s2)}
+.eq{display:block;width:100%;height:clamp(120px,30svh,340px)}
+.eq text{font-family:var(--tall);fill:var(--chalk);stroke:var(--char);stroke-width:3px;paint-order:stroke}
+.theorem{margin:0;font:400 var(--s3)/1.35 var(--hand);max-width:34ch;text-wrap:balance}
+.theorem b,.lemma b{font-weight:700}
+.lemma{margin:var(--g) 0 0;font-size:var(--s2);max-width:46ch}
+.base{display:grid;gap:var(--g) calc(var(--g)*4);align-items:end;border-top:2px solid var(--char);padding-top:calc(var(--g)*2)}
+@media (min-width:860px){.base{grid-template-columns:auto minmax(0,1fr) minmax(0,1.3fr)}}
+.name{margin:0;font:400 var(--s4)/.85 var(--tall);letter-spacing:.02em;text-transform:uppercase;color:var(--chalk);
+  -webkit-text-stroke:1.5px var(--char);paint-order:stroke}
+.what{margin:0;font-size:var(--s2);max-width:34ch}
+.nav{margin:0;font:700 var(--s2)/1.5 var(--hand);max-width:40ch}
+
+/* The proof: two columns, every block as tall as its price */
+.proof{display:flex;flex-direction:column-reverse;padding:calc(var(--g)*3) 0 0;border-top:2px solid var(--char)}
+.proof h2{margin:0 calc(var(--g)*2) calc(var(--g)*2);font:400 var(--s3)/1.3 var(--hand);max-width:40ch;text-wrap:balance}
+.cols{display:grid;grid-template-columns:1fr 1fr;align-items:end;border-left:0;border-right:0}
+.col{display:flex;flex-direction:column-reverse;border-top:4px solid var(--char)}
+.col + .col{border-left:4px solid var(--char)}
+.block{position:relative;height:calc(var(--p) * var(--u));border-top:2px solid var(--char);overflow:hidden;isolation:isolate}
+.block canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;z-index:-1}
+.block svg{position:absolute;inset:6px 6px 0 6px;width:calc(100% - 12px);height:calc(100% - 6px)}
+.block svg text{font-family:var(--tall);fill:var(--ash);stroke:var(--char);stroke-width:1.2px;vector-effect:non-scaling-stroke}
+.tag{position:absolute;left:0;bottom:0;max-width:calc(100% - 8px);margin:0;padding:2px var(--g) 4px;background:var(--ash);
+  border-top:2px solid var(--char);border-right:2px solid var(--char);font:700 var(--s1)/1.3 var(--hand)}
+.tag span{font-weight:400;white-space:nowrap}
+.tag .sum{display:block;font-weight:400;font-variant-numeric:tabular-nums}
+.foot{display:grid;grid-template-columns:1fr 1fr;border-top:4px solid var(--char)}
+.foot p{margin:0;padding:var(--g) calc(var(--g)*2);font:700 var(--s1)/1.4 var(--hand)}
+.foot p + p{border-left:4px solid var(--char)}
+.qed{margin:0;padding:calc(var(--g)*2);font:400 var(--s3)/1.3 var(--hand);text-wrap:balance}
+
+/* The top: given, and the corollary */
+.top{padding:calc(var(--g)*4) calc(var(--g)*2) calc(var(--g)*3);display:grid;gap:calc(var(--g)*3)}
+@media (min-width:860px){.top{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}}
+.top h2{margin:0 0 var(--g);font:700 var(--s3)/1.3 var(--hand)}
+.top p{margin:0 0 var(--g);max-width:44ch;text-wrap:pretty}
+.small{font-size:var(--s1);line-height:1.45}
+.row{display:grid;grid-template-columns:5.5em minmax(0,1fr);gap:var(--g);align-items:center;margin-bottom:var(--g);max-width:420px}
+.row label{font-weight:700}
+select{min-height:44px;width:100%;padding:0 var(--g);background:var(--ash);border:2px solid var(--char);border-radius:0}
+.book{min-height:48px;padding:0 calc(var(--g)*3);border:2px solid var(--char);background:var(--char);color:var(--chalk);font-weight:700;cursor:pointer}
+.status{min-height:1.5em}
+
+/* The level line: a running height in euros as you climb */
+.level{position:fixed;left:0;right:0;top:50%;height:0;border-top:2px dashed var(--char);pointer-events:none;z-index:3;visibility:hidden}
+.level.on{visibility:visible}
+.level output{position:absolute;left:var(--g);top:0;transform:translateY(-50%);max-width:calc(50% - var(--g)*2);background:var(--chalk);color:var(--char);
+  border:2px solid var(--char);padding:2px var(--g);font:700 var(--s1)/1.3 var(--hand);font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="climb" id="climb" tabindex="0" role="region" aria-label="Brasa Nove, read from the bottom up">
+
+  <section class="start" id="start" aria-labelledby="t-name">
+    <p class="up">The proof reads upward from here.</p>
+    <div>
+      <svg class="eq" viewBox="0 -24 1000 254" preserveAspectRatio="none" role="img" aria-label="68 equals 9 plus 11 plus 16 plus 24 plus 8">
+        <text x="0" y="214" font-size="290" textLength="1000" lengthAdjust="spacingAndGlyphs">68 = 9 + 11 + 16 + 24 + 8</text>
+      </svg>
+      <p class="theorem"><b>Theorem.</b> At Brasa Nove, one rib-eye for two costs as much as the rest of the menu together.</p>
+      <p class="lemma"><b>Lemma, the house rule:</b> Everything on the menu touches the fire.</p>
+    </div>
+    <div class="base">
+      <h1 class="name" id="t-name">Brasa Nove</h1>
+      <p class="what">A wood-fire restaurant, open Tuesday to Saturday, 17:00 to 23:00.</p>
+      <p class="nav"><a href="#proof">Climb the proof</a>, <a href="#given">check the hours</a>, or <a href="#book">book a table for up to eight</a>.</p>
+    </div>
+  </section>
+
+  <section class="proof" id="proof" aria-labelledby="p-head" tabindex="-1">
+    <div class="foot" aria-hidden="true">
+      <p>Left: one dish.</p>
+      <p>Right: the other five.</p>
+    </div>
+    <div class="cols">
+      <ol class="col" aria-label="Left column: one dish" style="list-style:none;margin:0;padding:0">
+        <li class="block" style="--p:68" data-price="68">
+          <canvas aria-hidden="true"></canvas>
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><text x="50" y="100" font-size="140" text-anchor="middle" textLength="96" lengthAdjust="spacingAndGlyphs">68</text></svg>
+          <p class="tag">Rib-eye for two <span>· €68</span></p>
+        </li>
+      </ol>
+      <ol class="col" aria-label="Right column: the other five, from the bottom up" style="list-style:none;margin:0;padding:0">
+        <li class="block" style="--p:9" data-price="9">
+          <canvas aria-hidden="true"></canvas>
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><text x="50" y="100" font-size="140" text-anchor="middle" textLength="96" lengthAdjust="spacingAndGlyphs">9</text></svg>
+          <p class="tag">Flatbread with lardo <span>· €9</span><span class="sum" data-sum></span></p>
+        </li>
+        <li class="block" style="--p:11" data-price="11">
+          <canvas aria-hidden="true"></canvas>
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><text x="50" y="100" font-size="140" text-anchor="middle" textLength="96" lengthAdjust="spacingAndGlyphs">11</text></svg>
+          <p class="tag">Charred leeks with romesco <span>· €11</span><span class="sum" data-sum></span></p>
+        </li>
+        <li class="block" style="--p:16" data-price="16">
+          <canvas aria-hidden="true"></canvas>
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><text x="50" y="100" font-size="140" text-anchor="middle" textLength="96" lengthAdjust="spacingAndGlyphs">16</text></svg>
+          <p class="tag">Clams in cider <span>· €16</span><span class="sum" data-sum></span></p>
+        </li>
+        <li class="block" style="--p:24" data-price="24">
+          <canvas aria-hidden="true"></canvas>
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><text x="50" y="100" font-size="140" text-anchor="middle" textLength="96" lengthAdjust="spacingAndGlyphs">24</text></svg>
+          <p class="tag">Half chicken <span>· €24</span><span class="sum" data-sum></span></p>
+        </li>
+        <li class="block" style="--p:8" data-price="8">
+          <canvas aria-hidden="true"></canvas>
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><text x="50" y="100" font-size="140" text-anchor="middle" textLength="96" lengthAdjust="spacingAndGlyphs">8</text></svg>
+          <p class="tag">Burnt cheesecake <span>· €8</span><span class="sum" data-sum></span></p>
+        </li>
+      </ol>
+    </div>
+    <h2 class="qed" id="p-head">∎ Both columns stop at 68. Every block is as tall as its price in euros, so the left one dish and the right five weigh the same.</h2>
+  </section>
+
+  <section class="top" id="top" aria-label="Hours and booking">
+    <div id="given" tabindex="-1">
+      <h2>Given</h2>
+      <p>The doors are open Tuesday to Saturday, 17:00 to 23:00. Closed Sunday and Monday.</p>
+      <p>Parties of up to 8 book online. Larger groups book by phone.</p>
+      <p class="small">Prices are the menu's, in euros. One of each dish is the whole proof; nothing else is assumed.</p>
+    </div>
+    <form id="book" tabindex="-1" aria-labelledby="b-head">
+      <h2 id="b-head">Corollary: book a table</h2>
+      <div class="row"><label for="party">Party</label>
+        <select id="party" name="party">
+          <option>1</option><option selected>2</option><option>3</option><option>4</option>
+          <option>5</option><option>6</option><option>7</option><option>8</option>
+          <option value="9+">9 or more</option>
+        </select></div>
+      <div class="row"><label for="day">Day</label>
+        <select id="day" name="day"><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option selected>Friday</option><option>Saturday</option></select></div>
+      <div class="row"><label for="time">Time</label><select id="time" name="time"></select></div>
+      <button type="submit" class="book">Book a table</button>
+      <p class="status small" id="status" role="status"></p>
+      <p class="small">This page is a design: a booking made here is not sent anywhere.</p>
+    </form>
+  </section>
+</div>
+<div class="level" id="level" aria-hidden="true"><output id="lv"></output></div>
+
+<script>
+(() => {
+  const climb = document.getElementById('climb');
+  climb.scrollTop = climb.scrollHeight; // engines that start column-reverse at the top jump to the foot; the rest clamp to it
+
+  /* Facts and the proof, checked on load */
+  const left = [...document.querySelectorAll('.col:first-child .block')].map(b => +b.dataset.price);
+  const right = [...document.querySelectorAll('.col:last-child .block')].map(b => +b.dataset.price);
+  const add = a => a.reduce((s, v) => s + v, 0);
+  console.assert(add(left) === 68 && add(right) === 68, 'both columns stop at 68');
+  console.assert(JSON.stringify([...right].sort((a, b) => a - b)) === '[8,9,11,16,24]', 'right column holds the other five prices');
+  let run = 0;
+  const sums = right.map(p => (run += p));
+  console.assert(sums.join() === '9,20,36,60,68', 'running totals');
+  document.querySelectorAll('[data-sum]').forEach((s, i) => { s.textContent = 'running total ' + sums[i]; });
+
+  /* Booking: online up to 8, larger groups by phone; times inside 17:00 to 23:00 */
+  const form = document.getElementById('book'), status = document.getElementById('status');
+  const route = size => (size === '9+' || +size > 8) ? 'phone' : 'online';
+  const slots = []; for (let m = 17 * 60; m < 23 * 60; m += 30) slots.push(`${String(m / 60 | 0).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`);
+  slots.forEach(s => form.time.add(new Option(s, s, false, s === '20:00')));
+  console.assert(route('8') === 'online' && route('9+') === 'phone' && slots[0] === '17:00' && slots.at(-1) === '22:30', 'booking rules');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    status.textContent = route(form.party.value) === 'phone'
+      ? 'Nine or more: please book by phone with the restaurant. Online booking takes up to 8.'
+      : `Table for ${form.party.value}, ${form.day.value} at ${form.time.value}. Noted on this page only; nothing was sent.`;
+  });
+
+  /* tex-06 dither, re-cut: charcoal and white pixels against a 4×4 Bayer threshold, darker at the foot of each block */
+  const B = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+  const lit = (v, x, y) => v > (B[(y & 3) * 4 + (x & 3)] + .5) / 16;
+  console.assert(B.filter((_, i) => lit(.5, i & 3, i >> 2)).length === 8, 'dither: 50% grey lights half the pixels');
+  const PX = 3, ink = [17, 17, 17], white = [244, 244, 242];
+  const dither = cv => {
+    const w = Math.max(1, Math.round(cv.clientWidth / PX)), h = Math.max(1, Math.round(cv.clientHeight / PX));
+    cv.width = w; cv.height = h;
+    const ctx = cv.getContext('2d'), img = ctx.createImageData(w, h), d = img.data;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const v = .28 + .44 * (1 - y / h), c = lit(v, x, y) ? white : ink, i = (y * w + x) * 4;
+      d[i] = c[0]; d[i + 1] = c[1]; d[i + 2] = c[2]; d[i + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+  };
+  const cvs = [...document.querySelectorAll('.block canvas')];
+  const ro = new ResizeObserver(es => es.forEach(e => dither(e.target)));
+  cvs.forEach(c => ro.observe(c));
+
+  /* The level line: how high you have climbed, in euros */
+  const level = document.getElementById('level'), lv = document.getElementById('lv');
+  const cols = document.querySelector('.cols'), names = ['flatbread', 'leeks', 'clams', 'chicken', 'cheesecake'];
+  const read = () => {
+    const r = cols.getBoundingClientRect(), mid = innerHeight / 2, u = r.height / 68;
+    const on = mid > r.top && mid < r.bottom;
+    level.classList.toggle('on', on);
+    if (!on) return;
+    const e = Math.max(0, Math.min(68, Math.round((r.bottom - mid) / u)));
+    const passed = sums.filter(s => s <= e).length;
+    lv.textContent = `€${e} up. Right so far: ${passed ? right.slice(0, passed).join(' + ') + ' = ' + sums[passed - 1] : '0'}`;
+  };
+  climb.addEventListener('scroll', read, {passive: true});
+  addEventListener('resize', read);
+  read();
+})();
+</script>
+</body>
+</html>

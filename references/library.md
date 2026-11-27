@@ -1,11 +1,12 @@
 # Library
 
-Four pages of numbered specimens in `library/`: buttons, motion, heroes and type. Each specimen is one working mechanism to re-cut into a design, not a component to drop in.
+Six pages of numbered specimens in `library/`: buttons, motion, heroes, type, layouts and textures. Each specimen is one working mechanism to re-cut into a design, not a component to drop in.
 
 ## How to use it
 
 - **Roll, don't choose.** `python3 scripts/roll.py --library buttons` (or `motion`, `heroes`, `type`; `--count N` for a batch, never repeating). Picking by taste lands on the same few favourites every time.
-- **One per page per design.** A design takes at most one button, one motion, one hero and one type specimen, and never the same specimen twice in a batch.
+- **Layouts and textures follow the trait.** A rolled reading direction or texture names its specimen (`library/layouts.html#lay-03`); open that one. They can be rolled like the others too.
+- **One per page per design.** A design takes at most one specimen from each page, and never the same specimen twice in a batch.
 - **Re-cut it.** Change the copy, colours and type to the product's own until it reads as part of that page. The sample products, words and figures in the specimens are placeholders.
 - **Copy three parts.** The specimen's `<article>`, its CSS block (every rule starts with its `#id`, under a `/* id Name */` comment) and its JS block (`// id Name`, one `{ }` block). Take its font family from the page's Google Fonts link. The gallery shell around the specimens is not part of any of them.
 
@@ -106,9 +107,46 @@ Each specimen's caption names the font's axes, licence (all OFL) and the local f
 | type-19 | Vertical shop sign | Japanese or vertical headlines | Copy, real hours, the seal | Dela Gothic One |
 | type-20 | Text on a spiral | Manifestos, menus, slow reads | Text, turns, offset range | Ojuju, wght |
 
+## Layouts (`library/layouts.html`)
+
+One working skeleton per loud reading direction, in the roll table's order. Build the page on the one the design rolled: it already handles phones, keyboards and reduced motion.
+
+| id | Name | Use it when | Change before use | Font |
+|---|---|---|---|---|
+| lay-01 | Sideways scroll | The design reads horizontally only | The panels, their width, the snap points | Archivo Black |
+| lay-02 | One screen, swapped in place | The page is one screen and never scrolls | The tabs and panels, the swap | Rubik Mono One |
+| lay-03 | Columns right to left | The design reads in vertical columns, top to bottom, right to left | The copy, the column height, upright numbers | Zen Old Mincho |
+| lay-04 | Bottom to top | The design reads from the bottom up | The entries and the start marker | Kode Mono |
+| lay-05 | Zoom to read | Each level of the page is a closer look | The levels and the words that zoom | Abril Fatface |
+| lay-06 | Drag-around surface | The page is a 2D surface you move around | The plane size and what sits on it | Cabin Sketch |
+| lay-07 | Opposite halves | The two halves of the screen scroll in opposite directions | The two columns' content | Anton |
+| lay-08 | Ring | The content is read around a circle | The sections and the ring size | Cinzel |
+| lay-09 | Slope | Content is laid on a diagonal | The blocks and the slope | Righteous |
+| lay-10 | Book | The page turns like a book | The pages and the paper | Libre Baskerville |
+
+## Textures (`library/textures.html`)
+
+Pure CSS, SVG filters and canvas, no image files. The texture trait names the specimen to open; quiet "Letterpress bite" points to `library/motion.html#mo-03` and loud "Guilloché and microtext" to `elements/security-print.html`.
+
+| id | Name | Use it when | Change before use | Font |
+|---|---|---|---|---|
+| tex-01 | Halftone | Print dots should shade a shape or a photo | The dot size, the ink, what is shaded | Lilita One |
+| tex-02 | Scanlines | A screen, a terminal or anything live should glow like a CRT | The phosphor colour, line spacing, the copy | VT323 |
+| tex-03 | Paper and torn edge | The page should feel like paper: grain alone, or grain with a torn edge | Grain strength, paper colour, which edge tears | Cutive Mono |
+| tex-04 | RGB split | A glitch should split one headline, not the whole page | The word, the offset, the two channel colours | Teko |
+| tex-05 | Hand-drawn border | Borders should look drawn by hand | Wobble scale, line colour and weight | Patrick Hand |
+| tex-06 | Dither | A gradient or a picture should step in pixels, like an old screen or a riso print | The two colours, the pixel size, what is drawn | Pixelify Sans |
+| tex-07 | Engraved hatching | Shading should look engraved, like a banknote portrait or a catalogue plate | Line angle and spacing, the shape it shades | Rozha One |
+| tex-08 | Crop marks | The page should look like a print proof (publishing, printers, packaging) | The bleed, the colour bar, the slug line | Azeret Mono |
+| tex-09 | Baseline grid | A quiet page should show its rigour: every line on a shared baseline | The line height and the copy | Source Serif 4 |
+| tex-10 | Blind emboss | A seal or monogram should be pressed into the paper with no ink | The mark, the paper colour, the light angle | Marcellus SC |
+| tex-11 | Duotone | The product's own photos should share the page's two colours | The two colours and the image | Archivo Narrow |
+
 ## Watch out
 
 - **Fonts.** Every page loads its faces from Google Fonts, and offline previews fall back to system fonts and lose the idea. Self-host the font for anything that ships. Colour fonts (Honk, Kalnia Glaze) need a browser with COLRv1 support and draw flat without it.
 - **Claims.** A barcode, a countdown or a counter is a claim: make it real or label it as sample. Test type-06 with a scanner before shipping.
 - **Hold and drag.** The fuse, pull chain, zipper and price tag have click and keyboard equivalents; keep them when you re-cut. hero-03 and hero-06 lay an invisible range input over the artwork: test them on a real phone.
+- **Scroll boxes.** lay-01, lay-06 and lay-07 take over scrolling inside a box. In a real page give the box the viewport, and keep plain links to every section.
+- **Texture under text.** A texture never sits at full strength under body text; check contrast on the textured ground. SVG turbulence and `contrast()` filters repaint, so keep them on fixed areas, not the whole scrolling page. tex-10 is decorative only: the readable line beside it carries the words.
 - **Sound.** hero-09 speaks the headword and hero-11 plays its melody, only when the visitor presses their button. Never autoplay.

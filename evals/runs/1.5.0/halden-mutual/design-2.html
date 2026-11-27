@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halden Mutual · Savings Passbook</title>
+<meta name="description" content="Halden Mutual, a savings bank owned by its members since 1874. Easy-access saver 3.10% AER variable, 95-day notice saver 3.60% AER variable, no fees, open with £1.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Design 2: the passbook. One object on an empty counter; every word is inside it or on the slip beside it. */
+:root{
+  --ground:#FFFFFF; --ink:#1F4D3A;                 /* locked brand: Halden green on white */
+  --line:rgb(31 77 58/.35);                          /* ledger ruling: a tint of the brand ink, never under text alone */
+  --u:8px;
+  --s1:.8125rem; --s2:.9375rem; --s3:1.25rem; --s4:clamp(2rem,1.5rem + 2vw,2.75rem);
+  --serif:'Old Standard TT','Times New Roman',Times,serif;
+  --hand:'Cedarville Cursive','Snell Roundhand','Apple Chancery',cursive;
+  --tint:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='8'%3E%3Cpath d='M0 4C6 0 6 8 12 4S18 0 24 4' fill='none' stroke='%231F4D3A' stroke-opacity='.1' stroke-width='.7'/%3E%3C/svg%3E");
+  --tabs:calc(var(--u)*4);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{color:var(--ink);background:var(--ground);-webkit-text-size-adjust:100%}
+body{margin:0;font:400 var(--s2)/1.5 var(--serif);font-variant-numeric:lining-nums tabular-nums}
+h1,h2,p,table,dl,dd,ol,fieldset{margin:0}
+a{color:inherit;text-underline-offset:.18em}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.cloth :focus-visible{outline-color:var(--ground)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+main{display:grid;grid-template-columns:minmax(0,1fr);gap:calc(var(--u)*3);padding:calc(var(--u)*2);max-width:calc(var(--u)*160)}
+@media (min-width:1000px){
+  main{grid-template-columns:minmax(0,calc(var(--u)*94)) calc(var(--u)*38);column-gap:calc(var(--u)*8);row-gap:calc(var(--u)*2);padding:calc(var(--u)*6) calc(var(--u)*8)}
+  .slip{grid-column:2;grid-row:1/span 2;align-self:end}
+}
+
+/* The book: pages turned sideways, one spread (desktop) or one page (phone) at a time */
+.bookwrap{position:relative;display:grid;grid-template-columns:minmax(0,1fr) var(--tabs)}
+.book{display:flex;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;
+  border:1px solid var(--ink);min-height:calc(var(--u)*60);
+  box-shadow:3px 3px 0 -1px var(--ground),3px 3px 0 0 var(--ink),6px 6px 0 -1px var(--ground),6px 6px 0 0 var(--ink)}
+.book::-webkit-scrollbar{display:none}
+.page{position:relative;flex:0 0 100%;scroll-snap-align:start;display:flex;flex-direction:column;gap:calc(var(--u)*2);padding:calc(var(--u)*2);
+  background:var(--tint),var(--ground);min-width:0}
+@media (min-width:1000px){
+  .book{height:calc(var(--u)*75)}
+  .page{flex-basis:50%;padding:calc(var(--u)*3);overflow-y:auto}
+  .page:nth-child(even){scroll-snap-align:none;border-left:1px solid var(--line)}
+  .bookwrap::after{content:"";position:absolute;top:var(--u);bottom:var(--u);left:calc((100% - var(--tabs))/2);border-left:2px dashed var(--line);pointer-events:none}
+}
+
+/* Thumb index cut into the fore-edge */
+.thumb ol{list-style:none;padding:calc(var(--u)*2) 0 0;display:flex;flex-direction:column;gap:2px}
+.thumb a{display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;min-height:calc(var(--u)*8);width:calc(var(--tabs) - 2px);
+  padding:var(--u) 0;font-size:var(--s1);letter-spacing:.06em;text-decoration:none;background:var(--ink);color:var(--ground);border-radius:0 6px 6px 0}
+.thumb a[aria-current]{background:var(--ground);color:var(--ink);border:1px solid var(--ink);border-left:0;width:var(--tabs);margin-left:-1px}
+.thumb a:hover{text-decoration:underline}
+
+/* Running heads, folios, titles */
+.rh{display:flex;justify-content:space-between;font-size:var(--s1);border-bottom:1px solid var(--ink);padding-bottom:calc(var(--u)/2);letter-spacing:.04em}
+.page h2{font-size:var(--s3);font-weight:700;letter-spacing:.02em;text-wrap:balance}
+.foot{font-size:var(--s1);font-style:italic;text-wrap:pretty;margin-top:auto}
+
+/* Cloth covers */
+.cloth{color:var(--ground);background:
+  repeating-linear-gradient(0deg,rgb(255 255 255/.06) 0 1px,transparent 1px 3px),
+  repeating-linear-gradient(90deg,rgb(0 0 0/.14) 0 1px,transparent 1px 4px),var(--ink)}
+.cover{justify-content:space-between;text-align:center}
+.cover h1{font-weight:400;line-height:1.1}
+.cover .cv-name{display:block;font-size:var(--s4);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.cover .cv-kind{display:block;font-size:var(--s3);font-style:italic;margin-top:var(--u);letter-spacing:.04em}
+.seal{width:calc(var(--u)*8);height:calc(var(--u)*8);margin:0 auto;border-radius:50%;display:grid;place-content:center;color:var(--ink);
+  font:700 var(--s3)/1.1 var(--serif);letter-spacing:.1em;border:2px solid rgb(0 0 0/.2);
+  box-shadow:inset 1px 1px 0 rgb(255 255 255/.14),inset -1px -1px 0 rgb(0 0 0/.3);
+  text-shadow:-1px -1px 0 rgb(0 0 0/.45),1px 1px 0 rgb(255 255 255/.2)}
+.seal span:last-child{font-size:var(--s1)}
+.label-window{background:var(--ground);color:var(--ink);border:4px double var(--ink);outline:1px solid var(--ground);padding:var(--u) calc(var(--u)*2);text-align:left}
+.label-window .lw-h{font-size:var(--s1);font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-align:center;border-bottom:1px solid var(--ink);padding-bottom:calc(var(--u)/2);margin-bottom:var(--u)}
+.label-window table{width:100%;border-collapse:collapse}
+.label-window tr{display:flex;flex-wrap:wrap;justify-content:space-between;column-gap:var(--u);padding:2px 0}
+.label-window th{text-align:left;font-weight:400;white-space:nowrap}
+.label-window td{text-align:right;font-weight:700;white-space:nowrap;margin-left:auto}
+.label-window .holder{display:flex;gap:var(--u);font-size:var(--s1);margin-top:var(--u);font-style:italic}
+.label-window .holder span:last-child{flex:1;border-bottom:1px solid var(--ink)}
+.cv-link{font-weight:700;font-size:var(--s2);padding:var(--u) 0;display:inline-block}
+
+/* Rules printed inside the cover */
+.rules{list-style:none;padding:0;display:grid;gap:var(--u);text-align:justify;hyphens:auto}
+.rules li{display:grid;grid-template-columns:calc(var(--u)*4) minmax(0,1fr)}
+.rules b{font-weight:700}
+
+/* Ledger */
+.terms{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px calc(var(--u)*2);font-size:var(--s2)}
+.terms dt{font-style:italic}
+.terms dd{font-weight:700}
+.ledger{width:100%;table-layout:fixed;border-collapse:collapse;font-size:var(--s1)}
+.ledger th{font-weight:700;text-align:left;padding:2px 4px;border-bottom:1px solid var(--ink);letter-spacing:.03em}
+.ledger td{height:calc(var(--u)*4);padding:0 4px;border-bottom:1px solid var(--line);white-space:nowrap}
+.ledger th+th,.ledger td+td{border-left:1px solid var(--ink)}
+.ledger th:nth-child(3),.ledger td:nth-child(3){border-left:3px double var(--ink)}
+.ledger .m{text-align:right}
+.ledger .hand{font:var(--s3)/1 var(--hand);white-space:normal}
+.blank{flex:1;min-height:calc(var(--u)*4);margin-top:calc(var(--u)*-2);background:
+  linear-gradient(var(--ink),var(--ink)) 17% 0/1px 100% no-repeat,
+  linear-gradient(var(--ink),var(--ink)) 48% 0/3px 100% no-repeat,
+  linear-gradient(var(--ink),var(--ink)) 59% 0/1px 100% no-repeat,
+  linear-gradient(var(--ink),var(--ink)) 78% 0/1px 100% no-repeat,
+  repeating-linear-gradient(to bottom,transparent 0 calc(var(--u)*4 - 1px),var(--line) 0 calc(var(--u)*4))}
+
+/* Memoranda: a sum with a double rule under the total */
+.memo-note{font:var(--s3)/1.3 var(--hand)}
+.sum{width:100%;border-collapse:collapse}
+.sum th{text-align:left;font-weight:400;padding:var(--u) var(--u) var(--u) 0;border-bottom:1px solid var(--line)}
+.sum td{text-align:right;padding:var(--u) 0;border-bottom:1px solid var(--line);white-space:nowrap;width:5em}
+.sum thead th,.sum thead td{font-size:var(--s1);font-weight:700;border-bottom:1px solid var(--ink);padding-top:0}
+.sum .tot th{font-weight:700}
+.sum .tot td{font-weight:700;border-top:1px solid var(--ink);border-bottom:3px double var(--ink)}
+
+/* Rubber stamp; it lands as its page opens */
+.stamp{align-self:flex-end;transform:rotate(-7deg);border:3px double var(--ink);padding:2px calc(var(--u)*1.5);
+  font:700 var(--s1)/1.4 var(--serif);letter-spacing:.16em;text-transform:uppercase;text-align:center}
+@keyframes thump{0%{transform:rotate(-7deg) scale(1.8);opacity:0}70%{transform:rotate(-7deg) scale(.96);opacity:1}100%{transform:rotate(-7deg) scale(1);opacity:1}}
+@media (prefers-reduced-motion:no-preference){
+  .js .stamp{opacity:0}
+  .js .stamp.landed{animation:thump .28s cubic-bezier(.2,.7,.3,1) both}
+}
+
+/* Back cover small print */
+.back{justify-content:flex-end;gap:calc(var(--u)*2);font-size:var(--s1)}
+.back p{max-width:44ch;text-wrap:pretty}
+.back .bc-h{font-size:var(--s2);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+
+/* Turning controls */
+.turn{display:flex;align-items:center;justify-content:space-between;gap:var(--u);padding-right:var(--tabs);font-size:var(--s1);white-space:nowrap}
+.turn button{font:700 var(--s1)/1 var(--serif);letter-spacing:.04em;color:var(--ink);background:var(--ground);border:1px solid var(--ink);min-height:calc(var(--u)*5.5);padding:0 calc(var(--u)*2);cursor:pointer}
+.turn button:disabled{opacity:.45;cursor:default}
+
+/* The opening slip, with its counterfoil */
+.slip{border:1px solid var(--ink);background:var(--tint),var(--ground)}
+.foil{padding:calc(var(--u)*1.5) calc(var(--u)*2);font-size:var(--s1);display:grid;gap:2px;
+  background:radial-gradient(circle,var(--ground) 0 3px,var(--ink) 3.5px 4px,transparent 4.5px) 0 100%/12px 8px repeat-x;padding-bottom:calc(var(--u)*2.5)}
+.foil b{letter-spacing:.06em;text-transform:uppercase}
+.slip-main{padding:calc(var(--u)*2);display:grid;gap:calc(var(--u)*2)}
+.slip h2{font-size:var(--s3);font-weight:700}
+.slip fieldset{border:0;padding:0;display:grid;gap:var(--u)}
+.slip legend{font-weight:700;font-size:var(--s1);letter-spacing:.06em;text-transform:uppercase;margin-bottom:var(--u)}
+.slip .opt{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--u);align-items:start;cursor:pointer}
+.slip input[type=radio]{accent-color:var(--ink);width:18px;height:18px;margin:3px 0 0}
+.slip .amt{display:grid;gap:4px}
+.slip .amt label{font-weight:700;font-size:var(--s1);letter-spacing:.06em;text-transform:uppercase}
+.slip .amt div{display:flex;align-items:baseline;gap:4px;border-bottom:1px solid var(--ink);font-size:var(--s3)}
+.slip input[type=number]{font:400 var(--s3)/1.3 var(--serif);color:var(--ink);border:0;background:transparent;width:100%;padding:4px 0;font-variant-numeric:tabular-nums}
+.slip button{font:700 var(--s2)/1 var(--serif);letter-spacing:.1em;text-transform:uppercase;color:var(--ground);background:var(--ink);border:0;min-height:calc(var(--u)*6);cursor:pointer}
+.slip button:hover{text-decoration:underline}
+.slip .fine{font-size:var(--s1);font-style:italic}
+</style>
+</head>
+<body>
+<main>
+
+<div class="bookwrap">
+  <div class="book" id="book" tabindex="0" role="region" aria-label="Savings passbook. Scroll sideways or use the page buttons to turn the pages.">
+
+    <section class="page cloth cover" id="cover" aria-labelledby="t-cover" tabindex="-1">
+      <div class="seal" aria-hidden="true"><span>HM</span><span>1874</span></div>
+      <h1 id="t-cover"><span class="cv-name">Halden Mutual</span> <span class="cv-kind">Savings Passbook</span></h1>
+      <div class="label-window">
+        <p class="lw-h">A savings bank owned by its members since 1874</p>
+        <table>
+          <caption class="vh">Our two accounts</caption>
+          <tbody>
+            <tr><th scope="row">Easy-access saver</th><td>3.10% AER variable</td></tr>
+            <tr><th scope="row">95-day notice saver</th><td>3.60% AER variable</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:var(--u)">No fees. Opens with £1.</p>
+        <p class="holder" aria-hidden="true"><span>Holder</span><span></span></p>
+      </div>
+      <p><a class="cv-link" href="#slip">Open an account with £1</a></p>
+    </section>
+
+    <section class="page" id="rules" aria-labelledby="t-rules" tabindex="-1">
+      <p class="rh"><span>Halden Mutual · Savings Passbook</span><span>p. 1</span></p>
+      <h2 id="t-rules">Rules printed for the holder</h2>
+      <ol class="rules">
+        <li><b>I.</b><span>Halden Mutual is owned by its members, not by shareholders.</span></li>
+        <li><b>II.</b><span>It has been owned by its members since 1874, and keeps 41 branches.</span></li>
+        <li><b>III.</b><span>No fees are charged on either account in this book.</span></li>
+        <li><b>IV.</b><span>Either account may be opened with £1.</span></li>
+        <li><b>V.</b><span>Rates are variable, may go down as well as up, and are stated as AER.</span></li>
+        <li><b>VI.</b><span>Money in the 95-day notice saver is paid out 95 days after notice is given.</span></li>
+      </ol>
+    </section>
+
+    <section class="page" id="easy" aria-labelledby="t-easy" tabindex="-1">
+      <p class="rh"><span>Halden Mutual · Savings Passbook</span><span>p. 2</span></p>
+      <h2 id="t-easy">Easy-access saver</h2>
+      <dl class="terms">
+        <dt>Rate</dt><dd>3.10% AER variable</dd>
+        <dt>Notice</dt><dd>None</dd>
+        <dt>Fees</dt><dd>None</dd>
+      </dl>
+      <table class="ledger">
+        <caption class="vh">Specimen entries, illustrative figures in pounds</caption>
+        <colgroup><col style="width:17%"><col style="width:31%"><col style="width:11%"><col style="width:18%"><col style="width:23%"></colgroup>
+        <thead><tr><th scope="col">Date</th><th scope="col">Particulars</th><th scope="col" class="m">Out</th><th scope="col" class="m">In</th><th scope="col" class="m">Balance</th></tr></thead>
+        <tbody>
+          <tr><td><abbr title="Month">Mo.</abbr> 0</td><td class="hand">Opened</td><td class="m"></td><td class="m">1.00</td><td class="m">1.00</td></tr>
+          <tr><td><abbr title="Month">Mo.</abbr> 0</td><td class="hand">Paid in</td><td class="m"></td><td class="m">999.00</td><td class="m">1,000.00</td></tr>
+          <tr><td><abbr title="Month">Mo.</abbr> 12</td><td class="hand">Interest</td><td class="m"></td><td class="m">31.00</td><td class="m">1,031.00</td></tr>
+          <tr><td><abbr title="Month">Mo.</abbr> 12</td><td class="hand">Fees</td><td class="m">nil</td><td class="m"></td><td class="m">1,031.00</td></tr>
+        </tbody>
+      </table>
+      <div class="blank" aria-hidden="true"></div>
+      <p class="stamp">Specimen<br>illustrative figures</p>
+      <p class="foot">Illustrative: £1,000 for 12 months at 3.10% AER, rate unchanged, nothing taken out.</p>
+    </section>
+
+    <section class="page" id="notice" aria-labelledby="t-notice" tabindex="-1">
+      <p class="rh"><span>Halden Mutual · Savings Passbook</span><span>p. 3</span></p>
+      <h2 id="t-notice">95-day notice saver</h2>
+      <dl class="terms">
+        <dt>Rate</dt><dd>3.60% AER variable</dd>
+        <dt>Notice</dt><dd>95 days</dd>
+        <dt>Fees</dt><dd>None</dd>
+      </dl>
+      <table class="ledger">
+        <caption class="vh">Specimen entries, illustrative figures in pounds</caption>
+        <colgroup><col style="width:17%"><col style="width:31%"><col style="width:11%"><col style="width:18%"><col style="width:23%"></colgroup>
+        <thead><tr><th scope="col">Date</th><th scope="col">Particulars</th><th scope="col" class="m">Out</th><th scope="col" class="m">In</th><th scope="col" class="m">Balance</th></tr></thead>
+        <tbody>
+          <tr><td><abbr title="Month">Mo.</abbr> 0</td><td class="hand">Opened</td><td class="m"></td><td class="m">1.00</td><td class="m">1.00</td></tr>
+          <tr><td><abbr title="Month">Mo.</abbr> 0</td><td class="hand">Paid in</td><td class="m"></td><td class="m">999.00</td><td class="m">1,000.00</td></tr>
+          <tr><td><abbr title="Month">Mo.</abbr> 12</td><td class="hand">Interest</td><td class="m"></td><td class="m">36.00</td><td class="m">1,036.00</td></tr>
+          <tr><td><abbr title="Month">Mo.</abbr> 12</td><td class="hand">Fees</td><td class="m">nil</td><td class="m"></td><td class="m">1,036.00</td></tr>
+        </tbody>
+      </table>
+      <div class="blank" aria-hidden="true"></div>
+      <p class="stamp">Specimen<br>illustrative figures</p>
+      <p class="foot">Illustrative: £1,000 for 12 months at 3.60% AER, rate unchanged, nothing taken out.</p>
+    </section>
+
+    <section class="page" id="memo" aria-labelledby="t-memo" tabindex="-1">
+      <p class="rh"><span>Halden Mutual · Savings Passbook</span><span>p. 4</span></p>
+      <h2 id="t-memo">Memoranda</h2>
+      <p class="memo-note">The same £1,000, left for 12 months:</p>
+      <table class="sum">
+        <caption class="vh">Illustrative comparison, in pounds</caption>
+        <thead><tr><th scope="col">Interest</th><td>£</td></tr></thead>
+        <tbody>
+          <tr><th scope="row">95-day notice saver, 3.60%</th><td>36.00</td></tr>
+          <tr><th scope="row">Easy-access saver, 3.10%</th><td>31.00</td></tr>
+          <tr class="tot"><th scope="row">More for giving 95 days’ notice</th><td>5.00</td></tr>
+        </tbody>
+      </table>
+      <p class="stamp">Specimen<br>illustrative figures</p>
+      <p class="foot">Both figures assume the rate does not change for the 12 months and nothing is taken out.</p>
+    </section>
+
+    <section class="page cloth back" id="back" aria-labelledby="t-back" tabindex="-1">
+      <h2 id="t-back" class="bc-h">Halden Mutual</h2>
+      <p>Owned by its members since 1874. 41 branches.</p>
+      <p>AER is the annual equivalent rate: it shows what the interest would be if it were paid and added to your balance once a year. Both rates are variable and can go down as well as up.</p>
+      <p><a class="cv-link" href="#slip">Open an account with £1</a></p>
+    </section>
+
+  </div>
+
+  <nav class="thumb" aria-label="Passbook pages">
+    <ol>
+      <li><a href="#cover" aria-label="Cover">Cover</a></li>
+      <li><a href="#rules" aria-label="Rules">Rules</a></li>
+      <li><a href="#easy" aria-label="Easy-access saver">Easy</a></li>
+      <li><a href="#notice" aria-label="Notice saver, 95 days">Notice</a></li>
+      <li><a href="#memo" aria-label="Memoranda">Memo</a></li>
+      <li><a href="#back" aria-label="Back cover">Back</a></li>
+      <li><a href="#slip" class="out" aria-label="Open an account">Open</a></li>
+    </ol>
+  </nav>
+</div>
+
+<div class="turn">
+  <button type="button" id="prev" aria-label="Previous page">← Previous</button>
+  <span id="where" aria-live="polite">Pages 1–2 of 6</span>
+  <button type="button" id="next" aria-label="Next page">Next →</button>
+</div>
+
+<form class="slip" id="slip" action="/open" method="get" aria-labelledby="t-slip">
+  <div class="foil" aria-hidden="true">
+    <b>Counterfoil · keep this part</b>
+    <span>Account: <output id="foil-acct">Easy-access saver</output></span>
+    <span>Paid in: £<output id="foil-amt">1.00</output></span>
+  </div>
+  <div class="slip-main">
+    <h2 id="t-slip">Opening slip</h2>
+    <fieldset>
+      <legend>Account</legend>
+      <label class="opt"><input type="radio" name="account" value="easy-access" data-name="Easy-access saver" checked><span>Easy-access saver, 3.10% AER variable</span></label>
+      <label class="opt"><input type="radio" name="account" value="95-day-notice" data-name="95-day notice saver"><span>95-day notice saver, 3.60% AER variable</span></label>
+    </fieldset>
+    <div class="amt">
+      <label for="amount">Paying in</label>
+      <div><span aria-hidden="true">£</span><input id="amount" name="amount" type="number" inputmode="decimal" min="1" step="0.01" value="1.00" required aria-describedby="amount-note"></div>
+      <p class="fine" id="amount-note">From £1. No fees on either account.</p>
+    </div>
+    <button type="submit">Open this account</button>
+  </div>
+</form>
+
+</main>
+
+<script>
+document.documentElement.classList.add('js');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const book = document.getElementById('book');
+const pages = [...book.querySelectorAll('.page')];
+const tabs = [...document.querySelectorAll('.thumb a')];
+const prev = document.getElementById('prev'), next = document.getElementById('next'), where = document.getElementById('where');
+
+const pageW = () => pages[0].getBoundingClientRect().width;
+const perView = () => Math.max(1, Math.round(book.clientWidth / pageW()));
+const first = () => Math.round(book.scrollLeft / pageW());
+const spreadStart = (i, n) => Math.floor(i / n) * n;
+console.assert(spreadStart(3, 2) === 2 && spreadStart(4, 2) === 4 && spreadStart(3, 1) === 3, 'design-2: spread maths');
+
+function update() {
+  const f = first(), n = perView(), last = Math.min(f + n, pages.length);
+  where.textContent = n > 1 ? `Pages ${f + 1}–${last} of ${pages.length}` : `Page ${f + 1} of ${pages.length}`;
+  prev.disabled = f <= 0;
+  next.disabled = last >= pages.length;
+  tabs.forEach(t => {
+    const i = pages.findIndex(p => '#' + p.id === t.hash);
+    i >= f && i < last ? t.setAttribute('aria-current', 'page') : t.removeAttribute('aria-current');
+  });
+}
+const go = i => book.scrollTo({left: spreadStart(i, perView()) * pageW(), behavior: reduce ? 'auto' : 'smooth'});
+prev.addEventListener('click', () => go(Math.max(0, first() - perView())));
+next.addEventListener('click', () => go(first() + perView()));
+let raf = 0;
+book.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); }, {passive: true});
+addEventListener('resize', update);
+
+// Thumb tabs and in-page links turn to the page instead of jumping the window.
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  const i = a ? pages.findIndex(p => '#' + p.id === a.hash) : -1;
+  if (i < 0) return;
+  e.preventDefault();
+  go(i);
+  pages[i].focus({preventScroll: true});
+});
+if (location.hash) { const i = pages.findIndex(p => '#' + p.id === location.hash); if (i > 0) go(i); }
+
+// Stamps land when their page opens.
+const stampWatch = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) e.target.querySelectorAll('.stamp').forEach(s => s.classList.add('landed'));
+}), {root: book, threshold: .6});
+pages.forEach(p => stampWatch.observe(p));
+
+// Counterfoil echoes the slip.
+const slip = document.getElementById('slip');
+slip.addEventListener('input', () => {
+  document.getElementById('foil-acct').textContent = slip.querySelector('input[name=account]:checked').dataset.name;
+  const v = parseFloat(slip.amount.value);
+  document.getElementById('foil-amt').textContent = isFinite(v) ? v.toLocaleString('en-GB', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '—';
+});
+
+// Self-check: the specimen ledgers add up.
+const add = rows => rows.reduce((s, r) => s + Math.round(r * 100), 0) / 100;
+console.assert(add([1, 999, 31]) === 1031 && add([1, 999, 36]) === 1036 && add([36, -31]) === 5, 'design-2: ledger sums');
+update();
+</script>
+</body>
+</html>

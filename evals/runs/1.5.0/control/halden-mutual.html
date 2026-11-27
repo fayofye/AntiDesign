@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halden Mutual | Member-owned savings since 1874</title>
+<meta name="description" content="Easy-access saver at 3.10% AER variable, 95-day notice saver at 3.60% AER variable. No fees. Open with £1. Member-owned since 1874.">
+<style>
+  :root {
+    --green: #1F4D3A;
+    --green-dark: #163828;
+    --tint: #EEF3F0;
+    --line: #D5E0DA;
+    --ink: #14211B;
+    --muted: #4A5A52;
+    --white: #FFFFFF;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --wrap: 1120px;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; font: 17px/1.6 var(--sans); color: var(--ink); background: var(--white); }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.15; margin: 0; color: var(--green); }
+  p { margin: 0; }
+  a { color: var(--green); }
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; border-radius: 4px; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+
+  .skip { position: absolute; left: -9999px; top: 8px; background: var(--green); color: var(--white); padding: 8px 14px; z-index: 10; }
+  .skip:focus { left: 8px; }
+
+  /* Header */
+  header { border-bottom: 1px solid var(--line); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 72px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--green); font-family: var(--serif); font-size: 1.3rem; font-weight: 600; }
+  .brand svg { flex: none; }
+  nav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+  nav a { text-decoration: none; color: var(--ink); font-size: .95rem; }
+  nav a:hover { color: var(--green); text-decoration: underline; text-underline-offset: 4px; }
+
+  .btn { display: inline-block; padding: 13px 22px; border-radius: 6px; font-weight: 600; font-size: 1rem; text-decoration: none; border: 2px solid var(--green); transition: background .15s, color .15s; }
+  .btn-primary { background: var(--green); color: var(--white); }
+  .btn-primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
+  .btn-ghost { background: transparent; color: var(--green); }
+  .btn-ghost:hover { background: var(--tint); }
+  .bar .btn { padding: 9px 16px; font-size: .95rem; }
+  .bar .brand, .bar .btn { white-space: nowrap; }
+
+  /* Hero */
+  .hero { padding: 72px 0 80px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; }
+  .eyebrow { font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; color: var(--muted); margin-bottom: 18px; }
+  .hero h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); margin-bottom: 22px; }
+  .lead { font-size: 1.2rem; color: var(--muted); max-width: 32ch; margin-bottom: 32px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .rates { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--white); box-shadow: 0 1px 0 var(--line), 0 18px 40px -24px rgba(31,77,58,.35); }
+  .rates header { background: var(--green); color: var(--white); padding: 14px 24px; font-size: .9rem; font-weight: 600; border: 0; }
+  .rate { padding: 24px; display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: baseline; }
+  .rate + .rate { border-top: 1px solid var(--line); }
+  .rate h2 { font-family: var(--sans); font-size: 1rem; color: var(--ink); }
+  .rate .num { font-family: var(--serif); font-size: 2.6rem; color: var(--green); line-height: 1; grid-row: span 2; text-align: right; }
+  .rate .num small { display: block; font-family: var(--sans); font-size: .75rem; color: var(--muted); margin-top: 6px; letter-spacing: .02em; }
+  .rate p { font-size: .9rem; color: var(--muted); }
+  .rates footer { background: var(--tint); padding: 12px 24px; font-size: .85rem; color: var(--muted); }
+
+  /* Facts strip */
+  .facts { background: var(--tint); border-block: 1px solid var(--line); }
+  .facts ul { list-style: none; margin: 0 auto; padding-block: 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .facts li { display: flex; flex-direction: column; }
+  .facts strong { font-family: var(--serif); font-size: 1.8rem; color: var(--green); font-weight: 600; line-height: 1.2; }
+  .facts span { font-size: .9rem; color: var(--muted); }
+
+  /* Accounts */
+  section { padding: 88px 0; }
+  .section-head { max-width: 620px; margin-bottom: 40px; }
+  .section-head h2 { font-size: clamp(1.9rem, 3.4vw, 2.5rem); margin-bottom: 12px; }
+  .section-head p { color: var(--muted); font-size: 1.1rem; }
+
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 32px; display: flex; flex-direction: column; }
+  .card h3 { font-size: 1.6rem; margin-bottom: 6px; }
+  .card .for { color: var(--muted); margin-bottom: 24px; }
+  .card .big { font-family: var(--serif); font-size: 3.2rem; color: var(--green); line-height: 1; }
+  .card .big + p { font-size: .9rem; color: var(--muted); margin: 6px 0 24px; }
+  .card dl { margin: 0 0 28px; border-top: 1px solid var(--line); }
+  .card dl div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .card dt { color: var(--muted); }
+  .card dd { margin: 0; font-weight: 600; text-align: right; }
+  .card .btn { margin-top: auto; align-self: flex-start; }
+
+  /* Ownership */
+  .owned { background: var(--green); color: var(--white); }
+  .owned .wrap { display: grid; grid-template-columns: 1.3fr .7fr; gap: 56px; align-items: end; }
+  .owned .eyebrow { color: #B9CFC4; }
+  .owned blockquote { margin: 0; font-family: var(--serif); font-size: clamp(1.9rem, 4vw, 3rem); line-height: 1.2; }
+  .owned p.after { color: #D6E3DC; font-size: 1.05rem; }
+  .owned p.after + p.after { margin-top: 14px; }
+
+  /* Branches */
+  .branches .wrap { display: grid; grid-template-columns: .9fr 1.1fr; gap: 56px; align-items: center; }
+  .branch-art { aspect-ratio: 4 / 3; border-radius: 12px; background: var(--tint); border: 1px solid var(--line); display: grid; place-items: center; }
+  .branches h2 { font-size: clamp(1.9rem, 3.4vw, 2.5rem); margin-bottom: 16px; }
+  .branches p { color: var(--muted); font-size: 1.1rem; margin-bottom: 28px; max-width: 44ch; }
+
+  /* FAQ */
+  .faq { border-top: 1px solid var(--line); }
+  .faq .wrap { max-width: 800px; }
+  details { border-bottom: 1px solid var(--line); }
+  summary { cursor: pointer; padding: 20px 0; font-weight: 600; font-size: 1.1rem; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--green); font-size: 1.4rem; line-height: 1; }
+  details[open] summary::after { content: "\2212"; }
+  details p { padding: 0 0 22px; color: var(--muted); max-width: 64ch; }
+
+  /* Footer */
+  .site-foot { background: var(--ink); color: #C3CEC8; padding: 48px 0; font-size: .9rem; }
+  .site-foot .top { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; }
+  .site-foot .brand { color: var(--white); }
+  .site-foot ul { list-style: none; display: flex; flex-wrap: wrap; gap: 20px; margin: 0; padding: 0; }
+  .site-foot a { color: #C3CEC8; }
+  .site-foot .small { border-top: 1px solid #2D3D35; padding-top: 24px; max-width: 80ch; }
+  .site-foot .small + .small { border: 0; padding-top: 10px; }
+
+  @media (max-width: 900px) {
+    nav { display: none; }
+    .hero { padding: 48px 0 56px; }
+    .hero .wrap, .owned .wrap, .branches .wrap { grid-template-columns: 1fr; gap: 40px; }
+    .facts ul { grid-template-columns: repeat(2, 1fr); }
+    .cards { grid-template-columns: 1fr; }
+    section { padding: 64px 0; }
+    .branch-art { aspect-ratio: 16 / 9; }
+  }
+  @media (max-width: 420px) {
+    .wrap { padding: 0 18px; }
+    .card { padding: 24px; }
+    .rate .num { font-size: 2.2rem; }
+    .bar { gap: 12px; }
+    .bar .brand { font-size: 1.1rem; }
+    .bar .btn { padding: 8px 12px; font-size: .9rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#" aria-label="Halden Mutual home">
+      <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#1F4D3A"/><path d="M10 9v14M22 9v14M10 16h12" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>
+      Halden Mutual
+    </a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#savings">Savings</a></li>
+        <li><a href="#ownership">Membership</a></li>
+        <li><a href="#branches">Branches</a></li>
+        <li><a href="#help">Help</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-primary" href="#savings">Open an account</a>
+  </div>
+</header>
+
+<main id="main">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Member-owned since 1874</p>
+        <h1>Savings that stay with the people who save.</h1>
+        <p class="lead">Two straightforward savings accounts. No fees. Open either one with £1.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#savings">Compare our savers</a>
+          <a class="btn btn-ghost" href="#branches">Find a branch</a>
+        </div>
+      </div>
+
+      <aside class="rates" aria-label="Today's savings rates">
+        <header>Our savings rates</header>
+        <div class="rate">
+          <h2>Easy-access saver</h2>
+          <p class="num">3.10%<small>AER variable</small></p>
+          <p>Pay in and take out whenever you like.</p>
+        </div>
+        <div class="rate">
+          <h2>95-day notice saver</h2>
+          <p class="num">3.60%<small>AER variable</small></p>
+          <p>A higher rate for giving 95 days' notice.</p>
+        </div>
+        <footer>No fees on either account. Open with £1.</footer>
+      </aside>
+    </div>
+  </div>
+
+  <div class="facts">
+    <ul class="wrap" aria-label="Halden Mutual at a glance">
+      <li><strong>1874</strong><span>Member-owned since</span></li>
+      <li><strong>41</strong><span>Branches</span></li>
+      <li><strong>£0</strong><span>Account fees</span></li>
+      <li><strong>£1</strong><span>To open an account</span></li>
+    </ul>
+  </div>
+
+  <section id="savings" aria-labelledby="savings-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="savings-title">Choose how you save</h2>
+        <p>Keep your money close at hand, or earn more by planning ahead. Both accounts are fee-free and open from £1.</p>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <h3>Easy-access saver</h3>
+          <p class="for">For money you might need at short notice.</p>
+          <p class="big">3.10%</p>
+          <p>AER variable</p>
+          <dl>
+            <div><dt>Withdrawals</dt><dd>Whenever you like</dd></div>
+            <div><dt>Fees</dt><dd>None</dd></div>
+            <div><dt>Open with</dt><dd>£1</dd></div>
+          </dl>
+          <a class="btn btn-primary" href="#">Open an easy-access saver</a>
+        </article>
+
+        <article class="card">
+          <h3>95-day notice saver</h3>
+          <p class="for">For money you can plan around.</p>
+          <p class="big">3.60%</p>
+          <p>AER variable</p>
+          <dl>
+            <div><dt>Withdrawals</dt><dd>95 days' notice</dd></div>
+            <div><dt>Fees</dt><dd>None</dd></div>
+            <div><dt>Open with</dt><dd>£1</dd></div>
+          </dl>
+          <a class="btn btn-primary" href="#">Open a 95-day notice saver</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="owned" id="ownership" aria-labelledby="owned-title">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow" id="owned-title">Who we answer to</p>
+        <blockquote>Halden Mutual is owned by its members, not by shareholders.</blockquote>
+      </div>
+      <div>
+        <p class="after">We have been a mutual since 1874.</p>
+        <p class="after">When you save with us, you are saving with a bank run for the people who use it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="branches" id="branches" aria-labelledby="branches-title">
+    <div class="wrap">
+      <div class="branch-art" aria-hidden="true">
+        <svg width="180" height="140" viewBox="0 0 180 140" fill="none" stroke="#1F4D3A" stroke-width="3" stroke-linejoin="round">
+          <path d="M20 54 90 18l70 36z" fill="#fff"/>
+          <path d="M28 54h124M34 62v52M62 62v52M118 62v52M146 62v52"/>
+          <rect x="80" y="80" width="20" height="34" fill="#fff"/>
+          <path d="M16 122h148M22 114h136"/>
+        </svg>
+      </div>
+      <div>
+        <h2 id="branches-title">41 branches, and people in every one</h2>
+        <p>Prefer to talk it through? Walk into any of our branches and we'll help you choose the right saver and open it there and then.</p>
+        <a class="btn btn-ghost" href="#">Find your nearest branch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="help" aria-labelledby="faq-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="faq-title">Good to know</h2>
+      </div>
+      <details>
+        <summary>What does AER mean?</summary>
+        <p>AER stands for Annual Equivalent Rate. It shows what the interest rate would be if interest were paid and added to your balance once a year, so you can compare savings accounts on the same basis.</p>
+      </details>
+      <details>
+        <summary>What does "variable" mean?</summary>
+        <p>A variable rate can go up or down. If we change the rate on your account, we'll tell you.</p>
+      </details>
+      <details>
+        <summary>How does a 95-day notice account work?</summary>
+        <p>You tell us you want to withdraw money, and it's available 95 days later. In return for planning ahead, the rate is higher than our easy-access saver.</p>
+      </details>
+      <details>
+        <summary>Are there any fees?</summary>
+        <p>No. Neither saver charges a fee, and you can open either one with £1.</p>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="top">
+      <a class="brand" href="#" aria-label="Halden Mutual home">
+        <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#fff"/><path d="M10 9v14M22 9v14M10 16h12" stroke="#1F4D3A" stroke-width="2.6" stroke-linecap="round"/></svg>
+        Halden Mutual
+      </a>
+      <ul>
+        <li><a href="#savings">Savings</a></li>
+        <li><a href="#branches">Branches</a></li>
+        <li><a href="#help">Help</a></li>
+        <li><a href="#">Accessibility</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+    </div>
+    <p class="small">Rates shown are AER (Annual Equivalent Rate) and are variable, which means they can change. Easy-access saver 3.10% AER variable. 95-day notice saver 3.60% AER variable. No fees. Minimum opening deposit £1.</p>
+    <p class="small">Halden Mutual is owned by its members, not by shareholders. Member-owned since 1874.</p>
+  </div>
+</footer>
+</body>
+</html>
